@@ -41,6 +41,7 @@ module.exports = {
 
                     ['^paths'],
                     ['^types'],
+                    ['^enums'],
 
                     ['^engine'],
                     ['^plugins'],

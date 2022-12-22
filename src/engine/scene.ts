@@ -4,16 +4,30 @@ import { Map, MapLayer, MapTileset } from 'engine/types';
 
 import { SceneLayers } from 'scenes/enums';
 
+import { Spines } from 'spines/utils/enums';
+import { getSpineData } from 'spines/utils/get-spine-data';
+
 import { Tilemaps } from 'tilemaps/utils/enums';
 import { getTilemapData } from 'tilemaps/utils/get-tilemap-data';
 
 import { Tilesets } from 'tilesets/utils/enums';
 import { getTilesetData } from 'tilesets/utils/get-tileset-data';
 
-export class Scene extends Phaser.Scene {
+export class Scene extends Phaser.Scene implements Scene {
     public map!: Map;
     public mapTileset!: MapTileset;
     public mapLayers: Partial<Record<SceneLayers, MapLayer>> = {};
+
+    loadSpine(spine: Spines) {
+        const { atlasSrc, jsonSrc } = getSpineData(spine);
+        this.load.spine(spine, jsonSrc, atlasSrc);
+    }
+
+    loadSpines(spines: Spines[]) {
+        spines.map((spine) => {
+            this.loadSpine(spine);
+        });
+    }
 
     loadTilemap(tilemap: Tilemaps) {
         this.load.tilemapTiledJSON(tilemap, getTilemapData(tilemap).jsonSrc);

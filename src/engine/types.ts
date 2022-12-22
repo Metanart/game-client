@@ -17,3 +17,9 @@ export type CameraControls = Phaser.Cameras.Controls.FixedKeyControl;
 export type Map = Phaser.Tilemaps.Tilemap;
 export type MapTileset = Phaser.Tilemaps.Tileset;
 export type MapLayer = Phaser.Tilemaps.TilemapLayer;
+
+export interface Scene {
+    load: Phaser.Loader.LoaderPlugin & {
+        spine: (key: string, atlasSrc: string, jsonSrc: string) => void;
+    };
+}
