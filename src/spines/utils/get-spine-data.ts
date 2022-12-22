@@ -4,9 +4,9 @@ import { Spines } from './enums';
 import { SpineData } from './types';
 
 const mapSpineToData: Record<Spines, SpineData> = {
-    [Spines.SPINE_GOBLINS]: {
-        atlasSrc: 'goblins/goblins.atlas',
-        jsonSrc: 'goblins/goblins.json',
+    [Spines.SPINE_GOBLIN]: {
+        atlasSrc: 'goblin/goblin.atlas',
+        jsonSrc: 'goblin/goblin.json',
     },
 };
 
