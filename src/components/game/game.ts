@@ -1,31 +1,22 @@
 import Phaser from 'phaser';
 
-import { Scene } from 'engine/scene/scene';
 import { GameConfig } from 'engine/types';
 
+import { MainScene } from 'scenes/main-scene';
+
 const gameConfig: GameConfig = {
-    type: Phaser.WEBGL,
-    scale: {
-        mode: Phaser.Scale.ScaleModes.NONE,
-        width: window.innerWidth,
-        height: window.innerHeight,
-    },
+    type: Phaser.AUTO,
+    width: '100%',
+    height: '100%',
     parent: 'game-root',
-    backgroundColor: '#000',
     pixelArt: true,
-    roundPixels: true,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { x: 0, y: 0 },
-            debug: true,
+            gravity: { y: 0 },
         },
     },
-    render: {
-        antialiasGL: false,
-        pixelArt: true,
-    },
-    scene: [Scene],
+    scene: [MainScene],
 };
 
-const Game = new Phaser.Game(gameConfig);
+const game = new Phaser.Game(gameConfig);

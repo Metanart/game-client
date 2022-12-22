@@ -34,6 +34,10 @@ module.exports = {
                     ['^react'],
                     ['^@react'],
                     ['^phaser'],
+
+                    ['^paths'],
+                    ['^types'],
+
                     ['^engine'],
                     ['^components'],
 
