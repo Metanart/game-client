@@ -1,7 +1,10 @@
-import { Layers } from 'engine/enums/layers';
-import { Tilemaps } from 'engine/enums/tilemaps';
-import { Tilesets } from 'engine/enums/tilesets';
-import { Scene } from 'engine/scene/scene';
+import { Scene } from 'engine/scene';
+
+import { Tilemaps } from 'tilemaps/utils/enums';
+
+import { Tilesets } from 'tilesets/utils/enums';
+
+import { SceneLayers } from './enums';
 
 export class MainScene extends Scene {
     preload() {
@@ -11,6 +14,10 @@ export class MainScene extends Scene {
 
     create() {
         this.createMap(Tilemaps.TILEMAP_MAIN_LEVEL, Tilesets.TILESET_CITY);
-        this.createMapLayers([Layers.LAYER_BELOW_PLAYER, Layers.LAYER_WORLD, Layers.LAYER_ABOVE_PLAYER]);
+        this.createMapLayers([
+            SceneLayers.SCENE_LAYER_BELOW_PLAYER,
+            SceneLayers.SCENE_LAYER_WORLD,
+            SceneLayers.SCENE_LAYER_ABOVE_PLAYER,
+        ]);
     }
 }

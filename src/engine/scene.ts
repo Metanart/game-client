@@ -1,31 +1,19 @@
 import Phaser from 'phaser';
 
-import { Atlases } from 'engine/enums/atlases';
-import { Layers } from 'engine/enums/layers';
-import { Tilemaps } from 'engine/enums/tilemaps';
-import { Tilesets } from 'engine/enums/tilesets';
 import { Map, MapLayer, MapTileset } from 'engine/types';
-import { getAtlasData } from 'engine/utils/get-atlas-data';
-import { getTilemapData } from 'engine/utils/get-tilemap-data';
-import { getTilesetData } from 'engine/utils/get-tileset-data';
+
+import { SceneLayers } from 'scenes/enums';
+
+import { Tilemaps } from 'tilemaps/utils/enums';
+import { getTilemapData } from 'tilemaps/utils/get-tilemap-data';
+
+import { Tilesets } from 'tilesets/utils/enums';
+import { getTilesetData } from 'tilesets/utils/get-tileset-data';
 
 export class Scene extends Phaser.Scene {
     public map!: Map;
     public mapTileset!: MapTileset;
-    public mapLayers: Partial<Record<Layers, MapLayer>> = {};
-
-    loadAtlas(atlas: Atlases) {
-        const { imageSrc, jsonSrc } = getAtlasData(atlas);
-        this.load.atlas(atlas, imageSrc, jsonSrc);
-    }
-
-    loadAtlases(atlases: Atlases | Atlases[]) {
-        if (typeof atlases === 'object') {
-            atlases.map((atlas) => {
-                this.loadAtlas(atlas);
-            });
-        }
-    }
+    public mapLayers: Partial<Record<SceneLayers, MapLayer>> = {};
 
     loadTilemap(tilemap: Tilemaps) {
         this.load.tilemapTiledJSON(tilemap, getTilemapData(tilemap).jsonSrc);
@@ -52,7 +40,7 @@ export class Scene extends Phaser.Scene {
         this.mapTileset = this.map.addTilesetImage(tileset, tileset);
     }
 
-    createMapLayer(layer: Layers) {
+    createMapLayer(layer: SceneLayers) {
         if (this.map && this.mapTileset) {
             this.mapLayers[layer] = this.map.createLayer(layer, this.mapTileset, 0, 0);
         } else {
@@ -60,7 +48,7 @@ export class Scene extends Phaser.Scene {
         }
     }
 
-    createMapLayers(layers: Layers[]) {
+    createMapLayers(layers: SceneLayers[]) {
         if (this.map && this.mapTileset) {
             layers.map((layer) => {
                 this.createMapLayer(layer);
