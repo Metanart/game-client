@@ -16,10 +16,12 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "sourceMap": true,
-        "baseUrl": "src/",
+        "baseUrl": "src",
         "paths": {
             "*": ["*"]
-        }
+        },
+        "typeRoots": ["@types", "node_modules/@types", "node_module/phaser/types"],
+        "types": ["phaser"]
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "public"],

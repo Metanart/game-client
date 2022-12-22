@@ -18,15 +18,8 @@ export type Map = Phaser.Tilemaps.Tilemap;
 export type MapTileset = Phaser.Tilemaps.Tileset;
 export type MapLayer = Phaser.Tilemaps.TilemapLayer;
 
-export type AtlasData = {
-    imageSrc: ImageSrc;
-    jsonSrc: JsonSrc;
-};
-
-export type TilesetData = {
-    imageSrc: ImageSrc;
-};
-
-export type TilemapData = {
-    jsonSrc: JsonSrc;
-};
+export interface Scene {
+    load: Phaser.Loader.LoaderPlugin & {
+        spine: (key: string, atlasSrc: string, jsonSrc: string) => void;
+    };
+}

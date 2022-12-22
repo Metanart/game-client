@@ -1,30 +1,32 @@
 import Phaser from 'phaser';
 
-import { Atlases } from 'engine/enums/atlases';
-import { Layers } from 'engine/enums/layers';
-import { Tilemaps } from 'engine/enums/tilemaps';
-import { Tilesets } from 'engine/enums/tilesets';
 import { Map, MapLayer, MapTileset } from 'engine/types';
-import { getAtlasData } from 'engine/utils/get-atlas-data';
-import { getTilemapData } from 'engine/utils/get-tilemap-data';
-import { getTilesetData } from 'engine/utils/get-tileset-data';
 
-export class Scene extends Phaser.Scene {
+import { SceneLayers } from 'scenes/enums';
+
+import { Spines } from 'spines/utils/enums';
+import { getSpineData } from 'spines/utils/get-spine-data';
+
+import { Tilemaps } from 'tilemaps/utils/enums';
+import { getTilemapData } from 'tilemaps/utils/get-tilemap-data';
+
+import { Tilesets } from 'tilesets/utils/enums';
+import { getTilesetData } from 'tilesets/utils/get-tileset-data';
+
+export class Scene extends Phaser.Scene implements Scene {
     public map!: Map;
     public mapTileset!: MapTileset;
-    public mapLayers: Partial<Record<Layers, MapLayer>> = {};
+    public mapLayers: Partial<Record<SceneLayers, MapLayer>> = {};
 
-    loadAtlas(atlas: Atlases) {
-        const { imageSrc, jsonSrc } = getAtlasData(atlas);
-        this.load.atlas(atlas, imageSrc, jsonSrc);
+    loadSpine(spine: Spines) {
+        const { atlasSrc, jsonSrc } = getSpineData(spine);
+        this.load.spine(spine, jsonSrc, atlasSrc);
     }
 
-    loadAtlases(atlases: Atlases | Atlases[]) {
-        if (typeof atlases === 'object') {
-            atlases.map((atlas) => {
-                this.loadAtlas(atlas);
-            });
-        }
+    loadSpines(spines: Spines[]) {
+        spines.map((spine) => {
+            this.loadSpine(spine);
+        });
     }
 
     loadTilemap(tilemap: Tilemaps) {
@@ -52,7 +54,7 @@ export class Scene extends Phaser.Scene {
         this.mapTileset = this.map.addTilesetImage(tileset, tileset);
     }
 
-    createMapLayer(layer: Layers) {
+    createMapLayer(layer: SceneLayers) {
         if (this.map && this.mapTileset) {
             this.mapLayers[layer] = this.map.createLayer(layer, this.mapTileset, 0, 0);
         } else {
@@ -60,7 +62,7 @@ export class Scene extends Phaser.Scene {
         }
     }
 
-    createMapLayers(layers: Layers[]) {
+    createMapLayers(layers: SceneLayers[]) {
         if (this.map && this.mapTileset) {
             layers.map((layer) => {
                 this.createMapLayer(layer);
