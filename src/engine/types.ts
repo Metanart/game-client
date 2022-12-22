@@ -1,6 +1,6 @@
 import Phaser, { Types as PhaserTypes } from 'phaser';
 
-import { ImageSrc, JsonSrc } from 'types';
+import { ImageSrc, JsonSrc } from 'utils/types';
 
 export type { Types as PhaserTypes } from 'phaser';
 

@@ -1,7 +1,7 @@
-import { SPINES_PATH } from 'paths';
-
 import { Spines } from './enums';
 import { SpineData } from './types';
+
+import { SPINES_PATH } from 'utils/paths';
 
 const mapSpineToData: Record<Spines, SpineData> = {
     [Spines.SPINE_GOBLIN]: {

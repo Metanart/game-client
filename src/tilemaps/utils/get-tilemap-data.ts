@@ -1,7 +1,7 @@
-import { TILEMAPS_PATH } from 'paths';
-
 import { Tilemaps } from './enums';
 import { TilemapData } from './types';
+
+import { TILEMAPS_PATH } from 'utils/paths';
 
 const mapTilemapToData: Record<Tilemaps, TilemapData> = {
     [Tilemaps.TILEMAP_MAIN_LEVEL]: {
