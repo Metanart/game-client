@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 import { Scene } from 'engine/scene';
 
 import { Spines } from 'spines/utils/enums';
@@ -26,5 +28,8 @@ export class MainScene extends Scene {
             SceneLayers.SCENE_LAYER_WORLD,
             SceneLayers.SCENE_LAYER_ABOVE_PLAYER,
         ]);
+
+        const goblin = this.add.spine(400, 600, Spines.SPINE_GOBLINS, 'idle', true);
+        goblin.skeleton.setSkinByName('goblin');
     }
 }
