@@ -1,14 +1,14 @@
 import Phaser from 'phaser';
 
-import { GameConfig } from 'engine/types';
+import { T_GameConfig } from 'engine/types';
 
-import { Scenes } from 'scenes/enums';
+import { E_Scenes } from 'scenes/enums';
 import { MainScene } from 'scenes/main-scene';
 
 import 'phaser/types/SpinePlugin';
 import 'phaser/plugins/spine/dist/SpineWebGLPlugin';
 
-const gameConfig: GameConfig = {
+const gameConfig: T_GameConfig = {
     type: Phaser.AUTO,
     width: '100%',
     height: '100%',
@@ -25,7 +25,7 @@ const gameConfig: GameConfig = {
             {
                 key: 'SpinePlugin',
                 plugin: window.SpinePlugin,
-                sceneKey: Scenes.SCENE_MAIN,
+                sceneKey: E_Scenes.SCENE_MAIN,
             },
         ],
     },

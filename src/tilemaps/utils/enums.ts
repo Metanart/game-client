@@ -1,3 +1,13 @@
-export enum Tilemaps {
+export enum E_Tilemaps {
     TILEMAP_MAIN_LEVEL = 'TILEMAP_MAIN_LEVEL',
+}
+
+export enum E_TilemapLayers {
+    TILEMAP_LAYER_WORLD = 'TILEMAP_LAYER_WORLD',
+    TILEMAP_LAYER_ABOVE_PLAYER = 'TILEMAP_LAYER_ABOVE_PLAYER',
+    TILEMAP_LAYER_BELOW_PLAYER = 'TILEMAP_LAYER_BELOW_PLAYER',
+}
+
+export enum E_SpawnPoints {
+    SPAWN_POINT_PLAYER = 'SPAWN_POINT_PLAYER',
 }

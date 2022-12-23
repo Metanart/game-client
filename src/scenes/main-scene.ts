@@ -1,95 +1,54 @@
-import Phaser from 'phaser';
+import { Scene } from 'engine/scene/scene';
+import { createMap } from 'engine/scene/utils/create-map';
+import { createPlayer } from 'engine/scene/utils/create-player';
+import { createPlayerControls } from 'engine/scene/utils/create-player-controls';
+import { getSpawnPoint } from 'engine/scene/utils/get-spawn-point';
+import { preloadMap } from 'engine/scene/utils/preload-map';
+import { preloadPlayer } from 'engine/scene/utils/preload-player';
+import { updatePlayerAnimation } from 'engine/scene/utils/update-player-animation';
+import { PLAYER_SCALE, updatePlayerVelocity } from 'engine/scene/utils/update-player-velocity';
 
-import { Scene } from 'engine/scene';
+import { E_Spines } from 'spines/utils/enums';
 
-import { Spines } from 'spines/utils/enums';
+import { E_SpawnPoints, E_Tilemaps } from 'tilemaps/utils/enums';
 
-import { Tilemaps } from 'tilemaps/utils/enums';
+import { E_Tilesets } from 'tilesets/utils/enums';
 
-import { Tilesets } from 'tilesets/utils/enums';
+import { E_Scenes } from './enums';
 
-import { SceneLayers, Scenes } from './enums';
-
-let goblin: Phaser.GameObjects | undefined = undefined;
-let cursors = undefined;
-let camera = undefined;
-let player = undefined;
+import { T_SpawnPoint } from '../engine/scene/types';
+import { createPlayerCamera } from '../engine/scene/utils/create-player-camera';
+import { T_Dimensions } from '../utils/types';
 
 export class MainScene extends Scene {
     constructor() {
-        super({ key: Scenes.SCENE_MAIN });
+        super(E_Scenes.SCENE_MAIN);
     }
 
     preload() {
-        this.loadSpine(Spines.SPINE_GOBLIN);
-        this.loadTileset(Tilesets.TILESET_CITY);
-        this.loadTilemap(Tilemaps.TILEMAP_MAIN_LEVEL);
+        preloadPlayer(this, E_Spines.SPINE_GOBLIN);
+        preloadMap(this, E_Tilemaps.TILEMAP_MAIN_LEVEL, E_Tilesets.TILESET_CITY);
     }
 
     create() {
-        this.createMap(Tilemaps.TILEMAP_MAIN_LEVEL, Tilesets.TILESET_CITY);
-        this.createMapLayers([
-            SceneLayers.SCENE_LAYER_BELOW_PLAYER,
-            SceneLayers.SCENE_LAYER_WORLD,
-            SceneLayers.SCENE_LAYER_ABOVE_PLAYER,
-        ]);
+        this.map = createMap(this, E_Tilemaps.TILEMAP_MAIN_LEVEL, E_Tilesets.TILESET_CITY);
 
-        this.mapLayers['SCENE_LAYER_WORLD']?.setCollisionByProperty({ collides: true });
-        this.mapLayers['SCENE_LAYER_ABOVE_PLAYER']?.setDepth(10);
+        const playerSpawnPoint: T_SpawnPoint = getSpawnPoint(this.map.tilemap, E_SpawnPoints.SPAWN_POINT_PLAYER);
+        const mapDimensions: T_Dimensions = {
+            width: this.map.tilemap.widthInPixels,
+            height: this.map.tilemap.heightInPixels,
+        };
 
-        const spawnPoint = this.map.findObject('Objects', (obj) => obj.name === 'SPAWN_POINT');
+        this.player = createPlayer(this, E_Spines.SPINE_GOBLIN, playerSpawnPoint);
+        this.playerCamera = createPlayerCamera(this, this.player, mapDimensions);
+        this.playerControls = createPlayerControls(this);
 
-        goblin = this.add.spine(400, 600, Spines.SPINE_GOBLIN, 'idle', true);
-        goblin.skeleton.setSkinByName('goblin');
-        goblin.setScale(0.35);
-
-        camera = this.cameras.main;
-        camera.startFollow(goblin);
-        camera.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
-        cursors = this.input.keyboard.createCursorKeys();
-
-        goblin.setPosition(spawnPoint.x, spawnPoint.y);
-
-        this.physics.add.existing(goblin);
-
-        goblin.body.setVelocity(100, 200);
-
-        console.log('[IKATASONOV]:', goblin);
+        this.player.skeleton.setSkinByName('goblin');
+        this.player.setScale(PLAYER_SCALE);
     }
 
-    update(time, delta) {
-        const speed = 175;
-        const prevVelocity = goblin.body.velocity.clone();
-
-        // Stop any previous movement from the last frame
-        goblin.body.setVelocity(0);
-
-        // Horizontal movement
-        if (cursors.left.isDown) {
-            goblin.body.setVelocityX(-speed);
-        } else if (cursors.right.isDown) {
-            goblin.body.setVelocityX(speed);
-        }
-
-        if (cursors.up.isDown) {
-            goblin.body.setVelocityY(-speed);
-        } else if (cursors.down.isDown) {
-            goblin.body.setVelocityY(speed);
-        }
-
-        goblin.body.velocity.normalize().scale(speed);
-
-        if (cursors.left.isDown) {
-            goblin.play('walk', true, true);
-        } else if (cursors.right.isDown) {
-            goblin.play('walk', true, true);
-        } else if (cursors.up.isDown) {
-            goblin.play('walk', true, true);
-        } else if (cursors.down.isDown) {
-            goblin.play('walk', true, true);
-        } else {
-            goblin.play('idle', true, true);
-        }
+    update() {
+        updatePlayerVelocity(this.player, this.playerControls);
+        updatePlayerAnimation(this.player, this.playerControls);
     }
 }

@@ -1,5 +1,5 @@
-import { ImageSrc } from 'utils/types';
+import { T_ImageSrc } from 'utils/types';
 
-export type TilesetData = {
-    imageSrc: ImageSrc;
+export type T_TilesetData = {
+    imageSrc: T_ImageSrc;
 };

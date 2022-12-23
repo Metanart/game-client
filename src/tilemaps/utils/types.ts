@@ -1,5 +1,8 @@
-import { JsonSrc } from 'utils/types';
+import { E_TilemapLayers } from './enums';
 
-export type TilemapData = {
-    jsonSrc: JsonSrc;
+import { T_JsonSrc } from 'utils/types';
+
+export type T_TilemapData = {
+    jsonSrc: T_JsonSrc;
+    layersKeys: E_TilemapLayers[];
 };
