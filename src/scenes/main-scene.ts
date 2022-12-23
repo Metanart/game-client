@@ -1,6 +1,8 @@
 import { Scene } from 'engine/scene/scene';
+import { T_SpawnPoint } from 'engine/scene/types';
 import { createMap } from 'engine/scene/utils/create-map';
 import { createPlayer } from 'engine/scene/utils/create-player';
+import { createPlayerCamera } from 'engine/scene/utils/create-player-camera';
 import { createPlayerControls } from 'engine/scene/utils/create-player-controls';
 import { getSpawnPoint } from 'engine/scene/utils/get-spawn-point';
 import { preloadMap } from 'engine/scene/utils/preload-map';
@@ -16,9 +18,7 @@ import { E_Tilesets } from 'tilesets/utils/enums';
 
 import { E_Scenes } from './enums';
 
-import { T_SpawnPoint } from '../engine/scene/types';
-import { createPlayerCamera } from '../engine/scene/utils/create-player-camera';
-import { T_Dimensions } from '../utils/types';
+import { T_Dimensions } from 'utils/types';
 
 export class MainScene extends Scene {
     constructor() {

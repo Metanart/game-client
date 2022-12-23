@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 
-import { T_Camera, T_Player, T_PlayerControls, T_SceneMap } from './types';
+import { E_Scenes } from 'scenes/enums';
 
-import { E_Scenes } from '../../scenes/enums';
+import { T_Camera, T_Player, T_PlayerControls, T_SceneMap } from './types';
 
 export class Scene extends Phaser.Scene {
     public map!: T_SceneMap;
