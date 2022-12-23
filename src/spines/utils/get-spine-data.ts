@@ -1,17 +1,17 @@
-import { SPINES_PATH } from 'paths';
+import { E_Spines } from './enums';
+import { T_SpineData } from './types';
 
-import { Spines } from './enums';
-import { SpineData } from './types';
+import { SPINES_PATH } from 'utils/paths';
 
-const mapSpineToData: Record<Spines, SpineData> = {
-    [Spines.SPINE_GOBLINS]: {
-        atlasSrc: 'goblins/goblins.atlas',
-        jsonSrc: 'goblins/goblins.json',
+const mapSpineToData: Record<E_Spines, T_SpineData> = {
+    [E_Spines.SPINE_GOBLIN]: {
+        atlasSrc: 'goblin/goblin.atlas',
+        jsonSrc: 'goblin/goblin.json',
     },
 };
 
-export const getSpineData = (spine: Spines): SpineData => {
-    const { atlasSrc, jsonSrc } = mapSpineToData[spine];
+export const getSpineData = (spineKey: E_Spines): T_SpineData => {
+    const { atlasSrc, jsonSrc } = mapSpineToData[spineKey];
 
     return {
         atlasSrc: `${SPINES_PATH}/${atlasSrc}`,

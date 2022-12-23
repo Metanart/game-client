@@ -1,9 +1,3 @@
-export enum Scenes {
+export enum E_Scenes {
     SCENE_MAIN = 'SCENE_MAIN',
-}
-
-export enum SceneLayers {
-    SCENE_LAYER_WORLD = 'SCENE_LAYER_WORLD',
-    SCENE_LAYER_ABOVE_PLAYER = 'SCENE_LAYER_ABOVE_PLAYER',
-    SCENE_LAYER_BELOW_PLAYER = 'SCENE_LAYER_BELOW_PLAYER',
 }
