@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 import { E_Spine } from 'spines/utils/enums';
 
 import { E_TilemapLayer } from 'tilemaps/utils/enums';
@@ -19,9 +21,10 @@ export function createPlayer(
     const playerDepth = getTilemapLayerData(E_TilemapLayer.PLAYER).depth;
     const player: T_SpineGameObject = addSpineToScene(scene, spineKey).setDepth(playerDepth);
     const playerWithBody = scene.physics.add.existing(player as unknown as T_GameObject) as unknown as T_Player;
+    playerWithBody.setPosition(position?.x || 0, position?.y || 0);
 
     scene.physics.add.collider(playerWithBody as unknown as T_GameObject, colliderLayer);
-    playerWithBody.setPosition(position?.x || 0, position?.y || 0);
+    playerWithBody.body.setSize(190, playerWithBody.height, true);
 
     return playerWithBody;
 }

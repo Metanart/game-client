@@ -8,7 +8,7 @@ import { getSpawnPoint } from 'engine/scene/utils/get-spawn-point';
 import { preloadMap } from 'engine/scene/utils/preload-map';
 import { preloadPlayer } from 'engine/scene/utils/preload-player';
 import { updatePlayerAnimation } from 'engine/scene/utils/update-player-animation';
-import { PLAYER_SCALE, updatePlayerVelocity } from 'engine/scene/utils/update-player-velocity';
+import { updatePlayerVelocity } from 'engine/scene/utils/update-player-velocity';
 
 import { E_Spine } from 'spines/utils/enums';
 
@@ -18,6 +18,7 @@ import { E_Tileset } from 'tilesets/utils/enums';
 
 import { E_Scene } from './enums';
 
+import { createCollisionsDebug } from '../engine/scene/utils/create-collisions-debug';
 import { T_Dimensions } from 'utils/types';
 
 export class MainScene extends Scene {
@@ -40,14 +41,16 @@ export class MainScene extends Scene {
         };
 
         const worldLayer = this.map.getLayer(E_TilemapLayer.WORLD);
-        //worldLayer.setCollisionByProperty({ collides: true });
+        worldLayer.setCollisionByProperty({ collides: true });
 
         this.player = createPlayer(this, E_Spine.GOBLIN, worldLayer, playerSpawnPoint);
         this.playerCamera = createPlayerCamera(this, this.player, mapDimensions);
         this.playerControls = createPlayerControls(this);
 
         this.player.skeleton.setSkinByName('goblin');
-        this.player.setScale(PLAYER_SCALE);
+        this.player.setScale(0.2);
+
+        createCollisionsDebug(this, worldLayer);
     }
 
     update() {
