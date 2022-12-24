@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 import { T_GameConfig } from 'engine/types';
 
-import { E_Scenes } from 'scenes/enums';
+import { E_Scene } from 'scenes/enums';
 import { MainScene } from 'scenes/main-scene';
 
 import 'phaser/types/SpinePlugin';
@@ -25,7 +25,7 @@ const gameConfig: T_GameConfig = {
             {
                 key: 'SpinePlugin',
                 plugin: window.SpinePlugin,
-                sceneKey: E_Scenes.SCENE_MAIN,
+                sceneKey: E_Scene.MAIN,
             },
         ],
     },

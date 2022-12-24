@@ -1,3 +1,3 @@
-export enum E_Spines {
-    SPINE_GOBLIN = 'SPINE_GOBLIN',
+export enum E_Spine {
+    GOBLIN = 'SPINE_GOBLIN',
 }

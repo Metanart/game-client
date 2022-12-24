@@ -10,36 +10,39 @@ import { preloadPlayer } from 'engine/scene/utils/preload-player';
 import { updatePlayerAnimation } from 'engine/scene/utils/update-player-animation';
 import { PLAYER_SCALE, updatePlayerVelocity } from 'engine/scene/utils/update-player-velocity';
 
-import { E_Spines } from 'spines/utils/enums';
+import { E_Spine } from 'spines/utils/enums';
 
-import { E_SpawnPoints, E_Tilemaps } from 'tilemaps/utils/enums';
+import { E_SpawnPoint, E_Tilemap, E_TilemapLayer } from 'tilemaps/utils/enums';
 
-import { E_Tilesets } from 'tilesets/utils/enums';
+import { E_Tileset } from 'tilesets/utils/enums';
 
-import { E_Scenes } from './enums';
+import { E_Scene } from './enums';
 
 import { T_Dimensions } from 'utils/types';
 
 export class MainScene extends Scene {
     constructor() {
-        super(E_Scenes.SCENE_MAIN);
+        super(E_Scene.MAIN);
     }
 
     preload() {
-        preloadPlayer(this, E_Spines.SPINE_GOBLIN);
-        preloadMap(this, E_Tilemaps.TILEMAP_MAIN_LEVEL, E_Tilesets.TILESET_CITY);
+        preloadPlayer(this, E_Spine.GOBLIN);
+        preloadMap(this, E_Tilemap.TILEMAP_MAIN_LEVEL, E_Tileset.TILESET_CITY);
     }
 
     create() {
-        this.map = createMap(this, E_Tilemaps.TILEMAP_MAIN_LEVEL, E_Tilesets.TILESET_CITY);
+        this.map = createMap(this, E_Tilemap.TILEMAP_MAIN_LEVEL, E_Tileset.TILESET_CITY);
 
-        const playerSpawnPoint: T_SpawnPoint = getSpawnPoint(this.map.tilemap, E_SpawnPoints.SPAWN_POINT_PLAYER);
+        const playerSpawnPoint: T_SpawnPoint = getSpawnPoint(this.map.tilemap, E_SpawnPoint.SPAWN_POINT_PLAYER);
         const mapDimensions: T_Dimensions = {
             width: this.map.tilemap.widthInPixels,
             height: this.map.tilemap.heightInPixels,
         };
 
-        this.player = createPlayer(this, E_Spines.SPINE_GOBLIN, playerSpawnPoint);
+        const worldLayer = this.map.getLayer(E_TilemapLayer.WORLD);
+        //worldLayer.setCollisionByProperty({ collides: true });
+
+        this.player = createPlayer(this, E_Spine.GOBLIN, worldLayer, playerSpawnPoint);
         this.playerCamera = createPlayerCamera(this, this.player, mapDimensions);
         this.playerControls = createPlayerControls(this);
 
