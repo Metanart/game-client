@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { E_Scenes } from 'scenes/enums';
+import { E_Scene } from 'scenes/enums';
 
 import { T_Camera, T_Player, T_PlayerControls, T_SceneMap } from './types';
 
@@ -10,7 +10,7 @@ export class Scene extends Phaser.Scene {
     public playerCamera!: T_Camera;
     public playerControls!: T_PlayerControls;
 
-    constructor(sceneKey: E_Scenes) {
+    constructor(sceneKey: E_Scene) {
         super({ key: sceneKey });
     }
 }

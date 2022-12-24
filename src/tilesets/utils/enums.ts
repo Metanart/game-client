@@ -1,3 +1,3 @@
-export enum E_Tilesets {
+export enum E_Tileset {
     TILESET_CITY = 'TILESET_CITY',
 }
