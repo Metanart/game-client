@@ -9,11 +9,11 @@ import 'phaser/types/SpinePlugin';
 import 'phaser/plugins/spine/dist/SpineWebGLPlugin';
 
 const gameConfig: T_GameConfig = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     width: '100%',
     height: '100%',
     parent: 'game-root',
-    pixelArt: true,
+    pixelArt: false,
     physics: {
         default: 'arcade',
         arcade: {

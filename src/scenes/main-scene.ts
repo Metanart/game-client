@@ -35,6 +35,7 @@ export class MainScene extends Scene {
         this.map = createMap(this, E_Tilemap.TILEMAP_MAIN_LEVEL, E_Tileset.TILESET_CITY);
 
         const playerSpawnPoint: T_SpawnPoint = getSpawnPoint(this.map.tilemap, E_SpawnPoint.SPAWN_POINT_PLAYER);
+
         const mapDimensions: T_Dimensions = {
             width: this.map.tilemap.widthInPixels,
             height: this.map.tilemap.heightInPixels,
