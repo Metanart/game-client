@@ -23,8 +23,8 @@ function createTilemapLayer(tilemap: T_Tilemap, tilemapLayerKey: E_TilemapLayer,
 function createTilemapLayers(tilemap: T_Tilemap, tilemapKey: E_Tilemap, tileset: T_Tileset): T_TilemapLayers {
     const result: T_TilemapLayers = {};
 
-    getTilemapData(tilemapKey).layersKeys.map((tilemapLayerKey) => {
-        result[tilemapLayerKey] = createTilemapLayer(tilemap, tilemapLayerKey, tileset);
+    getTilemapData(tilemapKey).layersKeys.map((layerKey: E_TilemapLayer) => {
+        result[layerKey] = createTilemapLayer(tilemap, layerKey, tileset);
     });
 
     return result;
