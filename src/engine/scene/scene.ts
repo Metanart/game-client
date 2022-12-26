@@ -9,6 +9,8 @@ export class Scene extends Phaser.Scene {
     public player!: T_Player;
     public playerCamera!: T_Camera;
     public playerControls!: T_PlayerControls;
+    public chunkSize: number = 60;
+    public tileSize: number = 34;
 
     constructor(sceneKey: E_Scene) {
         super({ key: sceneKey });

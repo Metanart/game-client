@@ -15,6 +15,8 @@
         "lint"
     ],
     "dependencies": {
+        "@types/noisejs": "^0.0.28",
+        "noisejs": "^2.1.0",
         "path": "^0.12.7",
         "phaser": "^3.55.2",
         "react": "^18.2.0",

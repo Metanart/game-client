@@ -2,9 +2,11 @@ import Phaser from 'phaser';
 
 import { E_TilemapLayer } from 'tilemaps/utils/enums';
 
+import { Scene } from './scene';
+
 import 'phaser/types/SpineGameObject.d.ts';
 
-export type T_Scene = Phaser.Scene;
+export type T_Scene = Scene;
 
 export type T_SceneMap = {
     tilemap: T_Tilemap;
@@ -18,6 +20,8 @@ export type T_Tileset = Phaser.Tilemaps.Tileset;
 export type T_Tilemap = Phaser.Tilemaps.Tilemap;
 
 export type T_TilemapLayer = Phaser.Tilemaps.TilemapLayer;
+export type T_TilemapLayerData = Phaser.Tilemaps.LayerData;
+export type T_TilemapTile = Phaser.Tilemaps.Tile;
 
 export type T_TilemapLayers = Partial<Record<E_TilemapLayer, T_TilemapLayer>>;
 
