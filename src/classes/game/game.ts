@@ -19,7 +19,7 @@ export class Game {
     constructor() {
         const orbitControls = new OrbitControls(this.camera, renderer.domElement);
         orbitControls.minDistance = 10;
-        orbitControls.maxDistance = 100;
+        orbitControls.maxDistance = 300;
         orbitControls.enableDamping = true;
 
         this.scene.background = new Color(0xeeeeee);
@@ -37,7 +37,6 @@ export class Game {
     }
 
     render(time: number) {
-        this.player.render(time);
         renderer.render(this.scene, this.camera);
         this.run();
     }

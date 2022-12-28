@@ -5,14 +5,14 @@ import { cameraSettings } from '../game/game-settings';
 export class Camera extends ThreePerspectiveCamera {
     constructor() {
         const cameraSettings = {
-            fov: 90,
+            fov: 20,
             aspect: window.innerWidth / window.innerHeight,
             near: 1,
-            far: 1000,
+            far: 500,
         };
 
         const { fov, aspect, near, far } = cameraSettings;
         super(fov, aspect, near, far);
-        this.position.set(0, 200, 300);
+        this.position.set(100, 100, 0);
     }
 }
