@@ -1,6 +1,26 @@
+const Millisecond = 1;
 const Meter = 1;
 const Gram = 1;
 const Liter = 1;
+
+const Second = Millisecond * 1000;
+const Minute = Second * 60;
+const Hour = Minute * 60;
+const Day = Hour * 24;
+const Week = Day * 7;
+const Month = Week * 4;
+const Year = Month * 12;
+
+export const Time = {
+    Millisecond,
+    Second,
+    Minute,
+    Hour,
+    Day,
+    Week,
+    Month,
+    Year,
+};
 
 export const Length = {
     Millimeter: Meter / 1000,
