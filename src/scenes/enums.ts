@@ -1,3 +1,3 @@
-export enum E_Scene {
-    MAIN = 'SCENE_MAIN',
+export enum EScene {
+    MAIN = 'MAIN',
 }

@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom/client';
 
 import App from 'components/app/app';
 
-import 'scss/static/reset.css';
-import 'utils/init-game';
+import { Game } from './classes/game/game';
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+import 'global/scss/static/reset.css';
+
+const appRoot = document.getElementById('app-root') as HTMLElement;
+const gameRoot = document.getElementById('game-root') as HTMLElement;
+
+const game = new Game().renderToDom(gameRoot).run();
+
+ReactDOM.createRoot(appRoot).render(
     <React.StrictMode>
         <App />
     </React.StrictMode>,
