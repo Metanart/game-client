@@ -1,53 +1,39 @@
-import { Color, GridHelper } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-
 import { Camera } from 'classes/camera/camera';
-import { Player } from 'classes/player/player';
 import { renderer } from 'classes/renderer/utils';
 
 import { MainScene } from 'scenes/main-scene';
 
-import { Light } from '../light/light';
-import { MapTile } from '../map-tile/map-tile';
+import { IS_DEVELOPMENT_MODE } from 'constants/mode';
+
+import { gridHelper } from 'utils/get-development-grid';
+import { initDevelopmentCamera } from 'utils/init-development-camera';
 
 export class Game {
     private camera = new Camera();
     private scene = new MainScene();
-    private player = new Player();
-    private light = new Light();
 
-    constructor() {
-        const orbitControls = new OrbitControls(this.camera, renderer.domElement);
-        orbitControls.minDistance = 10;
-        orbitControls.maxDistance = 300;
-        orbitControls.enableDamping = true;
+    constructor(parentElement: HTMLElement) {
+        if (IS_DEVELOPMENT_MODE) {
+            initDevelopmentCamera(this.camera);
+            this.scene.add(gridHelper);
+        }
 
-        this.scene.background = new Color(0xeeeeee);
+        parentElement.appendChild(renderer.domElement);
 
-        const gridHelper = new GridHelper(20, 20);
-
-        this.scene.add(gridHelper);
-
-        this.scene.add(this.player);
-        this.scene.add(this.light);
-        this.scene.add();
-
-        const mapTile = new MapTile();
-        this.scene.add(mapTile);
+        this.tick();
     }
 
-    render(time: number) {
+    update() {
+        this.scene.update();
+    }
+
+    render() {
         renderer.render(this.scene, this.camera);
-        this.run();
     }
 
-    renderToDom(element: HTMLElement) {
-        element.appendChild(renderer.domElement);
-        return this;
-    }
-
-    run() {
-        requestAnimationFrame(this.render.bind(this));
-        return this;
+    tick() {
+        requestAnimationFrame(this.tick.bind(this));
+        this.render();
+        this.update();
     }
 }

@@ -33,15 +33,26 @@ module.exports = {
                 groups: [
                     ['^react'],
                     ['^@react'],
+
                     ['^vite'],
                     ['^@vite'],
+
                     ['^three'],
-                    ['^global'],
+
                     ['^classes'],
                     ['^components'],
                     ['^scenes'],
+
+                    ['^constants'],
+                    ['^tokens'],
+                    ['^types'],
+                    ['^utils'],
+
                     ['^assets'],
                     ['^scss'],
+
+                    ['^../'],
+
                     ['^./'],
                 ],
             },
