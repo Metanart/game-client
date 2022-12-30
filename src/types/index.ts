@@ -5,5 +5,3 @@ export type TJsonSrc = `${string}.${'json'}`;
 export type TCoordinates = { x: number; y: number; z: number };
 
 export type TDimensions = { width: number; height: number; depth: number };
-
-export type TKeyCode = 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD' | 'Escape';

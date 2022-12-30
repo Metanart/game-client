@@ -35,9 +35,11 @@ module.exports = {
                     ['^@react'],
 
                     ['^vite'],
-                    ['^@vite'],
 
+                    ['^@vite'],
                     ['^three'],
+
+                    ['uuid'],
 
                     ['^classes'],
                     ['^components'],
