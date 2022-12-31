@@ -19,6 +19,7 @@ export class PlayerController {
 
     private isRunning = false;
 
+    private direction = this.getDirection();
     private rotationAngle = new Vector3(0, 0, 0);
     private rotationQuaternion = new Quaternion();
 
@@ -103,6 +104,8 @@ export class PlayerController {
     }
 
     getDirection(): TDirection {
+        if (!this.checkIfKeysAreActive()) return 'Idle';
+
         const keys = this.movementKeysStatus;
 
         if (keys['KeyW'] && keys['KeyA']) return 'UpLeft';
