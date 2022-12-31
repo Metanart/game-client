@@ -1,24 +1,33 @@
+import { Quaternion, Vector3 } from 'three';
+import { calcNURBSDerivatives } from 'three/examples/jsm/curves/NURBSUtils';
+
 import { playerConfig } from './config';
 import { Player } from './player';
 
-type TMovementKey = 'w' | 'a' | 's' | 'd';
+type TMovementKey = 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD';
+
+type TMovementKeysStatus = Record<TMovementKey, boolean>;
 
 export class PlayerController {
-    private movementKeysStatus: Record<TMovementKey, boolean> = {
-        w: false,
-        a: false,
-        s: false,
-        d: false,
+    private movementKeysStatus: TMovementKeysStatus = {
+        KeyW: false,
+        KeyA: false,
+        KeyS: false,
+        KeyD: false,
     };
 
-    private velocity = playerConfig.speed.walk;
+    private isRunning = false;
+
+    private rotationAngle = new Vector3(0, 0, 0);
+    private rotationQuaternion = new Quaternion();
 
     constructor(private playerPosition: Player['position']) {
         this.setup();
     }
 
-    checkIfMovementKey(key: KeyboardEvent['key']) {
-        return key === 'w' || key === 'a' || key === 's' || key === 'd';
+    checkIfKeysAreActive() {
+        const keys = this.movementKeysStatus;
+        return keys['KeyW'] || keys['KeyA'] || keys['KeyS'] || keys['KeyD'];
     }
 
     setup() {
@@ -30,40 +39,94 @@ export class PlayerController {
         window.addEventListener('keydown', (event) => {
             if (event.repeat) return;
 
-            if (this.checkIfMovementKey(event.key)) {
-                this.movementKeysStatus[event.key as TMovementKey] = true;
-            }
+            console.log('[IKATASONOV]:', event);
+
+            this.isRunning = event.shiftKey;
+            this.movementKeysStatus[event.code as TMovementKey] = true;
         });
     }
 
     setupKeyUpListener() {
         window.addEventListener('keyup', (event) => {
-            if (this.checkIfMovementKey(event.key)) {
-                this.movementKeysStatus[event.key as TMovementKey] = false;
-            }
+            console.log('[IKATASONOV]:', event);
+
+            this.isRunning = event.shiftKey;
+            this.movementKeysStatus[event.code as TMovementKey] = false;
         });
     }
 
-    updatePositionFromVelocity() {
+    getDirectionOffset() {
         const keys = this.movementKeysStatus;
-        const position = this.playerPosition;
-        const velocity = this.velocity;
+        const offset = new Vector3();
+        const directValue = Math.PI / 2;
+        const diagonalValue = Math.PI / 2 - Math.PI / 6;
 
-        if (keys['w']) {
-            position.setX((position.x -= velocity));
+        if (keys['KeyW'] && keys['KeyA']) {
+            offset.x = diagonalValue;
+            offset.z = -diagonalValue;
+            return offset;
         }
-        if (keys['a']) {
-            position.setZ((position.z += velocity));
+
+        if (keys['KeyW'] && keys['KeyD']) {
+            offset.x = diagonalValue;
+            offset.z = diagonalValue;
+            return offset;
         }
-        if (keys['s']) {
-            position.setX((position.x += velocity));
+
+        if (keys['KeyS'] && keys['KeyA']) {
+            offset.x = -diagonalValue;
+            offset.z = -diagonalValue;
+            return offset;
         }
-        if (keys['d']) {
-            position.setZ((position.z -= velocity));
+
+        if (keys['KeyS'] && keys['KeyD']) {
+            offset.x = -diagonalValue;
+            offset.z = diagonalValue;
+            return offset;
         }
+
+        if (keys['KeyW']) {
+            offset.x = directValue;
+            return offset;
+        }
+
+        if (keys['KeyA']) {
+            offset.z = -directValue;
+            return offset;
+        }
+
+        if (keys['KeyS']) {
+            offset.x = -directValue;
+            return offset;
+        }
+
+        if (keys['KeyD']) {
+            offset.z = directValue;
+            return offset;
+        }
+
+        return offset;
     }
 
-    tick() {
-        this.updatePositionFromVelocity();
+    updatePlayerPosition(delta: number) {
+        if (!this.checkIfKeysAreActive()) return;
+
+        const { walk, run } = playerConfig.speed;
+
+        const keys = this.movementKeysStatus;
+
+        const position = this.playerPosition;
+        const velocity = this.isRunning ? run : walk;
+        const offset = this.getDirectionOffset();
+
+        const calculatedOffsetX = velocity * offset.x * delta;
+        const calculatedOffsetZ = velocity * offset.z * delta;
+
+        position.setX((position.x += calculatedOffsetX));
+        position.setZ((position.z += calculatedOffsetZ));
+    }
+
+    tick(delta: number) {
+        this.updatePlayerPosition(delta);
     }
 }

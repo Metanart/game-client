@@ -8,6 +8,6 @@ export class Camera extends ThreePerspectiveCamera {
 
         super(fov, aspect, near, far);
 
-        this.position.set(50, 50, 0);
+        this.position.set(-50, 50, 0);
     }
 }

@@ -8,7 +8,8 @@ export const playerConfig = {
     },
 
     speed: {
-        walk: 0.1,
+        walk: 2,
+        run: 4,
         turn: 0.1,
     },
 };

@@ -1,3 +1,5 @@
+import { Clock } from 'three';
+
 import { Camera } from 'classes/camera/camera';
 import { renderer } from 'classes/renderer/utils';
 
@@ -7,6 +9,8 @@ import { IS_DEVELOPMENT_MODE } from 'constants/mode';
 
 import { gridHelper } from 'utils/get-development-grid';
 import { initDevelopmentCamera } from 'utils/init-development-camera';
+
+const clock = new Clock();
 
 export class Game {
     private camera = new Camera();
@@ -31,6 +35,6 @@ export class Game {
         requestAnimationFrame(this.tick.bind(this));
 
         this.render();
-        this.scene.tick();
+        this.scene.tick(clock.getDelta());
     }
 }

@@ -9,7 +9,7 @@ export class Player extends Creature {
         super();
     }
 
-    tick() {
-        this.controller.tick();
+    tick(delta: number) {
+        this.controller.tick(delta);
     }
 }

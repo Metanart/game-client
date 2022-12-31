@@ -25,7 +25,7 @@ export class MainScene extends Scene {
         this.background = new Color(Colors.LightGrey);
     }
 
-    tick() {
-        this.player.tick();
+    tick(delta: number) {
+        this.player.tick(delta);
     }
 }
