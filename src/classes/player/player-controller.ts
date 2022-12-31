@@ -1,10 +1,11 @@
 import { Quaternion, Vector3 } from 'three';
-import { calcNURBSDerivatives } from 'three/examples/jsm/curves/NURBSUtils';
 
 import { playerConfig } from './config';
 import { Player } from './player';
 
 type TMovementKey = 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD';
+
+type TDirection = 'Up' | 'Left' | 'Down' | 'Right' | 'UpLeft' | 'UpRight' | 'DownLeft' | 'DownRight' | 'Idle';
 
 type TMovementKeysStatus = Record<TMovementKey, boolean>;
 
@@ -55,57 +56,66 @@ export class PlayerController {
         });
     }
 
-    getDirectionOffset() {
-        const keys = this.movementKeysStatus;
+    getDirectionOffset(direction: TDirection): Vector3 {
         const offset = new Vector3();
         const directValue = Math.PI / 2;
         const diagonalValue = Math.PI / 2 - Math.PI / 6;
 
-        if (keys['KeyW'] && keys['KeyA']) {
-            offset.x = diagonalValue;
-            offset.z = -diagonalValue;
-            return offset;
-        }
+        switch (direction) {
+            case 'UpLeft':
+                offset.x = diagonalValue;
+                offset.z = -diagonalValue;
+                return offset;
 
-        if (keys['KeyW'] && keys['KeyD']) {
-            offset.x = diagonalValue;
-            offset.z = diagonalValue;
-            return offset;
-        }
+            case 'UpRight':
+                offset.x = diagonalValue;
+                offset.z = diagonalValue;
+                return offset;
 
-        if (keys['KeyS'] && keys['KeyA']) {
-            offset.x = -diagonalValue;
-            offset.z = -diagonalValue;
-            return offset;
-        }
+            case 'DownLeft':
+                offset.x = -diagonalValue;
+                offset.z = -diagonalValue;
+                return offset;
 
-        if (keys['KeyS'] && keys['KeyD']) {
-            offset.x = -diagonalValue;
-            offset.z = diagonalValue;
-            return offset;
-        }
+            case 'DownRight':
+                offset.x = -diagonalValue;
+                offset.z = diagonalValue;
+                return offset;
 
-        if (keys['KeyW']) {
-            offset.x = directValue;
-            return offset;
-        }
+            case 'Up':
+                offset.x = directValue;
+                return offset;
 
-        if (keys['KeyA']) {
-            offset.z = -directValue;
-            return offset;
-        }
+            case 'Down':
+                offset.x = -directValue;
+                return offset;
 
-        if (keys['KeyS']) {
-            offset.x = -directValue;
-            return offset;
-        }
+            case 'Left':
+                offset.z = -directValue;
+                return offset;
 
-        if (keys['KeyD']) {
-            offset.z = directValue;
-            return offset;
+            case 'Right':
+                offset.z = directValue;
+                return offset;
         }
 
         return offset;
+    }
+
+    getDirection(): TDirection {
+        const keys = this.movementKeysStatus;
+
+        if (keys['KeyW'] && keys['KeyA']) return 'UpLeft';
+        if (keys['KeyW'] && keys['KeyD']) return 'UpRight';
+        if (keys['KeyS'] && keys['KeyA']) return 'DownLeft';
+        if (keys['KeyS'] && keys['KeyD']) return 'DownRight';
+
+        if (keys['KeyW']) return 'Up';
+        if (keys['KeyA']) return 'Left';
+        if (keys['KeyS']) return 'Down';
+        if (keys['KeyD']) return 'Right';
+
+        return 'Idle';
     }
 
     updatePlayerPosition(delta: number) {
@@ -117,7 +127,8 @@ export class PlayerController {
 
         const position = this.playerPosition;
         const velocity = this.isRunning ? run : walk;
-        const offset = this.getDirectionOffset();
+        const direction = this.getDirection();
+        const offset = this.getDirectionOffset(direction);
 
         const calculatedOffsetX = velocity * offset.x * delta;
         const calculatedOffsetZ = velocity * offset.z * delta;
