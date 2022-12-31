@@ -158,8 +158,6 @@ export class PlayerController {
 
         const { walk, run } = playerConfig.speed;
 
-        const keys = this.movementKeysStatus;
-
         const position = this.playerPosition;
         const velocity = this.isRunning ? run : walk;
         const offset = this.getMovementOffset();

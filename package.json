@@ -11,9 +11,6 @@
         "lint:format": "prettier  --loglevel warn --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
         "lint": "yarn lint:format && yarn lint:fix && tsc"
     },
-    "pre-commit": [
-        "lint"
-    ],
     "dependencies": {
         "hotkeys-js": "^3.10.1",
         "path": "^0.12.7",
