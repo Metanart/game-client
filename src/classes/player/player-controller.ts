@@ -1,4 +1,4 @@
-import { Quaternion, Vector3 } from 'three';
+import { Euler, Quaternion, Vector3 } from 'three';
 
 import { playerConfig } from './config';
 import { Player } from './player';
@@ -16,14 +16,10 @@ export class PlayerController {
         KeyS: false,
         KeyD: false,
     };
-
+    private direction: TDirection = 'Idle';
     private isRunning = false;
 
-    private direction = this.getDirection();
-    private rotationAngle = new Vector3(0, 0, 0);
-    private rotationQuaternion = new Quaternion();
-
-    constructor(private playerPosition: Player['position']) {
+    constructor(private playerPosition: Vector3, private playerRotation: Euler) {
         this.setup();
     }
 
@@ -41,8 +37,6 @@ export class PlayerController {
         window.addEventListener('keydown', (event) => {
             if (event.repeat) return;
 
-            console.log('[IKATASONOV]:', event);
-
             this.isRunning = event.shiftKey;
             this.movementKeysStatus[event.code as TMovementKey] = true;
         });
@@ -50,19 +44,17 @@ export class PlayerController {
 
     setupKeyUpListener() {
         window.addEventListener('keyup', (event) => {
-            console.log('[IKATASONOV]:', event);
-
             this.isRunning = event.shiftKey;
             this.movementKeysStatus[event.code as TMovementKey] = false;
         });
     }
 
-    getDirectionOffset(direction: TDirection): Vector3 {
+    getMovementOffset(): Vector3 {
         const offset = new Vector3();
         const directValue = Math.PI / 2;
         const diagonalValue = Math.PI / 2 - Math.PI / 6;
 
-        switch (direction) {
+        switch (this.direction) {
             case 'UpLeft':
                 offset.x = diagonalValue;
                 offset.z = -diagonalValue;
@@ -103,7 +95,7 @@ export class PlayerController {
         return offset;
     }
 
-    getDirection(): TDirection {
+    getMovementDirection(): TDirection {
         if (!this.checkIfKeysAreActive()) return 'Idle';
 
         const keys = this.movementKeysStatus;
@@ -121,7 +113,47 @@ export class PlayerController {
         return 'Idle';
     }
 
-    updatePlayerPosition(delta: number) {
+    updateDirection() {
+        this.direction = this.getMovementDirection();
+    }
+
+    updateRotation() {
+        const rotation = this.playerRotation;
+        const halfAngle = Math.PI / 2;
+        const quarterAngle = Math.PI / 4;
+
+        switch (this.direction) {
+            case 'UpLeft':
+                rotation.set(0, quarterAngle, 0);
+                break;
+            case 'UpRight':
+                rotation.set(0, -quarterAngle, 0);
+                break;
+            case 'DownLeft':
+                rotation.set(0, -quarterAngle, 0);
+                break;
+            case 'DownRight':
+                rotation.set(0, quarterAngle, 0);
+                break;
+            case 'Up':
+                rotation.set(0, 0, 0);
+                break;
+            case 'Down':
+                rotation.set(0, 0, 0);
+                break;
+            case 'Left':
+                rotation.set(0, halfAngle, 0);
+                break;
+            case 'Right':
+                rotation.set(0, -halfAngle, 0);
+                break;
+            case 'Idle':
+                rotation.set(0, 0, 0);
+                break;
+        }
+    }
+
+    updatePosition(delta: number) {
         if (!this.checkIfKeysAreActive()) return;
 
         const { walk, run } = playerConfig.speed;
@@ -130,8 +162,7 @@ export class PlayerController {
 
         const position = this.playerPosition;
         const velocity = this.isRunning ? run : walk;
-        const direction = this.getDirection();
-        const offset = this.getDirectionOffset(direction);
+        const offset = this.getMovementOffset();
 
         const calculatedOffsetX = velocity * offset.x * delta;
         const calculatedOffsetZ = velocity * offset.z * delta;
@@ -141,6 +172,8 @@ export class PlayerController {
     }
 
     tick(delta: number) {
-        this.updatePlayerPosition(delta);
+        this.updateDirection();
+        this.updateRotation();
+        this.updatePosition(delta);
     }
 }
