@@ -4,7 +4,7 @@ import { Colors } from 'tokens/colors';
 
 import { workbenchConfig } from './config';
 
-import { Body, Box, Plane, Vec3, World } from 'cannon-es';
+import { Body, Box, Vec3 } from 'cannon-es';
 
 export class Workbench extends Mesh {
     private body: Body;
@@ -22,7 +22,6 @@ export class Workbench extends Mesh {
         const shape = new Box(new Vec3(0.5, 0.5, 0.5));
         this.body = new Body({ mass: 5 });
         this.body.addShape(shape);
-        this.body.position.set(0, 5, 0);
     }
 
     getBody() {

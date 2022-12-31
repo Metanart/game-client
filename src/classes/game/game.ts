@@ -2,14 +2,17 @@ import { Clock } from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 import { Camera } from 'classes/camera/camera';
+import { MapTile } from 'classes/map-tile/map-tile';
+import { Player } from 'classes/player/player';
 import { renderer } from 'classes/renderer/utils';
+import { Workbench } from 'classes/workbench/workbench';
 
 import { MainScene } from 'scenes/main-scene';
 
 import { gridHelper } from 'utils/get-development-grid';
 import { initDevelopmentCamera } from 'utils/init-development-camera';
 
-import { Body, Plane, World } from 'cannon-es';
+import { World } from 'cannon-es';
 import CannonDebugger from 'cannon-es-debugger';
 
 const clock = new Clock();
@@ -43,12 +46,20 @@ export class Game {
     setupPhysics() {
         this.world.gravity.set(0, -10, 0);
 
-        // Floor
-        const floorShape = new Plane();
-        const floorBody = new Body({ mass: 0 });
-        floorBody.addShape(floorShape);
-        floorBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
-        this.world.addBody(floorBody);
+        const workbench = new Workbench();
+        const player = new Player();
+        const mapTile = new MapTile();
+
+        workbench.position.setX(3);
+        workbench.position.setZ(3);
+
+        //this.scene.add(workbench);
+        this.scene.add(mapTile);
+        this.scene.add(player);
+
+        this.world.addBody(player.getBody());
+        this.world.addBody(mapTile.getBody());
+        //this.world.addBody(workbench.getBody());
     }
 
     setupStats() {
