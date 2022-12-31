@@ -23,17 +23,14 @@ export class Game {
         this.tick();
     }
 
-    update() {
-        this.scene.update();
-    }
-
     render() {
         renderer.render(this.scene, this.camera);
     }
 
     tick() {
         requestAnimationFrame(this.tick.bind(this));
+
         this.render();
-        this.update();
+        this.scene.tick();
     }
 }

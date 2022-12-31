@@ -7,7 +7,8 @@ export const playerConfig = {
         depth: Length.Decimeter * 7,
     },
 
-    walk: {
-        velocity: Length.Meter * 2,
+    speed: {
+        walk: 0.1,
+        turn: 0.1,
     },
 };

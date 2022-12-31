@@ -7,6 +7,8 @@ import { Scene } from 'classes/scene/scene';
 
 import { Colors } from 'tokens/colors';
 
+import hotkeys from 'hotkeys-js';
+
 export class MainScene extends Scene {
     private player = new Player();
     private light = new Light();
@@ -21,5 +23,9 @@ export class MainScene extends Scene {
         this.add(this.light);
 
         this.background = new Color(Colors.LightGrey);
+    }
+
+    tick() {
+        this.player.tick();
     }
 }
