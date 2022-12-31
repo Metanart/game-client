@@ -12,6 +12,7 @@
         "lint": "yarn lint:format && yarn lint:fix && tsc"
     },
     "dependencies": {
+        "cannon-es": "^0.20.0",
         "hotkeys-js": "^3.10.1",
         "path": "^0.12.7",
         "react": "^18.2.0",
