@@ -1,17 +1,15 @@
-import { BoxGeometry, Mesh, MeshPhongMaterial } from 'three';
+import { Creature } from 'classes/creature/creature';
 
-import { Length } from 'global/measurements';
+import { PlayerController } from './player-controller';
 
-export class Player extends Mesh {
+export class Player extends Creature {
+    private controller = new PlayerController(this.position, this.rotation);
+
     constructor() {
-        const boxWidth = Length.Decimeter * 4;
-        const boxHeight = Length.Meter * 1.5;
-        const boxDepth = Length.Decimeter * 4;
-        const geometry = new BoxGeometry(boxWidth, boxHeight, boxDepth);
+        super();
+    }
 
-        const material = new MeshPhongMaterial({ color: 0x44aa88 }); // greenish blue
-        super(geometry, material);
-
-        this.position.setY(boxHeight / 2);
+    tick(delta: number) {
+        this.controller.tick(delta);
     }
 }
