@@ -9,17 +9,22 @@
         "preview": "vite preview",
         "lint:fix": "eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path ./.gitignore",
         "lint:format": "prettier  --loglevel warn --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
+        "lint:scss": "yarn stylelint \"**/*.scss\" --fix",
         "lint": "yarn lint:format && yarn lint:fix && tsc"
     },
     "pre-commit": [
         "lint"
     ],
     "dependencies": {
+        "@esotericsoftware/spine-threejs": "^4.2.10",
         "@react-three/cannon": "^6.5.0",
+        "@react-three/drei": "^9.48.6",
         "@react-three/fiber": "^8.9.2",
+        "@types/three": "^0.147.1",
         "path": "^0.12.7",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "three": "^0.148.0",
         "uuid": "^9.0.0"
     },
     "devDependencies": {
@@ -34,6 +39,9 @@
         "eslint-plugin-simple-import-sort": "^8.0.0",
         "pre-commit": "^1.2.2",
         "prettier": "^2.8.1",
+        "sass": "^1.57.1",
+        "stylelint": "^14.16.1",
+        "stylelint-config-standard": "^29.0.0",
         "typescript": "^4.9.3",
         "vite": "^4.0.0",
         "vite-tsconfig-paths": "^4.0.3"
