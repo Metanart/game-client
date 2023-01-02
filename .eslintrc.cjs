@@ -60,6 +60,6 @@ module.exports = {
             },
         ],
         'simple-import-sort/exports': 'error',
-        'no-unused-vars': 0,
+        'no-unused-vars': 2,
     },
 };

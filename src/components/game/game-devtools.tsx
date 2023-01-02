@@ -11,7 +11,7 @@ export const GameDevtools: FC = () => {
             <Stats />
             <OrbitControls />
             <gridHelper
-                args={[Length.Hectometer, Length.Hectometer, Colors.Red, 'teal']}
+                args={[Length.Hectometer, Length.Kilometer, Colors.Red, Colors.Teal]}
                 position={[Length.Meter / 2, 0, Length.Meter / 2]}
             />
         </Fragment>

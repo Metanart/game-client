@@ -1,9 +1,7 @@
-import React, { FC, useEffect, useRef } from 'react';
-
-import { Mesh } from 'three';
+import React, { FC } from 'react';
 
 import '@react-three/fiber';
 
-export const Workbench: FC = (props) => {
+export const Workbench: FC = () => {
     return <div></div>;
 };
