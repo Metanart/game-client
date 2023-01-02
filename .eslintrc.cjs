@@ -32,14 +32,11 @@ module.exports = {
             {
                 groups: [
                     ['^react'],
-                    ['^@react'],
-
                     ['^vite'],
-
-                    ['^@vite'],
                     ['^three'],
-
                     ['uuid'],
+
+                    ['^@'],
 
                     ['^classes'],
                     ['^components'],
@@ -60,6 +57,6 @@ module.exports = {
             },
         ],
         'simple-import-sort/exports': 'error',
-        'no-unused-vars': 2,
+        'no-unused-vars': 0,
     },
 };
