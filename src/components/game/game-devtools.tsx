@@ -12,7 +12,7 @@ export const GameDevtools: FC = () => {
             <OrbitControls />
             <gridHelper
                 args={[Length.Hectometer, Length.Kilometer, Colors.Red, Colors.Teal]}
-                position={[Length.Meter / 2, 0, Length.Meter / 2]}
+                position={[Length.Meter / 2, 0.001, Length.Meter / 2]}
             />
         </Fragment>
     );
