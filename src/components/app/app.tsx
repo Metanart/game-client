@@ -13,9 +13,10 @@ export const App: FC = () => {
     return (
         <div className={styles.root}>
             <Game>
-                <GameLight />
-                <GameMap />
-                {IS_DEVELOPMENT_MODE && <GameDevtools />}
+                <GameDevtools>
+                    <GameLight />
+                    <GameMap />
+                </GameDevtools>
             </Game>
         </div>
     );

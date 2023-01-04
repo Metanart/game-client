@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-import { Mesh, Object3D } from 'three';
+import { Mesh, Object3D, Raycaster, Vector3 } from 'three';
 
 import { SkeletonMesh } from '@esotericsoftware/spine-threejs';
+import { useBox } from '@react-three/cannon';
+import { Box } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 
 import { ESpines } from 'classes/spine/enums';
@@ -10,7 +12,29 @@ import { ESpines } from 'classes/spine/enums';
 import { useSpineAsset } from './use-spine-asset';
 
 export const Spine: FC = () => {
-    const meshRef = useRef<Mesh | null>(null);
+    const [meshRef, bodyApi] = useBox(() => ({ args: [1, 2, 2], position: [0, 1, 0], type: 'Static' }));
+
+    const collisionHandler = () => {
+        const distance = 32;
+
+        const raycaster = new Raycaster();
+
+        const raycasterRays = [
+            new Vector3(1, 0, 0),
+            new Vector3(1, 0, -1),
+            new Vector3(1, 0, 1),
+            new Vector3(0, 0, -1),
+            new Vector3(-1, 0, -1),
+            new Vector3(0, 0, 1),
+            new Vector3(-1, 0, 0),
+            new Vector3(-1, 0, 1),
+        ];
+
+        for (let i = 0; i < raycasterRays.length; i += 1) {
+            raycaster.set(meshRef.current?.position!, raycasterRays[i]);
+        }
+    };
+
     const [skeletonMesh, setSkeletonMesh] = useState<SkeletonMesh | null>(null);
     const [isMovingUp, setIsMovingUp] = useState(false);
     const [isMovingDown, setIsMovingDown] = useState(false);
@@ -84,25 +108,43 @@ export const Spine: FC = () => {
     useFrame(({ clock }, delta) => {
         skeletonMesh?.update(delta);
 
-        if (isMovingUp && isMovingLeft)
-            meshRef.current?.position.setZ(meshRef.current.position.z - (2 * delta * Math.PI) / 2);
-        if (isMovingUp && isMovingRight)
-            meshRef.current?.position.setZ(meshRef.current.position.z - (2 * delta * Math.PI) / 2);
+        collisionHandler();
 
-        if (isMovingDown && isMovingLeft)
-            meshRef.current?.position.setZ(meshRef.current.position.z + (2 * delta * Math.PI) / 2);
-        if (isMovingDown && isMovingRight)
-            meshRef.current?.position.setZ(meshRef.current.position.z + (2 * delta * Math.PI) / 2);
+        if (isMovingUp && isMovingLeft) {
+            meshRef.current?.position.setZ(meshRef.current.position.z - (2 * delta * Math.PI) / 4);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
+        if (isMovingUp && isMovingRight) {
+            meshRef.current?.position.setZ(meshRef.current.position.z - (2 * delta * Math.PI) / 4);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
 
-        if (isMovingUp) meshRef.current?.position.setZ(meshRef.current.position.z - 2 * delta * Math.PI);
-        if (isMovingLeft) meshRef.current?.position.setX(meshRef.current.position.x - 2 * delta * Math.PI);
-        if (isMovingDown) meshRef.current?.position.setZ(meshRef.current.position.z + 2 * delta * Math.PI);
-        if (isMovingRight) meshRef.current?.position.setX(meshRef.current.position.x + 2 * delta * Math.PI);
+        if (isMovingDown && isMovingLeft) {
+            meshRef.current?.position.setZ(meshRef.current.position.z + (2 * delta * Math.PI) / 4);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
+        if (isMovingDown && isMovingRight) {
+            meshRef.current?.position.setZ(meshRef.current.position.z + (2 * delta * Math.PI) / 4);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
+
+        if (isMovingUp) {
+            meshRef.current?.position.setZ(meshRef.current.position.z - 2 * delta * Math.PI);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
+        if (isMovingLeft) {
+            meshRef.current?.position.setX(meshRef.current.position.x - 2 * delta * Math.PI);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
+        if (isMovingDown) {
+            meshRef.current?.position.setZ(meshRef.current.position.z + 2 * delta * Math.PI);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
+        if (isMovingRight) {
+            meshRef.current?.position.setX(meshRef.current.position.x + 2 * delta * Math.PI);
+            bodyApi.position.copy(meshRef.current?.position as Vector3);
+        }
     });
 
-    return (
-        <mesh position={[0, 0.25, 0]} ref={meshRef}>
-            <boxGeometry attach={'geometry'} args={[0.5, 0.5, 0.5]} />
-        </mesh>
-    );
+    return <Box args={[0.5, 0.5, 0.5]} ref={meshRef} />;
 };

@@ -1,23 +1,16 @@
-import React, { FC, useRef } from 'react';
+import React, { FC } from 'react';
 
-import { PlaneBufferGeometryProps } from '@react-three/fiber';
+import { Plane } from '@react-three/drei';
 
 import { Colors } from 'tokens/colors';
 import { Length } from 'tokens/measurements';
 
-type Props = {
-    position?: [number, number];
-};
-
-export const MapTile: FC<Props> = (props) => {
-    const { position = [0, 0] } = props;
-
-    const mapTileRef = useRef<PlaneBufferGeometryProps>(null!);
-
+export const MapTile: FC = (props) => {
     return (
-        <mesh position={[position[0], 0, position[1]]} rotation={[-Math.PI / 2, 0, 0]}>
-            <planeBufferGeometry ref={mapTileRef} attach="geometry" args={[Length.Meter, Length.Meter]} />
-            <meshPhongMaterial attach="material" color={Colors.GreenishBlue} />
-        </mesh>
+        <Plane
+            args={[Length.Meter, Length.Meter]}
+            rotation={[-Math.PI / 2, 0, 0]}
+            material-color={Colors.GreenishBlue}
+        />
     );
 };

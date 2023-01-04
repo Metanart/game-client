@@ -1,5 +1,3 @@
-import { Object3D } from 'three';
-
 import {
     AssetManager,
     AtlasAttachmentLoader,
@@ -52,7 +50,7 @@ export class SpineAssetsManager extends AssetManager {
 
         const atlasLoader = new AtlasAttachmentLoader(this.textureAtlas);
         const skeletonJson = new SkeletonJson(atlasLoader);
-        skeletonJson.scale = 0.005;
+        skeletonJson.scale = 0.002;
 
         const skeletonData = skeletonJson.readSkeletonData(this.require(this.jsonPath));
 
