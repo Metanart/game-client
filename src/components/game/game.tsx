@@ -1,20 +1,19 @@
 import { FC, ReactNode } from 'react';
 
-import { Vector3 } from 'three/src/Three';
-
-import { Physics } from '@react-three/cannon';
 import { Canvas } from '@react-three/fiber';
 
-const cameraConfig = {
-    fov: 3,
-    aspect: window.innerWidth / window.innerHeight,
-    near: 1,
-    far: 500,
-    position: new Vector3(0, 100, 180),
-};
+import { GameCamera } from 'components/game/game-camera';
+import { GameDevtools } from 'components/game/game-devtools';
+import { GameLight } from 'components/game/game-ligth';
+import { GameMap } from 'components/game/game-map';
 
 export const Game: FC<{ children?: ReactNode }> = (props) => (
-    <Canvas camera={cameraConfig}>
-        <Physics>{props.children}</Physics>
+    <Canvas>
+        <GameCamera />
+        <GameLight />
+        <GameDevtools>
+            <GameMap />
+            {props.children}
+        </GameDevtools>
     </Canvas>
 );
