@@ -5,7 +5,7 @@ import { AxesHelper } from 'three';
 import { GizmoHelper, GizmoViewport, OrbitControls, Stats } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 
-import { debugConfig } from 'constants/debug-config';
+import { DEBUG_CONFIG } from 'components/game/config';
 
 import { Colors } from 'tokens/colors';
 import { Length } from 'tokens/measurements';
@@ -13,15 +13,15 @@ import { Length } from 'tokens/measurements';
 type Props = { children: ReactNode };
 
 export const GameDevtools: FC<Props> = (props) => {
-    const { scene } = useThree((state) => state);
     const { children } = props;
-    const { showStats, showGridHelper, useDevelopersCamera } = debugConfig;
+    const { scene } = useThree((state) => state);
+    const { showStats, showGridHelper, useDevelopersCamera, showAxisController, showAxis } = DEBUG_CONFIG;
 
-    if (debugConfig.showAxisController) useMemo(() => scene.add(new AxesHelper(100)), []);
+    if (showAxisController) useMemo(() => scene.add(new AxesHelper(100)), []);
 
     return (
         <Fragment>
-            {debugConfig.showAxis && (
+            {showAxis && (
                 <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
                     <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
                 </GizmoHelper>
@@ -29,7 +29,7 @@ export const GameDevtools: FC<Props> = (props) => {
 
             {showStats && <Stats />}
 
-            {useDevelopersCamera && <OrbitControls makeDefault={true} />}
+            {useDevelopersCamera && <OrbitControls layers={3} makeDefault={true} />}
 
             {showGridHelper && (
                 <gridHelper

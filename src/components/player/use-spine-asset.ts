@@ -1,5 +1,3 @@
-import { Vector2 } from 'three';
-
 import { SkeletonMesh } from '@esotericsoftware/spine-threejs';
 
 import { ESpines } from 'classes/spine/enums';

@@ -1,33 +1,33 @@
-import { FC, MutableRefObject, useRef, useState } from 'react';
+import { FC, MutableRefObject, useRef } from 'react';
 
-import { _SRGBAFormat, CameraHelper, Object3D, OrthographicCamera as OrthographicCamera3, Vector3 } from 'three';
+import { CameraHelper, Object3D } from 'three';
 
-import { OrthographicCamera } from '@react-three/drei';
-import { useHelper } from '@react-three/drei';
-import { OrthographicCameraProps, useThree } from '@react-three/fiber';
+import { OrthographicCamera, useHelper } from '@react-three/drei';
+import { OrthographicCameraProps } from '@react-three/fiber';
 
-import { debugConfig } from 'constants/debug-config';
+import { DEBUG_CONFIG } from 'components/game/config';
 
 import { useGameContext } from 'store/game/hooks';
 
-type TCameraSide = 'up' | 'left' | 'down' | 'right';
-
 export const GameCamera: FC = () => {
-    const { scene } = useThree();
     const { gameState } = useGameContext();
 
-    const cameraRef = useRef<Object3D>(null);
-    const camera = cameraRef.current;
+    const camera = useRef<Object3D>(null);
 
-    useHelper(cameraRef as MutableRefObject<Object3D>, CameraHelper);
+    if (DEBUG_CONFIG.showCameraHelper) useHelper(camera as MutableRefObject<Object3D>, CameraHelper);
 
-    let SCREEN_WIDTH = window.innerWidth;
-    let SCREEN_HEIGHT = window.innerHeight;
-    let aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
-    const args = [SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 450] as OrthographicCameraProps['args'];
-
-    const distance = 250;
+    const cameraArgs = [
+        screenHeight,
+        screenWidth,
+        screenHeight,
+        screenWidth,
+        1,
+        450,
+    ] as OrthographicCameraProps['args'];
+    const cameraDistance = 250;
 
     const getCameraDirectionProps = (): {
         position: OrthographicCameraProps['position'];
@@ -35,13 +35,19 @@ export const GameCamera: FC = () => {
     } => {
         switch (gameState.cameraDirection) {
             case 'up':
-                return { position: [0, distance, distance], rotation: [-Math.PI / 4, 0, 0] };
+                return { position: [0, cameraDistance, cameraDistance], rotation: [-Math.PI / 4, 0, 0] };
             case 'left':
-                return { position: [-distance, distance, 0], rotation: [-Math.PI / 2, -Math.PI / 4, -Math.PI / 2] };
+                return {
+                    position: [-cameraDistance, cameraDistance, 0],
+                    rotation: [-Math.PI / 2, -Math.PI / 4, -Math.PI / 2],
+                };
             case 'down':
-                return { position: [0, distance, -distance], rotation: [Math.PI / 4, Math.PI, 0] };
+                return { position: [0, cameraDistance, -cameraDistance], rotation: [Math.PI / 4, Math.PI, 0] };
             case 'right':
-                return { position: [distance, distance, 0], rotation: [-Math.PI / 2, Math.PI / 4, Math.PI / 2] };
+                return {
+                    position: [cameraDistance, cameraDistance, 0],
+                    rotation: [-Math.PI / 2, Math.PI / 4, Math.PI / 2],
+                };
         }
     };
 
@@ -49,9 +55,9 @@ export const GameCamera: FC = () => {
 
     return (
         <OrthographicCamera
-            makeDefault={!debugConfig.useDevelopersCamera}
-            ref={cameraRef}
-            args={args}
+            makeDefault={!DEBUG_CONFIG.useDevelopersCamera}
+            ref={camera}
+            args={cameraArgs}
             position={position}
             rotation={rotation}
             zoom={30}

@@ -9,16 +9,15 @@ import { TEXTURES_PATH } from 'constants/paths';
 
 import { Colors } from 'tokens/colors';
 
-import { TDirection4, TDirection8, TDirectionPlayer } from 'types';
+import { TDirection4, TDirectionPlayer } from 'types';
 
-import { useRaycaster } from 'hooks/use-raycaster';
 import { useGameContext } from 'store/game/hooks';
 
 export const Player: FC = () => {
-    const texture = useTexture(TEXTURES_PATH + '/dice-texture.png');
     const { gameState } = useGameContext();
+
+    const texture = useTexture(TEXTURES_PATH + '/dice-texture.png');
     const meshRef = useRef<Mesh | null>(null);
-    const { getIntersections } = useRaycaster(meshRef.current);
     const body = meshRef.current;
 
     const [isMovingUp, setIsMovingUp] = useState(false);
@@ -94,10 +93,10 @@ export const Player: FC = () => {
                 body?.rotation.set(0, -angle * 3, 0);
                 break;
             case 'up':
-                body?.rotation.set(0, angle * 4, 0);
+                body?.rotation.set(0, 0, 0);
                 break;
             case 'left':
-                body?.rotation.set(0, -angle * 2, 0);
+                body?.rotation.set(0, angle * 2, 0);
                 break;
             case 'down':
                 body?.rotation.set(0, angle * 4, 0);
@@ -109,8 +108,6 @@ export const Player: FC = () => {
                 break;
         }
     };
-
-    console.log(cameraDirection);
 
     function getPositionAxies(position: Object3D['position'], cameraDirection: TDirection4) {
         const updateZOffset = (offset: number) => position.setZ(position.z + offset);
@@ -186,7 +183,6 @@ export const Player: FC = () => {
     useFrame((state, delta) => {
         updatePosition(delta);
         updateRotation();
-        getIntersections();
     });
 
     texture.repeat.set(0.5, 0.5);
@@ -194,14 +190,13 @@ export const Player: FC = () => {
     texture.wrapT = RepeatWrapping;
 
     return (
-        <Fragment>
-            <Gltf
-                position={[0, 2, 0]}
-                ref={meshRef}
-                src={TEXTURES_PATH + '/adam/adamHead.gltf'}
-                receiveShadow
-                castShadow
-            />
-        </Fragment>
+        <Gltf
+            position={[0, 1, 0]}
+            ref={meshRef}
+            src={TEXTURES_PATH + '/adam/adamHead.gltf'}
+            receiveShadow={true}
+            castShadow={true}
+            scale={0.5}
+        />
     );
 };

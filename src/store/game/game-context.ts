@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
+import { defaultGameState } from './defaults';
 import { TGameDispatch, TGameState } from './types';
-import { defaultGameState } from './utils';
 
 export const GameContext = createContext<{
     gameState: TGameState;
