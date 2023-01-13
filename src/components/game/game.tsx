@@ -1,5 +1,6 @@
 import { FC, ReactNode } from 'react';
 
+import { Physics } from '@react-three/cannon';
 import { Canvas } from '@react-three/fiber';
 
 import { GameCamera } from 'components/game/game-camera';
@@ -11,9 +12,11 @@ export const Game: FC<{ children?: ReactNode }> = (props) => (
     <Canvas>
         <GameCamera />
         <GameLight />
-        <GameDevtools>
-            <GameMap />
-            {props.children}
-        </GameDevtools>
+        <Physics>
+            <GameDevtools>
+                <GameMap />
+                {props.children}
+            </GameDevtools>
+        </Physics>
     </Canvas>
 );

@@ -2,6 +2,7 @@ import { FC, Fragment, ReactNode, useMemo } from 'react';
 
 import { AxesHelper } from 'three';
 
+import { Debug } from '@react-three/cannon';
 import { GizmoHelper, GizmoViewport, OrbitControls, Stats } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 
@@ -15,7 +16,7 @@ type Props = { children: ReactNode };
 export const GameDevtools: FC<Props> = (props) => {
     const { children } = props;
     const { scene } = useThree((state) => state);
-    const { showStats, showGridHelper, useDevelopersCamera, showAxisController, showAxis } = DEBUG_CONFIG;
+    const { showPhysics, showStats, showGridHelper, useDevelopersCamera, showAxisController, showAxis } = DEBUG_CONFIG;
 
     if (showAxisController) useMemo(() => scene.add(new AxesHelper(100)), []);
 
@@ -37,8 +38,7 @@ export const GameDevtools: FC<Props> = (props) => {
                     position={[Length.Meter / 2, 0.002, Length.Meter / 2]}
                 />
             )}
-
-            {children}
+            {showPhysics ? <Debug>{children}</Debug> : children}
         </Fragment>
     );
 };

@@ -10,6 +10,6 @@ export type TVector3 = [x: number, y: number, z: number];
 
 export type TDirection4 = 'up' | 'left' | 'down' | 'right';
 
-export type TDirection8 = 'upLeft' | 'upRight' | 'downLeft' | 'downRight' | TDirection4;
+export type TDirection8 = TDirection4 | 'upLeft' | 'upRight' | 'downLeft' | 'downRight';
 
 export type TDirectionPlayer = TDirection8 | 'none';
