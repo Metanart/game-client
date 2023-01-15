@@ -5,22 +5,24 @@ import { Box } from '@react-three/drei';
 
 import '@react-three/fiber';
 
-type WorkbenchBodyProps = BoxProps;
-type WorkbenchMeshProps = ComponentProps<typeof Box>;
+type BodyProps = BoxProps;
+type MeshProps = ComponentProps<typeof Box>;
 
-const workbenchMeshProps: WorkbenchMeshProps = {
+const meshProps: MeshProps = {
     args: [1, 4, 6],
     position: [0, 2, 2],
     rotation: [0, Math.PI / 2, 0],
 };
 
-const workbenchBodyProps: WorkbenchBodyProps = {
-    mass: 1000,
-    ...(workbenchMeshProps as WorkbenchBodyProps),
+const bodyProps: BodyProps = {
+    mass: 0,
+    collisionFilterGroup: 2,
+    collisionFilterMask: 1,
+    ...(meshProps as BodyProps),
 };
 
 export const Workbench: FC = () => {
-    const [workbenchBodyRef] = useBox(() => workbenchBodyProps);
+    const [mesh] = useBox(() => bodyProps);
 
-    return <Box ref={workbenchBodyRef} {...workbenchMeshProps} />;
+    return <Box ref={mesh} {...meshProps} />;
 };

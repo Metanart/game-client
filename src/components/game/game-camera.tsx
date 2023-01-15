@@ -14,7 +14,8 @@ export const GameCamera: FC = () => {
 
     const camera = useRef<Object3D>(null);
 
-    if (DEBUG_CONFIG.showCameraHelper) useHelper(camera as MutableRefObject<Object3D>, CameraHelper);
+    if (DEBUG_CONFIG.showCameraHelper)
+        useHelper(camera as MutableRefObject<Object3D>, CameraHelper);
 
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -35,14 +36,20 @@ export const GameCamera: FC = () => {
     } => {
         switch (gameState.cameraDirection) {
             case 'up':
-                return { position: [0, cameraDistance, cameraDistance], rotation: [-Math.PI / 4, 0, 0] };
+                return {
+                    position: [0, cameraDistance, cameraDistance],
+                    rotation: [-Math.PI / 4, 0, 0],
+                };
             case 'left':
                 return {
                     position: [-cameraDistance, cameraDistance, 0],
                     rotation: [-Math.PI / 2, -Math.PI / 4, -Math.PI / 2],
                 };
             case 'down':
-                return { position: [0, cameraDistance, -cameraDistance], rotation: [Math.PI / 4, Math.PI, 0] };
+                return {
+                    position: [0, cameraDistance, -cameraDistance],
+                    rotation: [Math.PI / 4, Math.PI, 0],
+                };
             case 'right':
                 return {
                     position: [cameraDistance, cameraDistance, 0],

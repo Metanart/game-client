@@ -52,7 +52,9 @@ export class SpineAssetsManager extends AssetManager {
         const skeletonJson = new SkeletonJson(atlasLoader);
         skeletonJson.scale = 0.002;
 
-        const skeletonData = skeletonJson.readSkeletonData(this.require(this.jsonSrc));
+        const skeletonData = skeletonJson.readSkeletonData(
+            this.require(this.jsonSrc),
+        );
 
         return new SkeletonMesh(skeletonData, (parameters) => {
             parameters.depthTest = true;

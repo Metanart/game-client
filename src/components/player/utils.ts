@@ -5,8 +5,15 @@ type playerKeyboardEventsOptions = {
     setIsMovingRight: (isActive: boolean) => void;
 };
 
-export function setupPlayerKeyboardEvents(options: playerKeyboardEventsOptions) {
-    const { setIsMovingUp, setIsMovingLeft, setIsMovingDown, setIsMovingRight } = options;
+export function setupPlayerKeyboardEvents(
+    options: playerKeyboardEventsOptions,
+) {
+    const {
+        setIsMovingUp,
+        setIsMovingLeft,
+        setIsMovingDown,
+        setIsMovingRight,
+    } = options;
 
     window.addEventListener('keydown', (event) => {
         if (!event.repeat) {

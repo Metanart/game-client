@@ -8,8 +8,14 @@ const defaultGameState: TGameState = {
     cameraDirection: 'up',
 };
 
-export const GameContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
+export const GameContextProvider: FC<{ children: ReactNode }> = ({
+    children,
+}) => {
     const [gameState, gameDispatch] = useReducer(gameReducer, defaultGameState);
 
-    return <GameContext.Provider value={{ gameState, gameDispatch }}>{children}</GameContext.Provider>;
+    return (
+        <GameContext.Provider value={{ gameState, gameDispatch }}>
+            {children}
+        </GameContext.Provider>
+    );
 };

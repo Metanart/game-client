@@ -3,4 +3,9 @@ export const Colors = {
     LightGrey: 0xeeeeee,
     Red: 0xff0000,
     Teal: 'teal',
+    Bouncy: 'yellow',
+    Box: '#BB8E51',
+    Ground: '#9b7653',
+    Rubber: 'darkgrey',
+    Slippery: 'royalblue',
 };
