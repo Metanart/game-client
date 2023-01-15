@@ -1,9 +1,20 @@
+export type TJsonSrc = `${string}.${'json'}`;
+
+export type TAtlasSrc = `${string}.${'atlas'}`;
+
 export type TImageSrc = `${string}.${'png' | 'jpg' | 'jpeg'}`;
 
-export type TJsonPath = `${string}.${'json'}`;
+export type TVector2 = [x: number, y: number];
 
-export type TAtlasPath = `${string}.${'atlas'}`;
+export type TVector3 = [x: number, y: number, z: number];
 
-export type TCoordinates = { x: number; y: number; z: number };
+export type TDirection4 = 'up' | 'left' | 'down' | 'right';
 
-export type TDimensions = { width: number; height: number; depth: number };
+export type TDirection8 =
+    | TDirection4
+    | 'upLeft'
+    | 'upRight'
+    | 'downLeft'
+    | 'downRight';
+
+export type TDirectionPlayer = TDirection8 | 'none';

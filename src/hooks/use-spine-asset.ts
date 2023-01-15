@@ -9,8 +9,8 @@ export const useSpineAsset = async (spineKey: ESpines) => {
     const skeletonMesh = assetManager.getSkeletonMesh() as SkeletonMesh;
 
     skeletonMesh.rotateX(-Math.PI / 8);
-    skeletonMesh.position.z = -1;
     skeletonMesh.scale.x = -1;
+    skeletonMesh.zOffset = 0.005;
 
     return {
         skeletonMesh,
