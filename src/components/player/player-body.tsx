@@ -3,18 +3,19 @@ import { ComponentProps, FC, useEffect, useState } from 'react';
 import {
     CollideEndEvent,
     SphereProps,
-    useContactMaterial,
+    useBox,
+    useLockConstraint,
     useSphere,
 } from '@react-three/cannon';
-import { Sphere } from '@react-three/drei';
+import { Box, Sphere } from '@react-three/drei';
 
 import { Materials } from 'tokens/materials';
 
 import { usePlayerMaterialsRelations } from './hooks';
 import { setupPlayerKeyboardEvents } from './utils';
 
-type BodyProps = SphereProps;
-type MeshProps = ComponentProps<typeof Sphere>;
+type SphereMeshProps = ComponentProps<typeof Sphere>;
+type SphereBodyProps = SphereProps;
 
 const velocity = 5;
 const diagonalVelocity = 4;
@@ -25,25 +26,33 @@ export const PlayerBody: FC = () => {
     const [isMovingLeft, setIsMovingLeft] = useState(false);
     const [isMovingRight, setIsMovingRight] = useState(false);
 
-    const meshProps: MeshProps = {
+    const physicalMeshProps: SphereMeshProps = {
         args: [0.5],
         position: [0, 1, 0],
     };
 
-    usePlayerMaterialsRelations();
-
-    const bodyProps: BodyProps = {
+    const physicalBodyProps: SphereBodyProps = {
         type: 'Dynamic',
         mass: 90,
         fixedRotation: true,
         material: Materials.PLAYER,
+        linearDamping: 0,
+        angularDamping: 0,
         onCollideEnd: (event: CollideEndEvent) => {
-            body.velocity.set(0, 0, 0);
+            physicalBody.velocity.set(0, 0, 0);
         },
-        ...(meshProps as BodyProps),
+        ...(physicalMeshProps as SphereBodyProps),
     };
 
-    const [mesh, body] = useSphere(() => bodyProps);
+    const triggerBodyProps: SphereBodyProps = {
+        type: 'Dynamic',
+        mass: 0,
+        isTrigger: true,
+        args: [1],
+    };
+
+    const [physicalMesh, physicalBody] = useSphere(() => physicalBodyProps);
+    const [triggerMesh, triggerBody] = useSphere(() => triggerBodyProps);
 
     useEffect(
         () =>
@@ -56,27 +65,29 @@ export const PlayerBody: FC = () => {
         [],
     );
 
-    if (mesh.current) {
+    usePlayerMaterialsRelations();
+
+    if (physicalBody) {
         if (isMovingUp && isMovingLeft) {
-            body.velocity.set(diagonalVelocity, 0, diagonalVelocity);
+            physicalBody.velocity.set(diagonalVelocity, 0, diagonalVelocity);
         } else if (isMovingUp && isMovingRight) {
-            body.velocity.set(-diagonalVelocity, 0, diagonalVelocity);
+            physicalBody.velocity.set(-diagonalVelocity, 0, diagonalVelocity);
         } else if (isMovingDown && isMovingLeft) {
-            body.velocity.set(diagonalVelocity, 0, -diagonalVelocity);
+            physicalBody.velocity.set(diagonalVelocity, 0, -diagonalVelocity);
         } else if (isMovingDown && isMovingRight) {
-            body.velocity.set(-diagonalVelocity, 0, -diagonalVelocity);
+            physicalBody.velocity.set(-diagonalVelocity, 0, -diagonalVelocity);
         } else if (isMovingUp) {
-            body.velocity.set(0, 0, velocity);
+            physicalBody.velocity.set(0, 0, velocity);
         } else if (isMovingLeft) {
-            body.velocity.set(velocity, 0, 0);
+            physicalBody.velocity.set(velocity, 0, 0);
         } else if (isMovingDown) {
-            body.velocity.set(0, 0, -velocity);
+            physicalBody.velocity.set(0, 0, -velocity);
         } else if (isMovingRight) {
-            body.velocity.set(-velocity, 0, 0);
+            physicalBody.velocity.set(-velocity, 0, 0);
         } else {
-            body.velocity.set(0, 0, 0);
+            physicalBody.velocity.set(0, 0, 0);
         }
     }
 
-    return <Sphere ref={mesh} {...meshProps} />;
+    return <Sphere args={[0.5]} ref={physicalMesh}></Sphere>;
 };
