@@ -1,4 +1,4 @@
 export enum CollisionGroups {
-    SOLID_OBJECTS,
-    ACTION_TRIGGERS,
+    PHYSICAL_OBJECTS = 1,
+    TRIGGER_AREAS = 2,
 }
