@@ -13,7 +13,7 @@ export const Tree: FC = () => {
     const handleCollideEnd = (event: CollideEndEvent) => {};
 
     const [treeTrunkMesh, treeTrunkBody] = useCylinder(() => ({
-        args: [1, 1, 3, 12],
+        args: [0.5, 0.5, 3, 12],
         type: 'Static',
         mass: 0,
         position: [-2, 1.5, -2],
@@ -22,7 +22,7 @@ export const Tree: FC = () => {
     }));
 
     const [treeTriggerMesh, treeTriggerBody] = useCylinder(() => ({
-        args: [2, 2, 3, 12],
+        args: [1, 1, 3, 12],
         type: 'Static',
         mass: 0,
         position: [-2, 1.5, -2],
@@ -31,5 +31,5 @@ export const Tree: FC = () => {
         collisionFilterMask: CollisionGroups.TRIGGER_AREAS,
     }));
 
-    return <Cylinder args={[1, 1, 3, 12]} ref={treeTrunkMesh}></Cylinder>;
+    return <Cylinder args={[0.5, 0.5, 3, 12]} ref={treeTrunkMesh}></Cylinder>;
 };
