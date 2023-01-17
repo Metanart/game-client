@@ -10,8 +10,6 @@ import { Cylinder } from '@react-three/drei';
 import { CollisionGroups } from 'enums/collision-groups';
 
 export const Tree: FC = () => {
-    const handleCollideEnd = (event: CollideEndEvent) => {};
-
     const [treeTrunkMesh, treeTrunkBody] = useCylinder(() => ({
         args: [0.5, 0.5, 3, 12],
         type: 'Static',
