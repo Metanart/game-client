@@ -9,9 +9,9 @@ import { useFrame } from '@react-three/fiber';
 import { Materials } from 'tokens/materials';
 
 import { usePlayerMaterialsRelations } from './hooks';
-import { setupPlayerKeyboardEvents } from './utils';
 
 import { CollisionGroups } from 'enums/collision-groups';
+import { keyboardControlEvents } from 'keyboard-control/utils';
 
 type SphereMeshProps = ComponentProps<typeof Sphere>;
 type SphereBodyProps = SphereProps;
@@ -55,17 +55,6 @@ export const PlayerBody: FC = () => {
 
     const [playerMesh, playerBody] = useSphere(() => playerProps);
     const [triggerMesh, triggerBody] = useSphere(() => triggerProps);
-
-    useEffect(
-        () =>
-            setupPlayerKeyboardEvents({
-                setIsMovingUp,
-                setIsMovingLeft,
-                setIsMovingDown,
-                setIsMovingRight,
-            }),
-        [],
-    );
 
     usePlayerMaterialsRelations();
 
