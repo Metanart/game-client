@@ -1,9 +1,7 @@
-import { ComponentProps, FC, useEffect, useState } from 'react';
-
-import { Vector3 } from 'three';
+import { ComponentProps, FC, useState } from 'react';
 
 import { CollideBeginEvent, SphereProps, useSphere } from '@react-three/cannon';
-import { Box, Sphere } from '@react-three/drei';
+import { Sphere } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 
 import { Materials } from 'tokens/materials';
@@ -64,6 +62,22 @@ export const PlayerBody: FC = () => {
             triggerBody.position.set(x, y, z);
         });
     }
+
+    keyboardControlEvents.subscribe('default', 'moveUp', ({ isPressed }) =>
+        setIsMovingUp(isPressed),
+    );
+
+    keyboardControlEvents.subscribe('default', 'moveLeft', ({ isPressed }) =>
+        setIsMovingLeft(isPressed),
+    );
+
+    keyboardControlEvents.subscribe('default', 'moveDown', ({ isPressed }) =>
+        setIsMovingDown(isPressed),
+    );
+
+    keyboardControlEvents.subscribe('default', 'moveRight', ({ isPressed }) =>
+        setIsMovingRight(isPressed),
+    );
 
     useFrame((state, delta) => {
         if (playerBody) {

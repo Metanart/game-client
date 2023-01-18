@@ -41,7 +41,7 @@ export class Events<
     subscribe(
         contextKey: TGContextKey,
         eventKey: TGEventKey,
-        callback: TEventsCallback,
+        callback: (payload: TGCallbackPayload) => void,
     ): TEventsSubsribe {
         const callbackId: TEventsEventId = v4();
         const context = this.getContext(contextKey);
