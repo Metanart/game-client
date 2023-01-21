@@ -4,42 +4,52 @@ import { useCylinder } from '@react-three/cannon';
 import { Cylinder } from '@react-three/drei';
 
 import {
-    handleContextActionSubscribe,
-    handleContextActionUnsubscribe,
+    handleSubscribeContextAction,
+    handleUnsubscribeContextAction,
 } from 'control/utils';
 
 import { CollisionGroups } from 'enums/collision-groups';
+
+import { CylinderBodyProps, CylinderMeshProps } from 'types/cannon';
 
 const handleContextAction = (isPressed: boolean) => {
     console.log(isPressed);
 };
 
 const handleCollideBegin = () =>
-    handleContextActionSubscribe(handleContextAction);
+    handleSubscribeContextAction(handleContextAction);
 
-const handleCollideEnd = () => handleContextActionUnsubscribe();
+const handleCollideEnd = () =>
+    handleUnsubscribeContextAction(handleContextAction);
+
+const meshProps: CylinderMeshProps = {
+    args: [0.5, 0.5, 3, 12],
+    position: [-2, 1.5, -2],
+};
+
+const bodyProps: CylinderBodyProps = {
+    mass: 0,
+    type: 'Static',
+    collisionFilterGroup: CollisionGroups.PHYSICAL_OBJECTS,
+    collisionFilterMask: CollisionGroups.PHYSICAL_OBJECTS,
+    ...(meshProps as CylinderBodyProps),
+};
+
+const triggerProps: CylinderBodyProps = {
+    mass: 0,
+    type: 'Static',
+    isTrigger: true,
+    collisionFilterGroup: CollisionGroups.TRIGGER_AREAS,
+    collisionFilterMask: CollisionGroups.TRIGGER_AREAS,
+    onCollideBegin: handleCollideBegin,
+    onCollideEnd: handleCollideEnd,
+    ...(meshProps as CylinderBodyProps),
+};
 
 export const Tree: FC = () => {
-    const [treeTrunkMesh, treeTrunkBody] = useCylinder(() => ({
-        args: [0.5, 0.5, 3, 12],
-        type: 'Static',
-        mass: 0,
-        position: [-2, 1.5, -2],
-        collisionFilterGroup: CollisionGroups.PHYSICAL_OBJECTS,
-        collisionFilterMask: CollisionGroups.PHYSICAL_OBJECTS,
-        onCollideBegin: handleCollideBegin,
-        onCollideEnd: handleCollideEnd,
-    }));
+    const [bodyMesh] = useCylinder(() => bodyProps);
 
-    const [treeTriggerMesh, treeTriggerBody] = useCylinder(() => ({
-        args: [1, 1, 3, 12],
-        type: 'Static',
-        mass: 0,
-        position: [-2, 1.5, -2],
-        isTrigger: true,
-        collisionFilterGroup: CollisionGroups.TRIGGER_AREAS,
-        collisionFilterMask: CollisionGroups.TRIGGER_AREAS,
-    }));
+    useCylinder(() => triggerProps);
 
-    return <Cylinder args={[0.5, 0.5, 3, 12]} ref={treeTrunkMesh}></Cylinder>;
+    return <Cylinder ref={bodyMesh} {...meshProps} />;
 };

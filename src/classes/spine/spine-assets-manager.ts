@@ -6,9 +6,9 @@ import {
     TextureAtlas,
 } from '@esotericsoftware/spine-threejs';
 
-import { SPINES_PATH } from 'constants/paths';
+import { TAtlasSrc, TJsonSrc } from 'types/generic';
 
-import { TAtlasSrc, TJsonSrc } from 'types';
+import { SPINES_PATH } from 'constants/paths';
 
 import { ESpines } from './enums';
 
