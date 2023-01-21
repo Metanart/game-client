@@ -41,12 +41,12 @@ module.exports = {
                     ['^classes'],
                     ['^components'],
                     ['^scenes'],
-
                     ['^control'],
 
-                    ['^constants'],
-                    ['^tokens'],
+                    ['^enums'],
                     ['^types'],
+                    ['^tokens'],
+                    ['^constants'],
                     ['^utils'],
 
                     ['^assets'],
@@ -59,6 +59,15 @@ module.exports = {
             },
         ],
         'simple-import-sort/exports': 'error',
-        'no-unused-vars': 0,
+        'no-unused-vars': [
+            0,
+            {
+                vars: 'all',
+                args: 'after-used',
+                ignoreRestSiblings: false,
+                argsIgnorePattern: '^_',
+                destructuredArrayIgnorePattern: '^_',
+            },
+        ],
     },
 };

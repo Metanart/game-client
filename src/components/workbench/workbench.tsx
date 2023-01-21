@@ -1,29 +1,29 @@
-import { ComponentProps, FC } from 'react';
+import { FC } from 'react';
 
-import { BoxProps, useBox } from '@react-three/cannon';
+import { useBox } from '@react-three/cannon';
 import { Box } from '@react-three/drei';
 
-import '@react-three/fiber';
 import { CollisionGroups } from 'enums/collision-groups';
 
-type BodyProps = BoxProps;
-type MeshProps = ComponentProps<typeof Box>;
+import { BoxBodyProps, BoxMeshProps } from 'types/cannon';
 
-const meshProps: MeshProps = {
+import '@react-three/fiber';
+
+const meshProps: BoxMeshProps = {
     args: [1, 1, 2],
     position: [3, 1 / 2, 3],
     rotation: [0, Math.PI / 2, 0],
 };
 
-const bodyProps: BodyProps = {
+const bodyProps: BoxBodyProps = {
     mass: 0,
     collisionFilterGroup: CollisionGroups.PHYSICAL_OBJECTS,
     collisionFilterMask: CollisionGroups.PHYSICAL_OBJECTS,
-    ...(meshProps as BodyProps),
+    ...(meshProps as BoxBodyProps),
 };
 
 export const Workbench: FC = () => {
-    const [mesh] = useBox(() => bodyProps);
+    const [bodyMesh] = useBox(() => bodyProps);
 
-    return <Box ref={mesh} {...meshProps} />;
+    return <Box ref={bodyMesh} {...meshProps} />;
 };

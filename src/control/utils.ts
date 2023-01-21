@@ -24,7 +24,7 @@ export const ControlEvents = new Events<
     TControlCallbackPayload
 >();
 
-export const handleContextActionSubscribe = (
+export const handleSubscribeContextAction = (
     handleContextAction: (isPressed: boolean) => void,
 ) => {
     ControlEvents.subscribe(
@@ -35,7 +35,10 @@ export const handleContextActionSubscribe = (
     );
 };
 
-export const handleContextActionUnsubscribe = () => {
+export const handleUnsubscribeContextAction = (
+    handleContextAction: (isPressed: boolean) => void,
+) => {
+    handleContextAction(false);
     ControlEvents.unsubscribe(
         'default',
         'contextAction',

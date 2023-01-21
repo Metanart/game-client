@@ -12,10 +12,10 @@ import { useGameContext } from 'store/game/hooks';
 export const GameCamera: FC = () => {
     const { gameState } = useGameContext();
 
-    const camera = useRef<Object3D>(null);
+    const cameraRef = useRef<Object3D>(null);
 
     if (DEBUG_CONFIG.showCameraHelper)
-        useHelper(camera as MutableRefObject<Object3D>, CameraHelper);
+        useHelper(cameraRef as MutableRefObject<Object3D>, CameraHelper);
 
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -28,13 +28,15 @@ export const GameCamera: FC = () => {
         1,
         450,
     ] as OrthographicCameraProps['args'];
+
     const cameraDistance = 250;
 
-    const getCameraDirectionProps = (): {
+    const getCameraDirectionProps: () => {
         position: OrthographicCameraProps['position'];
         rotation: OrthographicCameraProps['rotation'];
-    } => {
+    } = () => {
         switch (gameState.cameraDirection) {
+            default:
             case 'up':
                 return {
                     position: [0, cameraDistance, cameraDistance],
@@ -63,7 +65,7 @@ export const GameCamera: FC = () => {
     return (
         <OrthographicCamera
             makeDefault={!DEBUG_CONFIG.useDevelopersCamera}
-            ref={camera}
+            ref={cameraRef}
             args={cameraArgs}
             position={position}
             rotation={rotation}

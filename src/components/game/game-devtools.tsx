@@ -45,9 +45,7 @@ export const GameDevtools: FC<Props> = (props) => {
 
             {showStats && <Stats />}
 
-            {useDevelopersCamera && (
-                <OrbitControls layers={3} makeDefault={true} />
-            )}
+            {useDevelopersCamera && <OrbitControls />}
 
             {showGridHelper && (
                 <gridHelper
