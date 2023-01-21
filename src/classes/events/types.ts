@@ -1,23 +1,22 @@
-export type TEventsEventId = string;
-
-export type TEventsData = any;
-
 export type TEventsSubscriptions<
-    TGContextKey extends string,
-    TGEventKey extends string,
+    TGContextId extends string,
+    TGEventId extends string,
+    TGCallbackPayload extends object,
 > = {
-    [Key in TGContextKey]: TEventsContext<TGEventKey>;
+    [Key in TGContextId]: TEventsContext<TGEventId, TGCallbackPayload>;
 };
 
-export type TEventsContext<TGEventKey extends string> = {
-    [Key in TGEventKey]?: TEventsEvent;
+export type TEventsContext<TGEventId extends string, TGCallbackPayload> = {
+    [Key in TGEventId]?: TEventsEvent<TGCallbackPayload>;
 };
 
-export type TEventsEvent = {
-    [Key in TEventsEventId]: TEventsCallback;
+export type TEventsEvent<TGCallbackPayload> = {
+    [Key in string]: TEventsCallback<TGCallbackPayload>;
 };
 
-export type TEventsCallback = (data?: TEventsData) => void;
+export type TEventsCallback<TGCallbackPayload> = (
+    payload: TGCallbackPayload,
+) => void;
 
 export type TEventsSubsribe = {
     unsubscribe: () => void;

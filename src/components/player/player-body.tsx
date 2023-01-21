@@ -4,12 +4,13 @@ import { CollideBeginEvent, SphereProps, useSphere } from '@react-three/cannon';
 import { Sphere } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 
+import { ControlEvents } from 'control/utils';
+
 import { Materials } from 'tokens/materials';
 
 import { usePlayerMaterialsRelations } from './hooks';
 
 import { CollisionGroups } from 'enums/collision-groups';
-import { keyboardControlEvents } from 'keyboard-control/utils';
 
 type SphereMeshProps = ComponentProps<typeof Sphere>;
 type SphereBodyProps = SphereProps;
@@ -45,9 +46,6 @@ export const PlayerBody: FC = () => {
         isTrigger: true,
         collisionFilterGroup: CollisionGroups.TRIGGER_AREAS,
         collisionFilterMask: CollisionGroups.TRIGGER_AREAS,
-        onCollideBegin: (event: CollideBeginEvent) => {
-            console.log(event);
-        },
         ...(physicalMeshProps as SphereBodyProps),
     };
 
@@ -63,19 +61,19 @@ export const PlayerBody: FC = () => {
         });
     }
 
-    keyboardControlEvents.subscribe('default', 'moveUp', ({ isPressed }) =>
+    ControlEvents.subscribe('default', 'moveUp', ({ isPressed }) =>
         setIsMovingUp(isPressed),
     );
 
-    keyboardControlEvents.subscribe('default', 'moveLeft', ({ isPressed }) =>
+    ControlEvents.subscribe('default', 'moveLeft', ({ isPressed }) =>
         setIsMovingLeft(isPressed),
     );
 
-    keyboardControlEvents.subscribe('default', 'moveDown', ({ isPressed }) =>
+    ControlEvents.subscribe('default', 'moveDown', ({ isPressed }) =>
         setIsMovingDown(isPressed),
     );
 
-    keyboardControlEvents.subscribe('default', 'moveRight', ({ isPressed }) =>
+    ControlEvents.subscribe('default', 'moveRight', ({ isPressed }) =>
         setIsMovingRight(isPressed),
     );
 
