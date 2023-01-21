@@ -1,78 +1,102 @@
 import { v4 } from 'uuid';
 
 import {
-    TEventsCallback,
     TEventsContext,
-    TEventsData,
     TEventsEvent,
-    TEventsEventId,
     TEventsSubscriptions,
     TEventsSubsribe,
 } from './types';
 
 export class Events<
-    TGContextKey extends string,
-    TGEventKey extends string,
-    TGCallbackPayload extends {},
+    TGContextId extends string,
+    TGEventId extends string,
+    TGCallbackPayload extends object,
 > {
     private subscriptions: Partial<
-        TEventsSubscriptions<TGContextKey, TGEventKey>
+        TEventsSubscriptions<TGContextId, TGEventId, TGCallbackPayload>
     > = {};
 
-    private getContext(eventContext: TGContextKey): TEventsContext<TGEventKey> {
+    private getContext(
+        eventContext: TGContextId,
+    ): TEventsContext<TGEventId, TGCallbackPayload> {
         if (this.subscriptions[eventContext] === undefined) {
             this.subscriptions[eventContext] = {};
         }
 
-        return this.subscriptions[eventContext] as TEventsContext<TGEventKey>;
+        return this.subscriptions[eventContext] as TEventsContext<
+            TGEventId,
+            TGCallbackPayload
+        >;
     }
 
     private getEvent(
-        context: TEventsContext<TGEventKey>,
-        eventKey: TGEventKey,
-    ): TEventsEvent {
-        if (context[eventKey] === undefined) {
-            context[eventKey] = {};
+        context: TEventsContext<TGEventId, TGCallbackPayload>,
+        eventId: TGEventId,
+    ): TEventsEvent<TGCallbackPayload> {
+        if (context[eventId] === undefined) {
+            context[eventId] = {};
         }
 
-        return context[eventKey] as TEventsEvent;
+        return context[eventId] as TEventsEvent<TGCallbackPayload>;
     }
 
     subscribe(
-        contextKey: TGContextKey,
-        eventKey: TGEventKey,
+        contextId: TGContextId,
+        eventId: TGEventId,
         callback: (payload: TGCallbackPayload) => void,
+        callbackId: string = v4(),
     ): TEventsSubsribe {
-        const callbackId: TEventsEventId = v4();
-        const context = this.getContext(contextKey);
-        const event = this.getEvent(context, eventKey);
+        const context = this.getContext(contextId);
+        const event = this.getEvent(context, eventId);
 
         event[callbackId] = callback;
 
         return {
-            unsubscribe: () => {
-                delete event[callbackId];
-
-                if (Object.keys(event).length === 0) {
-                    delete context[eventKey];
-                }
-
-                if (Object.keys(context).length === 0) {
-                    delete this.subscriptions[contextKey];
-                }
-            },
+            unsubscribe: () =>
+                this.unsubscribe(
+                    contextId,
+                    eventId,
+                    callbackId,
+                    context,
+                    event,
+                ),
         };
     }
 
-    trigger(
-        contextKey: TGContextKey,
-        eventKey: TGEventKey,
-        payload: TGCallbackPayload,
+    unsubscribe(
+        contextId: TGContextId,
+        eventId: TGEventId,
+        callbackId: string,
+        context: TEventsContext<TGEventId, TGCallbackPayload> = this.getContext(
+            contextId,
+        ),
+        event: TEventsEvent<TGCallbackPayload> = this.getEvent(
+            context,
+            eventId,
+        ),
     ) {
-        const event = this.subscriptions[contextKey]?.[eventKey];
+        delete event[callbackId];
+
+        if (Object.keys(event).length === 0) {
+            delete context[eventId];
+        }
+
+        if (Object.keys(context).length === 0) {
+            delete this.subscriptions[contextId];
+        }
+    }
+
+    trigger(
+        contextId: TGContextId,
+        eventId: TGEventId,
+        callbackPayload: TGCallbackPayload,
+    ) {
+        const event = this.subscriptions[contextId]?.[eventId];
 
         if (!event) return;
 
-        Object.keys(event).forEach((callbackId) => event[callbackId](payload));
+        Object.keys(event).forEach((callbackId) =>
+            event[callbackId](callbackPayload),
+        );
     }
 }

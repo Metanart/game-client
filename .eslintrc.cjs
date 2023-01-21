@@ -42,6 +42,8 @@ module.exports = {
                     ['^components'],
                     ['^scenes'],
 
+                    ['^control'],
+
                     ['^constants'],
                     ['^tokens'],
                     ['^types'],

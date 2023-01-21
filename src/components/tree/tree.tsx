@@ -1,13 +1,23 @@
 import { FC } from 'react';
 
-import {
-    CollideEndEvent,
-    useCompoundBody,
-    useCylinder,
-} from '@react-three/cannon';
+import { useCylinder } from '@react-three/cannon';
 import { Cylinder } from '@react-three/drei';
 
+import {
+    handleContextActionSubscribe,
+    handleContextActionUnsubscribe,
+} from 'control/utils';
+
 import { CollisionGroups } from 'enums/collision-groups';
+
+const handleContextAction = (isPressed: boolean) => {
+    console.log(isPressed);
+};
+
+const handleCollideBegin = () =>
+    handleContextActionSubscribe(handleContextAction);
+
+const handleCollideEnd = () => handleContextActionUnsubscribe();
 
 export const Tree: FC = () => {
     const [treeTrunkMesh, treeTrunkBody] = useCylinder(() => ({
@@ -17,6 +27,8 @@ export const Tree: FC = () => {
         position: [-2, 1.5, -2],
         collisionFilterGroup: CollisionGroups.PHYSICAL_OBJECTS,
         collisionFilterMask: CollisionGroups.PHYSICAL_OBJECTS,
+        onCollideBegin: handleCollideBegin,
+        onCollideEnd: handleCollideEnd,
     }));
 
     const [treeTriggerMesh, treeTriggerBody] = useCylinder(() => ({
