@@ -1,4 +1,4 @@
-import { Events } from 'classes/events/events';
+import { Events } from 'classes/common/events/events';
 
 import {
     TControlCallbackPayload,

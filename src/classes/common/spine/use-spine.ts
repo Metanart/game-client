@@ -1,7 +1,7 @@
 import { SkeletonMesh } from '@esotericsoftware/spine-threejs';
 
-import { ESpines } from 'classes/spine/enums';
-import { SpineAssetsManager } from 'classes/spine/spine-assets-manager';
+import { ESpines } from 'classes/common/spine/enums';
+import { SpineAssetsManager } from 'classes/common/spine/spine-assets-manager';
 
 export const useSpine = async (spineKey: ESpines) => {
     const assetManager = new SpineAssetsManager(ESpines.RAPTOR);
