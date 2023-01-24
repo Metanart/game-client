@@ -1,4 +1,4 @@
-import { processEntitiesInLoopedMethod } from 'utils/process-entities-in-looped-method';
+import { iterateMethod } from 'utils/iterate-method';
 
 export class List<TGListItem> {
     list: TGListItem[] = [];
@@ -33,7 +33,7 @@ export class List<TGListItem> {
     }
 
     addItems(items: TGListItem[]): TGListItem[] {
-        return processEntitiesInLoopedMethod<TGListItem>(
+        return iterateMethod<TGListItem>(
             items,
             this.addItem.bind(this),
         ) as TGListItem[];
@@ -45,7 +45,7 @@ export class List<TGListItem> {
     }
 
     addUniqueItems(items: TGListItem[]): TGListItem[] | undefined {
-        return processEntitiesInLoopedMethod<TGListItem>(
+        return iterateMethod<TGListItem>(
             items,
             this.removeItemByIndex.bind(this),
         );
@@ -60,7 +60,7 @@ export class List<TGListItem> {
     removeItemsByIndexes(indexes: number[]): TGListItem[] | undefined {
         if (this.list.length === 0) return;
 
-        return processEntitiesInLoopedMethod<number, TGListItem>(
+        return iterateMethod<number, TGListItem>(
             indexes,
             this.removeItemByIndex.bind(this),
         );
@@ -79,9 +79,6 @@ export class List<TGListItem> {
     removeItems(items: TGListItem[]): TGListItem[] | undefined {
         if (this.list.length === 0) return;
 
-        return processEntitiesInLoopedMethod<TGListItem>(
-            items,
-            this.removeItem.bind(this),
-        );
+        return iterateMethod<TGListItem>(items, this.removeItem.bind(this));
     }
 }

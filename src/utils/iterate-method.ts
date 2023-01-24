@@ -1,12 +1,9 @@
-export function processEntitiesInLoopedMethod<
-    TGInputEntity,
-    TGOutputEntity = TGInputEntity,
->(
+export function iterateMethod<TGInputEntity, TGOutputEntity = TGInputEntity>(
     entities: TGInputEntity[],
-    appliedMethod: Function,
+    performingMethod: Function,
 ): TGOutputEntity[] | undefined {
     const results = entities
-        .map((entity) => appliedMethod(entity))
+        .map((entity) => performingMethod(entity))
         .filter(Boolean) as TGOutputEntity[];
     return results.length > 0 ? results : undefined;
 }

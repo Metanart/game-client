@@ -7,7 +7,7 @@ import {
     TGridSize,
 } from './types';
 
-const DEFAULT_CELL: TGridCell = EGridCellStatus.EMPTY;
+const DEFAULT_CELL: TGridCell = { status: EGridCellStatus.EMPTY };
 
 const DEFAULT_GRID_SIZE: TGridSize = [9, 9];
 
@@ -28,11 +28,11 @@ export class Grid<TGGridCell extends TGridCell> {
         );
 
         for (
-            let iteratingRowId = 0;
-            iteratingRowId < this.numberOfRows;
-            iteratingRowId++
+            let iteratingRowIndex = 0;
+            iteratingRowIndex < this.numberOfRows;
+            iteratingRowIndex++
         ) {
-            grid[iteratingRowId] = new Array(this.numberOfCols).fill(
+            grid[iteratingRowIndex] = new Array(this.numberOfCols).fill(
                 DEFAULT_CELL,
             );
         }
@@ -41,20 +41,24 @@ export class Grid<TGGridCell extends TGridCell> {
     }
 
     cellChecker(providedCell: TGGridCell): boolean {
-        return providedCell === EGridCellStatus.EMPTY;
+        return providedCell.status === EGridCellStatus.EMPTY;
     }
 
     findCrossCoords(
         isRowDirected: boolean,
-        currentRowId: number,
-        currentColId: number,
+        currentRowIndex: number,
+        currentColIndex: number,
         requestedHeight: number,
         requestedWidth: number,
         cellChecker: (providedCell: TGGridCell) => boolean,
     ) {
         return this.findCoordsFromLine({
-            startingRowId: isRowDirected ? currentRowId + 1 : currentRowId,
-            startingColId: !isRowDirected ? currentColId + 1 : currentColId,
+            startingRowIndex: isRowDirected
+                ? currentRowIndex + 1
+                : currentRowIndex,
+            startingColIndex: !isRowDirected
+                ? currentColIndex + 1
+                : currentColIndex,
             requestedHeight: isRowDirected ? requestedHeight - 1 : 1,
             requestedWidth: isRowDirected ? 1 : requestedWidth - 1,
             direction: isRowDirected ? 'col' : 'row',
@@ -63,25 +67,25 @@ export class Grid<TGGridCell extends TGridCell> {
     }
 
     checkRequestedSize(
-        startingRowId: number,
-        startingColId: number,
+        startingRowIndex: number,
+        startingColIndex: number,
         requestedHeight: number,
         requestedWidth: number,
     ) {
-        const endingRowId = startingRowId + requestedHeight;
-        const endingColId = startingColId + requestedWidth;
+        const endingRowIndex = startingRowIndex + requestedHeight;
+        const endingColIndex = startingColIndex + requestedWidth;
 
         return (
             requestedWidth > 0 ||
             requestedHeight > 0 ||
-            endingRowId < this.numberOfRows ||
-            endingColId < this.numberOfCols
+            endingRowIndex < this.numberOfRows ||
+            endingColIndex < this.numberOfCols
         );
     }
 
     findCoords({
-        startingRowId = 0,
-        startingColId = 0,
+        startingRowIndex = 0,
+        startingColIndex = 0,
         requestedHeight = 1,
         requestedWidth = 1,
         direction = 'row',
@@ -91,13 +95,13 @@ export class Grid<TGGridCell extends TGridCell> {
 
         if (direction === 'row') {
             for (
-                let iteratorRowId = startingRowId;
-                iteratorRowId < this.numberOfRows;
-                iteratorRowId++
+                let iteratorRowIndex = startingRowIndex;
+                iteratorRowIndex < this.numberOfRows;
+                iteratorRowIndex++
             ) {
                 foundCoords = this.findCoordsFromLine({
-                    startingRowId: iteratorRowId,
-                    startingColId,
+                    startingRowIndex: iteratorRowIndex,
+                    startingColIndex,
                     requestedHeight,
                     requestedWidth,
                     direction,
@@ -108,13 +112,13 @@ export class Grid<TGGridCell extends TGridCell> {
             }
         } else {
             for (
-                let iteratorColId = startingColId;
-                iteratorColId < this.numberOfRows;
-                iteratorColId++
+                let iteratorColIndex = startingColIndex;
+                iteratorColIndex < this.numberOfRows;
+                iteratorColIndex++
             ) {
                 foundCoords = this.findCoordsFromLine({
-                    startingRowId,
-                    startingColId: iteratorColId,
+                    startingRowIndex,
+                    startingColIndex: iteratorColIndex,
                     requestedHeight,
                     requestedWidth,
                     direction,
@@ -129,8 +133,8 @@ export class Grid<TGGridCell extends TGridCell> {
     }
 
     findCoordsFromLine({
-        startingRowId = 0,
-        startingColId = 0,
+        startingRowIndex = 0,
+        startingColIndex = 0,
         requestedHeight = 1,
         requestedWidth = 1,
         direction = 'row',
@@ -139,18 +143,18 @@ export class Grid<TGGridCell extends TGridCell> {
         const isRowDirected = direction === 'row';
 
         const isRequestedSizeAvailable = this.checkRequestedSize(
-            startingRowId,
-            startingColId,
+            startingRowIndex,
+            startingColIndex,
             requestedHeight,
             requestedWidth,
         );
 
         if (!isRequestedSizeAvailable) return [];
 
-        const iteratorStartingId = isRowDirected
-            ? startingColId
-            : startingRowId;
-        const iteratorMaxId = isRowDirected
+        const iteratorStartingIndex = isRowDirected
+            ? startingColIndex
+            : startingRowIndex;
+        const iteratorMaxIndex = isRowDirected
             ? this.numberOfCols
             : this.numberOfRows;
 
@@ -164,26 +168,30 @@ export class Grid<TGGridCell extends TGridCell> {
         const requredLength = isRowDirected ? requestedWidth : requestedHeight;
 
         for (
-            let iteratorId = iteratorStartingId;
-            iteratorId < iteratorMaxId;
-            iteratorId++
+            let iteratorIndex = iteratorStartingIndex;
+            iteratorIndex < iteratorMaxIndex;
+            iteratorIndex++
         ) {
-            const currentRowId = isRowDirected ? startingRowId : iteratorId;
-            const currentColId = isRowDirected ? iteratorId : startingColId;
+            const currentRowIndex = isRowDirected
+                ? startingRowIndex
+                : iteratorIndex;
+            const currentColIndex = isRowDirected
+                ? iteratorIndex
+                : startingColIndex;
 
             const isCellMatches = cellChecker(
-                this.grid[currentRowId][currentColId],
+                this.grid[currentRowIndex][currentColIndex],
             );
 
             if (isCellMatches) {
-                foundCoords.push([currentRowId, currentColId]);
+                foundCoords.push([currentRowIndex, currentColIndex]);
             } else foundCoords = [];
 
             if (isCellMatches && shoudHaveCrossCoords) {
                 const crossCoords = this.findCrossCoords(
                     isRowDirected,
-                    currentRowId,
-                    currentColId,
+                    currentRowIndex,
+                    currentColIndex,
                     requestedHeight,
                     requestedWidth,
                     cellChecker,
@@ -210,9 +218,9 @@ export class Grid<TGGridCell extends TGridCell> {
         updatedCellData: TGGridCell,
     ): TGridCell[] {
         return coordsList.map((coords) => {
-            const [rowId, colId] = coords;
-            const iteratedCell = this.grid[rowId][colId];
-            this.grid[rowId][colId] = updatedCellData;
+            const [rowIndex, colIndex] = coords;
+            const iteratedCell = this.grid[rowIndex][colIndex];
+            this.grid[rowIndex][colIndex] = updatedCellData;
             return iteratedCell;
         });
     }
@@ -222,8 +230,8 @@ export class Grid<TGGridCell extends TGridCell> {
         cellChecker = this.cellChecker,
     ): Boolean {
         for (let iterator = 0; iterator < coordsList.length; iterator++) {
-            const [rowId, colId] = coordsList[iterator];
-            const iteratedCell = this.grid[rowId][colId];
+            const [rowIndex, colIndex] = coordsList[iterator];
+            const iteratedCell = this.grid[rowIndex][colIndex];
             const isCellMatvhes = cellChecker(iteratedCell);
 
             if (!isCellMatvhes) return false;
