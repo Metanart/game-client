@@ -1,220 +1,232 @@
 import { EGridCellStatus } from './enums';
-import { TGrid, TGridCell, TGridSize } from './types';
+import {
+    TGrid,
+    TGridCell,
+    TGridCoords,
+    TGridFindCoordsParams,
+    TGridSize,
+} from './types';
 
-const DEFAULT_CELL_STATUS = EGridCellStatus.EMPTY;
+const DEFAULT_CELL: TGridCell = EGridCellStatus.EMPTY;
 
 const DEFAULT_GRID_SIZE: TGridSize = [9, 9];
 
-export class Grid {
-    private grid: TGrid;
-    private height: number;
-    private width: number;
+export class Grid<TGGridCell extends TGridCell> {
+    private grid: TGrid<TGGridCell>;
+    private numberOfRows: number;
+    private numberOfCols: number;
 
     constructor(size: TGridSize = DEFAULT_GRID_SIZE) {
-        this.height = size[0];
-        this.width = size[1];
-        this.grid = this.generateGrid(...size);
+        this.numberOfRows = size[0];
+        this.numberOfCols = size[1];
+        this.grid = this.generateGrid();
     }
 
-    private generateGrid(numberOfRows: number, numberOfCols: number) {
-        const gridgrid = new Array(numberOfRows).fill(DEFAULT_CELL_STATUS);
+    private generateGrid() {
+        const grid: TGrid<TGGridCell> = new Array(this.numberOfRows).fill(
+            DEFAULT_CELL,
+        );
 
         for (
             let iteratingRowId = 0;
-            iteratingRowId < numberOfRows;
+            iteratingRowId < this.numberOfRows;
             iteratingRowId++
         ) {
-            gridgrid[iteratingRowId] = new Array(numberOfCols).fill(
-                DEFAULT_CELL_STATUS,
+            grid[iteratingRowId] = new Array(this.numberOfCols).fill(
+                DEFAULT_CELL,
             );
         }
 
-        return gridgrid;
+        return grid;
     }
 
-    private findCellsInRow(
-        options: {
-            selectedRowId: number;
-            startingColId: number;
-            requestedWidth: number;
-            cellStatus: EGridCellStatus;
-        } = {
-            selectedRowId: 0,
-            startingColId: 0,
-            requestedWidth: 1,
-            cellStatus: EGridCellStatus.EMPTY,
-        },
-    ): TGridCell[] {
-        let foundRowCoords: TGridCell[] = [];
-
-        const { selectedRowId, startingColId, requestedWidth, cellStatus } =
-            options;
-
-        if (selectedRowId > this.height || startingColId > this.width)
-            return [];
-
-        for (
-            let iteratingColId = startingColId;
-            iteratingColId < this.width;
-            iteratingColId++
-        ) {
-            if (this.grid[selectedRowId][iteratingColId] === cellStatus) {
-                foundRowCoords.push([
-                    selectedRowId,
-                    iteratingColId,
-                ] as TGridCell);
-            } else foundRowCoords = [];
-
-            if (foundRowCoords.length === requestedWidth) break;
-        }
-
-        return foundRowCoords.length === requestedWidth ? foundRowCoords : [];
+    cellChecker(providedCell: TGGridCell): boolean {
+        return providedCell === EGridCellStatus.EMPTY;
     }
 
-    private findCellsInCol(
-        options: {
-            startingRowId: number;
-            selectedColId: number;
-            requestedHeight: number;
-            cellStatus: EGridCellStatus;
-        } = {
-            startingRowId: 0,
-            selectedColId: 0,
-            requestedHeight: 1,
-            cellStatus: EGridCellStatus.EMPTY,
-        },
-    ): TGridCell[] {
-        let foundColCoords: TGridCell[] = [];
-
-        const { startingRowId, selectedColId, requestedHeight, cellStatus } =
-            options;
-
-        if (startingRowId > this.height || selectedColId > this.width)
-            return [];
-
-        for (
-            let iteratingRowId = startingRowId;
-            iteratingRowId < this.height;
-            iteratingRowId++
-        ) {
-            if (foundColCoords.length === requestedHeight) break;
-
-            const endingRowId = iteratingRowId + requestedHeight;
-
-            if (endingRowId > this.height) break;
-
-            if (this.grid[iteratingRowId][selectedColId] === cellStatus) {
-                foundColCoords.push([
-                    iteratingRowId,
-                    selectedColId,
-                ] as TGridCell);
-            } else foundColCoords = [];
-        }
-
-        return foundColCoords.length === requestedHeight ? foundColCoords : [];
-    }
-
-    private findOverlappingCells(options: {
-        rowCells: TGridCell[];
-        requestedHeight: number;
-        cellStatus: EGridCellStatus;
-    }): TGridCell[] {
-        const { rowCells, requestedHeight, cellStatus } = options;
-
-        let allFoundColCells: TGridCell[] = [];
-
-        for (let iterator = 0; iterator < rowCells.length; iterator++) {
-            const [rowId, colId] = rowCells[iterator];
-
-            // I'm using the +1-1 hack
-            // to avoid checking already checked 1st row cells
-            const foundColCells = this.findCellsInCol({
-                startingRowId: rowId + 1,
-                selectedColId: colId,
-                requestedHeight: requestedHeight - 1,
-                cellStatus,
-            });
-
-            if (foundColCells.length) {
-                allFoundColCells = [...allFoundColCells, ...foundColCells];
-            } else return [];
-        }
-
-        return allFoundColCells;
-    }
-
-    findCells(
-        requestedSize: TGridSize,
-        cellStatus: EGridCellStatus = EGridCellStatus.EMPTY,
-        startingCell: TGridCell = [0, 0],
-    ): TGridCell[] {
-        const [startingRowId, startingColId] = startingCell;
-        const [requestedWidth, requestedHeight] = requestedSize;
-
-        let foundRowCells: TGridCell[] = [];
-        let foundOverlappingCells: TGridCell[] = [];
-
-        if (
-            requestedWidth === 0 ||
-            requestedHeight === 0 ||
-            requestedWidth > this.width ||
-            requestedHeight > this.height
-        )
-            return [];
-
-        for (
-            let iteratingRowId = startingRowId;
-            iteratingRowId < this.height;
-            iteratingRowId++
-        ) {
-            foundRowCells = this.findCellsInRow({
-                selectedRowId: iteratingRowId,
-                startingColId,
-                requestedWidth,
-                cellStatus,
-            });
-
-            if (foundRowCells.length) {
-                foundOverlappingCells = this.findOverlappingCells({
-                    rowCells: foundRowCells,
-                    requestedHeight,
-                    cellStatus,
-                });
-
-                if (foundOverlappingCells.length) break;
-            }
-        }
-
-        return foundRowCells.length && foundOverlappingCells.length
-            ? [...foundRowCells, ...foundOverlappingCells]
-            : [];
-    }
-
-    updateCellsStatus(
-        cellsList: TGridCell[],
-        newStatus: EGridCellStatus = EGridCellStatus.EMPTY,
-    ): TGridCell[] {
-        return cellsList.map((cell) => {
-            const [rowId, colId] = cell;
-            this.grid[rowId][colId] = newStatus;
-            return cell;
+    findCrossCoords(
+        isRowDirected: boolean,
+        currentRowId: number,
+        currentColId: number,
+        requestedHeight: number,
+        requestedWidth: number,
+        cellChecker: (providedCell: TGGridCell) => boolean,
+    ) {
+        return this.findCoordsFromLine({
+            startingRowId: isRowDirected ? currentRowId + 1 : currentRowId,
+            startingColId: !isRowDirected ? currentColId + 1 : currentColId,
+            requestedHeight: isRowDirected ? requestedHeight - 1 : 1,
+            requestedWidth: isRowDirected ? 1 : requestedWidth - 1,
+            direction: isRowDirected ? 'col' : 'row',
+            cellChecker,
         });
     }
 
-    checkCellsStatus(
-        cellsList: TGridCell[],
-        status: EGridCellStatus = EGridCellStatus.EMPTY,
-    ): Boolean {
-        for (
-            let iteratingCellId = 0;
-            iteratingCellId < cellsList.length;
-            iteratingCellId++
-        ) {
-            const [rowId, colId] = cellsList[iteratingCellId];
+    checkRequestedSize(
+        startingRowId: number,
+        startingColId: number,
+        requestedHeight: number,
+        requestedWidth: number,
+    ) {
+        const endingRowId = startingRowId + requestedHeight;
+        const endingColId = startingColId + requestedWidth;
 
-            if (this.grid[rowId][colId] !== status) {
-                return false;
+        return (
+            requestedWidth > 0 ||
+            requestedHeight > 0 ||
+            endingRowId < this.numberOfRows ||
+            endingColId < this.numberOfCols
+        );
+    }
+
+    findCoords({
+        startingRowId = 0,
+        startingColId = 0,
+        requestedHeight = 1,
+        requestedWidth = 1,
+        direction = 'row',
+        cellChecker = this.cellChecker,
+    }: TGridFindCoordsParams<TGGridCell>): TGridCoords[] {
+        let foundCoords: TGridCoords[] = [];
+
+        if (direction === 'row') {
+            for (
+                let iteratorRowId = startingRowId;
+                iteratorRowId < this.numberOfRows;
+                iteratorRowId++
+            ) {
+                foundCoords = this.findCoordsFromLine({
+                    startingRowId: iteratorRowId,
+                    startingColId,
+                    requestedHeight,
+                    requestedWidth,
+                    direction,
+                    cellChecker,
+                });
+
+                if (foundCoords.length) break;
             }
+        } else {
+            for (
+                let iteratorColId = startingColId;
+                iteratorColId < this.numberOfRows;
+                iteratorColId++
+            ) {
+                foundCoords = this.findCoordsFromLine({
+                    startingRowId,
+                    startingColId: iteratorColId,
+                    requestedHeight,
+                    requestedWidth,
+                    direction,
+                    cellChecker,
+                });
+
+                if (foundCoords.length) break;
+            }
+        }
+
+        return foundCoords;
+    }
+
+    findCoordsFromLine({
+        startingRowId = 0,
+        startingColId = 0,
+        requestedHeight = 1,
+        requestedWidth = 1,
+        direction = 'row',
+        cellChecker = this.cellChecker,
+    }: TGridFindCoordsParams<TGGridCell>): TGridCoords[] {
+        const isRowDirected = direction === 'row';
+
+        const isRequestedSizeAvailable = this.checkRequestedSize(
+            startingRowId,
+            startingColId,
+            requestedHeight,
+            requestedWidth,
+        );
+
+        if (!isRequestedSizeAvailable) return [];
+
+        const iteratorStartingId = isRowDirected
+            ? startingColId
+            : startingRowId;
+        const iteratorMaxId = isRowDirected
+            ? this.numberOfCols
+            : this.numberOfRows;
+
+        let foundCoords: TGridCoords[] = [];
+        let foundCrossCoords: TGridCoords[] = [];
+
+        const shoudHaveCrossCoords = isRowDirected
+            ? requestedHeight > 1
+            : requestedWidth > 1;
+
+        const requredLength = isRowDirected ? requestedWidth : requestedHeight;
+
+        for (
+            let iteratorId = iteratorStartingId;
+            iteratorId < iteratorMaxId;
+            iteratorId++
+        ) {
+            const currentRowId = isRowDirected ? startingRowId : iteratorId;
+            const currentColId = isRowDirected ? iteratorId : startingColId;
+
+            const isCellMatches = cellChecker(
+                this.grid[currentRowId][currentColId],
+            );
+
+            if (isCellMatches) {
+                foundCoords.push([currentRowId, currentColId]);
+            } else foundCoords = [];
+
+            if (isCellMatches && shoudHaveCrossCoords) {
+                const crossCoords = this.findCrossCoords(
+                    isRowDirected,
+                    currentRowId,
+                    currentColId,
+                    requestedHeight,
+                    requestedWidth,
+                    cellChecker,
+                );
+
+                if (crossCoords.length) {
+                    foundCrossCoords = [...foundCrossCoords, ...crossCoords];
+                } else {
+                    foundCrossCoords = [];
+                    foundCoords = [];
+                }
+            }
+
+            if (foundCoords.length === requredLength) break;
+        }
+
+        return foundCoords.length === requredLength
+            ? [...foundCoords, ...foundCrossCoords]
+            : [];
+    }
+
+    updateCellsByCoords(
+        coordsList: TGridCoords[],
+        updatedCellData: TGGridCell,
+    ): TGridCell[] {
+        return coordsList.map((coords) => {
+            const [rowId, colId] = coords;
+            const iteratedCell = this.grid[rowId][colId];
+            this.grid[rowId][colId] = updatedCellData;
+            return iteratedCell;
+        });
+    }
+
+    checkCellsByCoords(
+        coordsList: TGridCoords[],
+        cellChecker = this.cellChecker,
+    ): Boolean {
+        for (let iterator = 0; iterator < coordsList.length; iterator++) {
+            const [rowId, colId] = coordsList[iterator];
+            const iteratedCell = this.grid[rowId][colId];
+            const isCellMatvhes = cellChecker(iteratedCell);
+
+            if (!isCellMatvhes) return false;
         }
 
         return true;
