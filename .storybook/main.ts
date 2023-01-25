@@ -25,22 +25,22 @@ const config: StorybookViteConfig = {
         reactDocgen: 'react-docgen-typescript',
     },
     async viteFinal(config) {
-      // Merge custom configuration into the default config
-      return mergeConfig(config, {
-        // Use the same "resolve" configuration as your app
-        // @ts-ignore
-        resolve: (await import('../vite.config.ts')).default.resolve,
-        // Add dependencies to pre-optimization
-        optimizeDeps: {
-          include: ['storybook-dark-mode'],
-        },
-        plugins: [
-          tsconfigPaths({
-            // eslint-disable-next-line no-undef
-            projects: [path.resolve(__dirname, '../tsconfig.json')],
-          }),
-        ]
-      });
+        // Merge custom configuration into the default config
+        return mergeConfig(config, {
+            // Use the same "resolve" configuration as your app
+            // @ts-ignore
+            resolve: (await import('../vite.config.ts')).default.resolve,
+            // Add dependencies to pre-optimization
+            optimizeDeps: {
+                include: ['storybook-dark-mode'],
+            },
+            plugins: [
+                tsconfigPaths({
+                    // eslint-disable-next-line no-undef
+                    projects: [path.resolve(__dirname, '../tsconfig.json')],
+                }),
+            ],
+        });
     },
 };
 
