@@ -11,14 +11,14 @@ import {
 } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 
-import { GAME_DEBUG_CONFIG } from 'components/game/config';
-
 import { TK_Colors } from 'tokens/colors';
 import { TK_Length } from 'tokens/measurements';
 
+import { GAME_DEBUG_CONFIG } from './config';
+
 type Props = { children: ReactNode };
 
-export const CM_GameDevtools: FC<Props> = (props) => {
+export const CN_GameDevtools: FC<Props> = (props) => {
     const { children } = props;
     const { scene } = useThree((state) => state);
     const {

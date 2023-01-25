@@ -22,7 +22,7 @@ const bodyProps: T_BoxBodyProps = {
     ...(meshProps as T_BoxBodyProps),
 };
 
-export const C3D_Workbench: FC = () => {
+export const MS_Workbench: FC = () => {
     const [bodyMesh] = useBox(() => bodyProps);
 
     return <Box ref={bodyMesh} {...meshProps} />;

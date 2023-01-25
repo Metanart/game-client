@@ -2,30 +2,39 @@
 
 ## Prefixes
 
-### CM - Component
+### CN\_ - Container component
 
 React component contains logic
 
-### CUI - Component UI
+### UI\_ - UI component
 
 React UI stateless, simple component
 
-### C3D - 3D Component
+### MS\_ - Mesh Component
 
 React 3D component contains Three.js mesh or / and Cannon-es physical body
 
-### CTX - Context
+### SB\_ - Container component
+
+React component contains logic
+
+### CTX\_ - Context
 
 React context component
 
-### CL - Class
+### CL\_ - Class
 
 Class object
 
-### T - Component UI
+### T\_ - Type
 
 Typescript types
 
-### TG - Component UI
+### GT\_ - Generic type
 
 Typescript generic type
+
+### Tips
+
+-   To run storybook could be useful:
+-   -   set NODE_OPTIONS=--openssl-legacy-provider

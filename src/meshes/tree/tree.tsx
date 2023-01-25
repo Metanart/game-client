@@ -46,7 +46,7 @@ const triggerProps: T_CylinderBodyProps = {
     ...(meshProps as T_CylinderBodyProps),
 };
 
-export const C3D_Tree: FC = () => {
+export const MS_Tree: FC = () => {
     const [bodyMesh] = useCylinder(() => bodyProps);
 
     useCylinder(() => triggerProps);

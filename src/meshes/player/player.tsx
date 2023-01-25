@@ -36,7 +36,7 @@ const triggerProps: T_SphereBodyProps = {
     ...(meshProps as T_SphereBodyProps),
 };
 
-export const C3D_Player: FC = () => {
+export const MS_Player: FC = () => {
     const [bodyMesh, body] = useSphere(() => bodyProps);
     const [_, trigger] = useSphere(() => triggerProps);
 

@@ -5,11 +5,11 @@ import { CameraHelper, Object3D } from 'three';
 import { OrthographicCamera, useHelper } from '@react-three/drei';
 import { OrthographicCameraProps } from '@react-three/fiber';
 
-import { GAME_DEBUG_CONFIG } from 'components/game/config';
+import { GAME_DEBUG_CONFIG } from './config';
 
 import { useGameContext } from 'store/game/hooks';
 
-export const CM_GameCamera: FC = () => {
+export const CN_GameCamera: FC = () => {
     const { gameState } = useGameContext();
 
     const cameraRef = useRef<Object3D>(null);

@@ -7,12 +7,12 @@ export type T_CollectionItem = {
 };
 
 export class CL_Collection<
-    TG_Item extends T_CollectionItem,
-> extends CL_List<TG_Item> {
+    GT_Item extends T_CollectionItem,
+> extends CL_List<GT_Item> {
     getItemByProperty(
         propertyValue: string | number,
         propertyName: T_CollectionItemProps,
-    ): TG_Item | undefined {
+    ): GT_Item | undefined {
         const itemIndex = this.getItemIndexByProperty(
             propertyValue,
             propertyName,
@@ -33,7 +33,7 @@ export class CL_Collection<
     removeItemByProperty(
         propertyValue: string | number,
         propertyName: T_CollectionItemProps,
-    ): TG_Item | undefined {
+    ): GT_Item | undefined {
         const itemIndex = this.getItemIndexByProperty(
             propertyValue,
             propertyName,
@@ -42,7 +42,7 @@ export class CL_Collection<
     }
 
     override getItemIndex(
-        requestedItem: TG_Item,
+        requestedItem: GT_Item,
         propertyName?: T_CollectionItemProps,
     ): number {
         if (this.list.length === 0) return -1;

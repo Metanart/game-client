@@ -1,21 +1,21 @@
 export type T_EventsSubscriptions<
-    TG_ContextId extends string,
-    TG_EventId extends string,
-    TG_CallbackPayload extends object,
+    GT_ContextId extends string,
+    GT_EventId extends string,
+    GT_CallbackPayload extends object,
 > = {
-    [Key in TG_ContextId]: T_EventsContext<TG_EventId, TG_CallbackPayload>;
+    [Key in GT_ContextId]: T_EventsContext<GT_EventId, GT_CallbackPayload>;
 };
 
-export type T_EventsContext<TG_EventId extends string, TG_CallbackPayload> = {
-    [Key in TG_EventId]?: T_EventsEvent<TG_CallbackPayload>;
+export type T_EventsContext<GT_EventId extends string, GT_CallbackPayload> = {
+    [Key in GT_EventId]?: T_EventsEvent<GT_CallbackPayload>;
 };
 
-export type T_EventsEvent<TG_CallbackPayload> = {
-    [Key in string]: T_EventsCallback<TG_CallbackPayload>;
+export type T_EventsEvent<GT_CallbackPayload> = {
+    [Key in string]: T_EventsCallback<GT_CallbackPayload>;
 };
 
-export type T_EventsCallback<TG_CallbackPayload> = (
-    payload: TG_CallbackPayload,
+export type T_EventsCallback<GT_CallbackPayload> = (
+    payload: GT_CallbackPayload,
 ) => void;
 
 export type T_EventsSubsribe = {

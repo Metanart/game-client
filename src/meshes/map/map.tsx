@@ -21,7 +21,7 @@ const bodyProps: T_PlaneBodyProps = {
     ...(meshProps as T_PlaneBodyProps),
 };
 
-export const C3D_Map: FC = () => {
+export const MS_Map: FC = () => {
     const [bodyMesh] = usePlane(() => bodyProps);
 
     return <Plane ref={bodyMesh} {...meshProps} />;

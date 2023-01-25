@@ -1,19 +1,19 @@
 import { iterateMethod } from 'utils/iterate-method';
 
-export class CL_List<TG_ListItem> {
-    list: TG_ListItem[] = [];
+export class CL_List<GT_ListItem> {
+    list: GT_ListItem[] = [];
 
-    constructor(items?: TG_ListItem[]) {
+    constructor(items?: GT_ListItem[]) {
         if (items?.length) this.addItems(items);
     }
 
-    getItemIndex(requestedItem: TG_ListItem): number {
+    getItemIndex(requestedItem: GT_ListItem): number {
         if (this.list.length === 0) return -1;
         return this.list.findIndex((item) => item === requestedItem);
     }
 
     getItemsIndexes(
-        items: TG_ListItem[],
+        items: GT_ListItem[],
         isExact = false,
     ): number[] | undefined {
         if (this.list.length === 0) return;
@@ -27,46 +27,46 @@ export class CL_List<TG_ListItem> {
         return results.length > 0 ? results : undefined;
     }
 
-    addItem(item: TG_ListItem): TG_ListItem {
+    addItem(item: GT_ListItem): GT_ListItem {
         this.list.push(item);
         return item;
     }
 
-    addItems(items: TG_ListItem[]): TG_ListItem[] {
-        return iterateMethod<TG_ListItem>(
+    addItems(items: GT_ListItem[]): GT_ListItem[] {
+        return iterateMethod<GT_ListItem>(
             items,
             this.addItem.bind(this),
-        ) as TG_ListItem[];
+        ) as GT_ListItem[];
     }
 
-    addUniqueItem(item: TG_ListItem): TG_ListItem | undefined {
+    addUniqueItem(item: GT_ListItem): GT_ListItem | undefined {
         if (this.getItemIndex(item) >= 0) return;
         return this.addItem(item);
     }
 
-    addUniqueItems(items: TG_ListItem[]): TG_ListItem[] | undefined {
-        return iterateMethod<TG_ListItem>(
+    addUniqueItems(items: GT_ListItem[]): GT_ListItem[] | undefined {
+        return iterateMethod<GT_ListItem>(
             items,
             this.removeItemByIndex.bind(this),
         );
     }
 
-    removeItemByIndex(index: number): TG_ListItem | undefined {
+    removeItemByIndex(index: number): GT_ListItem | undefined {
         if (this.list.length === 0) return;
         const removedItem = this.list.splice(index, 1)[0];
         return removedItem;
     }
 
-    removeItemsByIndexes(indexes: number[]): TG_ListItem[] | undefined {
+    removeItemsByIndexes(indexes: number[]): GT_ListItem[] | undefined {
         if (this.list.length === 0) return;
 
-        return iterateMethod<number, TG_ListItem>(
+        return iterateMethod<number, GT_ListItem>(
             indexes,
             this.removeItemByIndex.bind(this),
         );
     }
 
-    removeItem(item: TG_ListItem): TG_ListItem | undefined {
+    removeItem(item: GT_ListItem): GT_ListItem | undefined {
         if (this.list.length === 0) return;
 
         const itemIndex = this.getItemIndex(item);
@@ -76,9 +76,9 @@ export class CL_List<TG_ListItem> {
         return this.removeItemByIndex(itemIndex);
     }
 
-    removeItems(items: TG_ListItem[]): TG_ListItem[] | undefined {
+    removeItems(items: GT_ListItem[]): GT_ListItem[] | undefined {
         if (this.list.length === 0) return;
 
-        return iterateMethod<TG_ListItem>(items, this.removeItem.bind(this));
+        return iterateMethod<GT_ListItem>(items, this.removeItem.bind(this));
     }
 }

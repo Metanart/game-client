@@ -1,9 +1,9 @@
-export function iterateMethod<TG_InputEntity, TG_OutputEntity = TG_InputEntity>(
-    entities: TG_InputEntity[],
+export function iterateMethod<GT_InputEntity, GT_OutputEntity = GT_InputEntity>(
+    entities: GT_InputEntity[],
     performingMethod: Function,
-): TG_OutputEntity[] | undefined {
+): GT_OutputEntity[] | undefined {
     const results = entities
         .map((entity) => performingMethod(entity))
-        .filter(Boolean) as TG_OutputEntity[];
+        .filter(Boolean) as GT_OutputEntity[];
     return results.length > 0 ? results : undefined;
 }
