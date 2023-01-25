@@ -1,28 +1,32 @@
-import { Collection } from 'classes/generic/collection';
-import { EGridCellStatus } from 'classes/generic/grid/enums';
-import { Grid } from 'classes/generic/grid/grid';
-import { TGridCell, TGridCoords, TGridSize } from 'classes/generic/grid/types';
+import { CL_Collection } from 'classes/generic/collection';
+import { E_GridCellStatus } from 'classes/generic/grid/enums';
+import { CL_Grid } from 'classes/generic/grid/grid';
+import {
+    T_GridCell,
+    T_GridCoords,
+    T_GridSize,
+} from 'classes/generic/grid/types';
 
 import { iterateMethod } from 'utils/iterate-method';
 
-import { InventorySlot } from './inventory-slot';
-import { TInventoryItem } from './types';
+import { CL_InventorySlot } from './inventory-slot';
+import { T_InventoryItem } from './types';
 
 export class Inventory {
-    public grid: Grid<TGridCell>;
-    public collection: Collection<InventorySlot>;
+    public grid: CL_Grid<T_GridCell>;
+    public collection: CL_Collection<CL_InventorySlot>;
 
-    constructor(size: TGridSize, public ownerId: string) {
-        this.grid = new Grid(size);
-        this.collection = new Collection<InventorySlot>();
+    constructor(size: T_GridSize, public ownerId: string) {
+        this.grid = new CL_Grid(size);
+        this.collection = new CL_Collection<CL_InventorySlot>();
     }
 
-    storeItem(item: TInventoryItem): InventorySlot | false {
+    storeItem(item: T_InventoryItem): CL_InventorySlot | false {
         const foundCoords = this.findCoords(item.size);
 
         if (!foundCoords.list.length) return false;
 
-        const newSlot = new InventorySlot(
+        const newSlot = new CL_InventorySlot(
             item,
             this.ownerId,
             foundCoords.list,
@@ -30,40 +34,43 @@ export class Inventory {
         );
 
         this.grid.updateCellsByCoords(newSlot.coords, {
-            status: EGridCellStatus.BUSY,
+            status: E_GridCellStatus.BUSY,
         });
 
         return this.collection.addItem(newSlot);
     }
 
-    storeItems(items: TInventoryItem[]): InventorySlot[] | undefined {
-        return iterateMethod<TInventoryItem, InventorySlot>(
+    storeItems(items: T_InventoryItem[]): CL_InventorySlot[] | undefined {
+        return iterateMethod<T_InventoryItem, CL_InventorySlot>(
             items,
             this.storeItem.bind(this),
         );
     }
 
-    removeSlot(slot: InventorySlot): InventorySlot | undefined {
+    removeSlot(slot: CL_InventorySlot): CL_InventorySlot | undefined {
         const slotIndex = this.collection.getItemIndex(slot);
 
         if (!slotIndex) return undefined;
 
         this.grid.updateCellsByCoords(this.collection.list[slotIndex].coords, {
-            status: EGridCellStatus.EMPTY,
+            status: E_GridCellStatus.EMPTY,
         });
 
         return this.collection.removeItemByIndex(slotIndex);
     }
 
-    removeSlots(slots: InventorySlot[]): InventorySlot[] | undefined {
-        return iterateMethod<InventorySlot>(slots, this.removeSlots.bind(this));
+    removeSlots(slots: CL_InventorySlot[]): CL_InventorySlot[] | undefined {
+        return iterateMethod<CL_InventorySlot>(
+            slots,
+            this.removeSlots.bind(this),
+        );
     }
 
-    findCoords(itemSize: TGridSize): {
-        list: TGridCoords[];
+    findCoords(itemSize: T_GridSize): {
+        list: T_GridCoords[];
         isRotated: boolean;
     } {
-        let foundCoords: TGridCoords[] = [];
+        let foundCoords: T_GridCoords[] = [];
 
         const [requestedHeight, requestedWidth] = itemSize;
 

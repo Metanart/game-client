@@ -4,9 +4,9 @@ import { useFrame } from '@react-three/fiber';
 
 import { ControlEvents } from 'control/utils';
 
-import { PhysicalBody } from 'types/cannon';
+import { T_PhysicalBody } from 'types/cannon';
 
-export function usePlayerBodyControl(playerBody: PhysicalBody) {
+export function usePlayerControl(playerBody: T_PhysicalBody) {
     const velocity = 5;
     const diagonalVelocity = 4;
 

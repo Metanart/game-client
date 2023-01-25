@@ -1,15 +1,15 @@
 import { FC } from 'react';
 
-import { Game } from 'components/game/game';
+import { CM_Game } from 'components/game/game';
 
-import styles from './app.module.scss';
+import styles from 'ui/app/app.module.scss';
 
 import 'control/initialize';
 
-export const App: FC = () => {
+export const CM_App: FC = () => {
     return (
         <div className={styles.root}>
-            <Game />
+            <CM_Game />
         </div>
     );
 };

@@ -11,14 +11,14 @@ import {
 } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 
-import { DEBUG_CONFIG } from 'components/game/config';
+import { GAME_DEBUG_CONFIG } from 'components/game/config';
 
-import { Colors } from 'tokens/colors';
-import { Length } from 'tokens/measurements';
+import { TK_Colors } from 'tokens/colors';
+import { TK_Length } from 'tokens/measurements';
 
 type Props = { children: ReactNode };
 
-export const GameDevtools: FC<Props> = (props) => {
+export const CM_GameDevtools: FC<Props> = (props) => {
     const { children } = props;
     const { scene } = useThree((state) => state);
     const {
@@ -28,7 +28,7 @@ export const GameDevtools: FC<Props> = (props) => {
         useDevelopersCamera,
         showAxisController,
         showAxis,
-    } = DEBUG_CONFIG;
+    } = GAME_DEBUG_CONFIG;
 
     if (showAxisController) useMemo(() => scene.add(new AxesHelper(100)), []);
 
@@ -50,12 +50,12 @@ export const GameDevtools: FC<Props> = (props) => {
             {showGridHelper && (
                 <gridHelper
                     args={[
-                        Length.Hectometer,
-                        Length.Hectometer,
-                        Colors.Red,
-                        Colors.Teal,
+                        TK_Length.Hectometer,
+                        TK_Length.Hectometer,
+                        TK_Colors.Red,
+                        TK_Colors.Teal,
                     ]}
-                    position={[Length.Meter / 2, 0.002, Length.Meter / 2]}
+                    position={[TK_Length.Meter / 2, 0.002, TK_Length.Meter / 2]}
                 />
             )}
             {showPhysics ? <Debug>{children}</Debug> : children}

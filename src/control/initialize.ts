@@ -1,13 +1,13 @@
-import { TControlCallbackPayload, TControlKeyId } from './types';
+import { T_ControlCallbackPayload, T_ControlKeyId } from './types';
 import { ControlEvents, mapControlKeyIdToEventId } from './utils';
 import { checkIfControlEventIsRepeatable } from './utils';
 
 function handleKeyboardEvent(
     keyboardEvent: KeyboardEvent,
-    callbackPayload: TControlCallbackPayload,
+    callbackPayload: T_ControlCallbackPayload,
 ) {
     const controlEventId =
-        mapControlKeyIdToEventId[keyboardEvent.code as TControlKeyId];
+        mapControlKeyIdToEventId[keyboardEvent.code as T_ControlKeyId];
 
     // If the event runs the first time,
     // or if it's a repeatable event and could be performed more than once

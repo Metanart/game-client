@@ -1,5 +1,5 @@
 import { useContext } from 'react';
 
-import { GameContext } from './game-context';
+import { CTX_Game } from './game';
 
-export const useGameContext = () => useContext(GameContext);
+export const useGameContext = () => useContext(CTX_Game);

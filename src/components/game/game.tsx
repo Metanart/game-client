@@ -3,20 +3,20 @@ import { FC, ReactNode } from 'react';
 import { Physics } from '@react-three/cannon';
 import { Canvas } from '@react-three/fiber';
 
-import { GameCamera } from 'components/game/game-camera';
-import { GameDevtools } from 'components/game/game-devtools';
-import { GameLight } from 'components/game/game-ligth';
-import { GameMap } from 'components/game/game-map';
+import { CM_GameCamera } from './game-camera';
+import { CM_GameDevtools } from './game-devtools';
+import { CM_GameLight } from './game-ligth';
+import { CM_GameScene } from './game-scene';
 
-export const Game: FC<{ children?: ReactNode }> = (props) => (
+export const CM_Game: FC<{ children?: ReactNode }> = (props) => (
     <Canvas>
-        <GameCamera />
-        <GameLight />
+        <CM_GameCamera />
+        <CM_GameLight />
         <Physics>
-            <GameDevtools>
-                <GameMap />
+            <CM_GameDevtools>
+                <CM_GameScene />
                 {props.children}
-            </GameDevtools>
+            </CM_GameDevtools>
         </Physics>
     </Canvas>
 );

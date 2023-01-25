@@ -1,5 +1,5 @@
 import { FC } from 'react';
 
-import { PlayerBody } from './player-body';
+import { C3D_Player } from 'components-3d/player/player';
 
-export const Player: FC = () => <PlayerBody />;
+export const CM_Player: FC = () => <C3D_Player />;

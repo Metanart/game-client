@@ -1,13 +1,13 @@
 import { Dispatch } from 'react';
 
-import { TDirection4 } from 'types/generic';
+import { T_Direction4 } from 'types/generic';
 
-export type TGameActionUpdate = { type: 'update'; payload: TGameState };
+export type T_GameActionUpdate = { type: 'update'; payload: T_GameState };
 
-export type TGameAction = TGameActionUpdate;
+export type T_GameAction = T_GameActionUpdate;
 
-export type TGameDispatch = Dispatch<TGameAction>;
+export type T_GameDispatch = Dispatch<T_GameAction>;
 
-export type TGameState = {
-    cameraDirection: TDirection4;
+export type T_GameState = {
+    cameraDirection: T_Direction4;
 };

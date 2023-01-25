@@ -1,27 +1,29 @@
-import { Events } from 'classes/common/events/events';
+import { CL_Events } from 'classes/common/events/events';
 
 import {
-    TControlCallbackPayload,
-    TControlContextId,
-    TControlEventId,
-    TControlKeyId,
+    T_ControlCallbackPayload,
+    T_ControlContextId,
+    T_ControlEventId,
+    T_ControlKeyId,
 } from './types';
 
 const CONTEXT_ACTION_CALLBACK_ID = 'CONTEXT_ACTION_CALLBACK_ID';
 
-export const mapControlKeyIdToEventId: Record<TControlKeyId, TControlEventId> =
-    {
-        KeyW: 'moveUp',
-        KeyA: 'moveLeft',
-        KeyS: 'moveDown',
-        KeyD: 'moveRight',
-        KeyE: 'contextAction',
-    };
+export const mapControlKeyIdToEventId: Record<
+    T_ControlKeyId,
+    T_ControlEventId
+> = {
+    KeyW: 'moveUp',
+    KeyA: 'moveLeft',
+    KeyS: 'moveDown',
+    KeyD: 'moveRight',
+    KeyE: 'contextAction',
+};
 
-export const ControlEvents = new Events<
-    TControlContextId,
-    TControlEventId,
-    TControlCallbackPayload
+export const ControlEvents = new CL_Events<
+    T_ControlContextId,
+    T_ControlEventId,
+    T_ControlCallbackPayload
 >();
 
 export const handleSubscribeContextAction = (
@@ -46,7 +48,7 @@ export const handleUnsubscribeContextAction = (
     );
 };
 
-export const checkIfControlEventIsRepeatable = (eventId: TControlEventId) => {
+export const checkIfControlEventIsRepeatable = (eventId: T_ControlEventId) => {
     switch (eventId) {
         case 'contextAction':
             return false;

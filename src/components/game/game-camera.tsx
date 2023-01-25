@@ -5,16 +5,16 @@ import { CameraHelper, Object3D } from 'three';
 import { OrthographicCamera, useHelper } from '@react-three/drei';
 import { OrthographicCameraProps } from '@react-three/fiber';
 
-import { DEBUG_CONFIG } from 'components/game/config';
+import { GAME_DEBUG_CONFIG } from 'components/game/config';
 
 import { useGameContext } from 'store/game/hooks';
 
-export const GameCamera: FC = () => {
+export const CM_GameCamera: FC = () => {
     const { gameState } = useGameContext();
 
     const cameraRef = useRef<Object3D>(null);
 
-    if (DEBUG_CONFIG.showCameraHelper)
+    if (GAME_DEBUG_CONFIG.showCameraHelper)
         useHelper(cameraRef as MutableRefObject<Object3D>, CameraHelper);
 
     const screenWidth = window.innerWidth;
@@ -64,7 +64,7 @@ export const GameCamera: FC = () => {
 
     return (
         <OrthographicCamera
-            makeDefault={!DEBUG_CONFIG.useDevelopersCamera}
+            makeDefault={!GAME_DEBUG_CONFIG.useDevelopersCamera}
             ref={cameraRef}
             args={cameraArgs}
             position={position}

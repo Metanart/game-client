@@ -8,9 +8,9 @@ import {
     handleUnsubscribeContextAction,
 } from 'control/utils';
 
-import { CollisionGroups } from 'enums/collision-groups';
+import { E_CollisionGroups } from 'enums/collision-groups';
 
-import { CylinderBodyProps, CylinderMeshProps } from 'types/cannon';
+import { T_CylinderBodyProps, T_CylinderMeshProps } from 'types/cannon';
 
 const handleContextAction = (isPressed: boolean) => {
     console.log(isPressed);
@@ -22,31 +22,31 @@ const handleCollideBegin = () =>
 const handleCollideEnd = () =>
     handleUnsubscribeContextAction(handleContextAction);
 
-const meshProps: CylinderMeshProps = {
+const meshProps: T_CylinderMeshProps = {
     args: [0.5, 0.5, 3, 12],
     position: [-2, 1.5, -2],
 };
 
-const bodyProps: CylinderBodyProps = {
+const bodyProps: T_CylinderBodyProps = {
     mass: 0,
     type: 'Static',
-    collisionFilterGroup: CollisionGroups.PHYSICAL_OBJECTS,
-    collisionFilterMask: CollisionGroups.PHYSICAL_OBJECTS,
-    ...(meshProps as CylinderBodyProps),
+    collisionFilterGroup: E_CollisionGroups.PHYSICAL_OBJECTS,
+    collisionFilterMask: E_CollisionGroups.PHYSICAL_OBJECTS,
+    ...(meshProps as T_CylinderBodyProps),
 };
 
-const triggerProps: CylinderBodyProps = {
+const triggerProps: T_CylinderBodyProps = {
     mass: 0,
     type: 'Static',
     isTrigger: true,
-    collisionFilterGroup: CollisionGroups.TRIGGER_AREAS,
-    collisionFilterMask: CollisionGroups.TRIGGER_AREAS,
+    collisionFilterGroup: E_CollisionGroups.TRIGGER_AREAS,
+    collisionFilterMask: E_CollisionGroups.TRIGGER_AREAS,
     onCollideBegin: handleCollideBegin,
     onCollideEnd: handleCollideEnd,
-    ...(meshProps as CylinderBodyProps),
+    ...(meshProps as T_CylinderBodyProps),
 };
 
-export const Tree: FC = () => {
+export const C3D_Tree: FC = () => {
     const [bodyMesh] = useCylinder(() => bodyProps);
 
     useCylinder(() => triggerProps);

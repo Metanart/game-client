@@ -1,5 +1,5 @@
-import { TGameState } from './types';
+import { T_GameState } from './types';
 
-export const defaultGameState: TGameState = {
+export const defaultGameState: T_GameState = {
     cameraDirection: 'down',
 };

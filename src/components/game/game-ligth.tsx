@@ -1,3 +1,3 @@
 import { FC } from 'react';
 
-export const GameLight: FC = () => <ambientLight />;
+export const CM_GameLight: FC = () => <ambientLight />;

@@ -1,11 +1,11 @@
 import { createContext } from 'react';
 
 import { defaultGameState } from './defaults';
-import { TGameDispatch, TGameState } from './types';
+import { T_GameDispatch, T_GameState } from './types';
 
-export const GameContext = createContext<{
-    gameState: TGameState;
-    gameDispatch: TGameDispatch;
+export const CTX_Game = createContext<{
+    gameState: T_GameState;
+    gameDispatch: T_GameDispatch;
 }>({
     gameState: defaultGameState,
     gameDispatch: () => null,
