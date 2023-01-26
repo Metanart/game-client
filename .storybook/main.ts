@@ -1,10 +1,7 @@
 import path from 'path';
-import { StorybookViteConfig } from '@storybook/builder-vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import react from '@vitejs/plugin-react';
-import { mergeConfig } from 'vite';
+import { mergeConfig, loadConfigFromFile } from 'vite';
 
-const config: StorybookViteConfig = {
+const config = {
     stories: [
         '../src/**/*.stories.mdx',
         '../src/**/*.stories.@(js|jsx|ts|tsx)',
@@ -14,7 +11,10 @@ const config: StorybookViteConfig = {
         '@storybook/addon-essentials',
         '@storybook/addon-interactions',
     ],
-    framework: '@storybook/react',
+    framework: {
+        name: '@storybook/react-vite',
+        options: {},
+    },
     core: {
         builder: '@storybook/builder-vite',
     },
@@ -22,26 +22,22 @@ const config: StorybookViteConfig = {
         storyStoreV7: true,
     },
     typescript: {
-        reactDocgen: 'react-docgen-typescript',
+        check: true,
+        skipBabel: true,
     },
-    async viteFinal(config) {
-        // Merge custom configuration into the default config
-        return mergeConfig(config, {
-            // Use the same "resolve" configuration as your app
+    async viteFinal(config, { configType }) {
+        // @ts-ignore
+        const { config: userConfig } = await loadConfigFromFile(
             // @ts-ignore
-            resolve: (await import('../vite.config.ts')).default.resolve,
-            // Add dependencies to pre-optimization
-            optimizeDeps: {
-                include: ['storybook-dark-mode'],
-            },
-            plugins: [
-                tsconfigPaths({
-                    // eslint-disable-next-line no-undef
-                    projects: [path.resolve(__dirname, '../tsconfig.json')],
-                }),
-            ],
+            path.resolve(__dirname, '../vite.config.ts'),
+        );
+
+        return mergeConfig(config, {
+            ...userConfig,
         });
     },
+    docs: {
+        autodocs: true,
+    },
 };
-
 export default config;
