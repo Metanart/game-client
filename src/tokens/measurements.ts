@@ -11,7 +11,7 @@ const Week = Day * 7;
 const Month = Week * 4;
 const Year = Month * 12;
 
-export const Time = {
+export const TK_Time = {
     Millisecond,
     Second,
     Minute,
@@ -22,7 +22,7 @@ export const Time = {
     Year,
 };
 
-export const Length = {
+export const TK_Length = {
     Millimeter: Meter / 1000,
     Centimeter: Meter / 100,
     Decimeter: Meter / 10,
@@ -32,7 +32,7 @@ export const Length = {
     Kilometer: Meter * 1000,
 };
 
-export const Weight = {
+export const TK_Weight = {
     Milligram: Gram / 1000,
     Centigram: Gram / 100,
     Decigram: Gram / 10,
@@ -42,7 +42,7 @@ export const Weight = {
     Kilogram: Gram * 1000,
 };
 
-export const Volume = {
+export const TK_Volume = {
     Milliliter: Gram / 1000,
     Centiliter: Gram / 100,
     Deciliter: Gram / 10,

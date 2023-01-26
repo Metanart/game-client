@@ -11,7 +11,7 @@ module.exports = {
     settings: {
         'import/resolver': {
             node: {
-                paths: ['src'],
+                paths: ['src', '.storybook'],
                 extensions: ['.js', '.jsx', '.ts', '.tsx'],
             },
         },
@@ -21,11 +21,18 @@ module.exports = {
     },
     extends: [
         'eslint:recommended',
-        'plugin:prettier/recommended', // Make sure this is always the last element in the array.
+        'plugin:prettier/recommended',
+        'plugin:storybook/recommended',
     ],
     plugins: ['simple-import-sort', 'prettier'],
     rules: {
-        'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+        'prettier/prettier': [
+            'error',
+            {},
+            {
+                usePrettierrc: true,
+            },
+        ],
         '@typescript-eslint/explicit-function-return-type': 'off',
         'simple-import-sort/imports': [
             'error',
@@ -35,25 +42,19 @@ module.exports = {
                     ['^vite'],
                     ['^three'],
                     ['uuid'],
-
                     ['^@'],
-
                     ['^classes'],
                     ['^components'],
                     ['^scenes'],
                     ['^control'],
-
                     ['^enums'],
                     ['^types'],
                     ['^tokens'],
                     ['^constants'],
                     ['^utils'],
-
                     ['^assets'],
                     ['^scss'],
-
                     ['^../'],
-
                     ['^./'],
                 ],
             },

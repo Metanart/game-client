@@ -1,11 +1,11 @@
 import { SkeletonMesh } from '@esotericsoftware/spine-threejs';
 
-import { ESpines } from 'classes/common/spine/enums';
-import { SpineAssetsManager } from 'classes/common/spine/spine-assets-manager';
+import { E_Spines } from 'classes/common/spine/enums';
+import { CL_SpineAssetsManager } from 'classes/common/spine/spine-assets-manager';
 
-export const useSpine = async (spineKey: ESpines) => {
-    const assetManager = new SpineAssetsManager(ESpines.RAPTOR);
-    await assetManager.load(spineKey);
+export const useSpine = async (spineId: E_Spines) => {
+    const assetManager = new CL_SpineAssetsManager(E_Spines.RAPTOR);
+    await assetManager.load();
     const skeletonMesh = assetManager.getSkeletonMesh() as SkeletonMesh;
 
     skeletonMesh.rotateX(-Math.PI / 8);

@@ -6,35 +6,38 @@ import {
     TextureAtlas,
 } from '@esotericsoftware/spine-threejs';
 
-import { TAtlasSrc, TJsonSrc } from 'types/generic';
+import { T_AtlasSrc, T_JsonSrc } from 'types/generic';
 
 import { SPINES_PATH } from 'constants/paths';
 
-import { ESpines } from './enums';
+import { E_Spines } from './enums';
 
-export class SpineAssetsManager extends AssetManager {
+export class CL_SpineAssetsManager extends AssetManager {
     textureAtlas: TextureAtlas | undefined;
-    jsonSrc: TJsonSrc;
-    atlasSrc: TAtlasSrc;
+    jsonSrc: T_JsonSrc;
+    atlasSrc: T_AtlasSrc;
 
-    constructor(private spineKey: ESpines) {
+    constructor(private spineId: E_Spines) {
         super(SPINES_PATH);
 
-        const { jsonSrc, atlasSrc } = this.getAssetSrc(spineKey);
+        const { jsonSrc, atlasSrc } = this.getAssetSrc(spineId);
 
         this.jsonSrc = jsonSrc;
         this.atlasSrc = atlasSrc;
     }
 
-    getAssetSrc(spineKey: ESpines): { jsonSrc: TJsonSrc; atlasSrc: TAtlasSrc } {
-        const path = `/${spineKey}/${spineKey}`;
+    getAssetSrc(spineId: E_Spines): {
+        jsonSrc: T_JsonSrc;
+        atlasSrc: T_AtlasSrc;
+    } {
+        const path = `/${spineId}/${spineId}`;
         return {
             jsonSrc: `${path}.json`,
             atlasSrc: `${path}.atlas`,
         };
     }
 
-    async load(spineKey: ESpines) {
+    async load() {
         this.loadJson(this.jsonSrc);
         this.loadTextureAtlas(this.atlasSrc);
 

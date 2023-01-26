@@ -9,16 +9,16 @@ import {
 } from '@react-three/cannon';
 import { Box, Cylinder, Plane, Sphere } from '@react-three/drei';
 
-export type BoxMeshProps = ComponentProps<typeof Box>;
-export type BoxBodyProps = BoxProps;
+export type T_BoxMeshProps = ComponentProps<typeof Box>;
+export type T_BoxBodyProps = BoxProps;
 
-export type SphereMeshProps = ComponentProps<typeof Sphere>;
-export type SphereBodyProps = SphereProps;
+export type T_SphereMeshProps = ComponentProps<typeof Sphere>;
+export type T_SphereBodyProps = SphereProps;
 
-export type CylinderMeshProps = ComponentProps<typeof Cylinder>;
-export type CylinderBodyProps = CylinderProps;
+export type T_CylinderMeshProps = ComponentProps<typeof Cylinder>;
+export type T_CylinderBodyProps = CylinderProps;
 
-export type PlaneMeshProps = ComponentProps<typeof Plane>;
-export type PlaneBodyProps = PlaneProps;
+export type T_PlaneMeshProps = ComponentProps<typeof Plane>;
+export type T_PlaneBodyProps = PlaneProps;
 
-export type PhysicalBody = PublicApi;
+export type T_PhysicalBody = PublicApi;

@@ -1,16 +1,18 @@
-import { List } from './list';
+import { CL_List } from './list';
 
-type TCollectionItemProps = 'id' | 'ownerId';
+type T_CollectionItemProps = 'id' | 'ownerId';
 
-export type TCollectionItem = {
-    [Key in TCollectionItemProps]: any;
+export type T_CollectionItem = {
+    [Key in T_CollectionItemProps]: any;
 };
 
-export class Collection<TGItem extends TCollectionItem> extends List<TGItem> {
+export class CL_Collection<
+    GT_Item extends T_CollectionItem,
+> extends CL_List<GT_Item> {
     getItemByProperty(
         propertyValue: string | number,
-        propertyName: TCollectionItemProps,
-    ): TGItem | undefined {
+        propertyName: T_CollectionItemProps,
+    ): GT_Item | undefined {
         const itemIndex = this.getItemIndexByProperty(
             propertyValue,
             propertyName,
@@ -20,7 +22,7 @@ export class Collection<TGItem extends TCollectionItem> extends List<TGItem> {
 
     getItemIndexByProperty(
         propertyValue: string | number,
-        propertyName: TCollectionItemProps,
+        propertyName: T_CollectionItemProps,
     ): number {
         if (this.list.length === 0) return -1;
         return this.list.findIndex(
@@ -30,8 +32,8 @@ export class Collection<TGItem extends TCollectionItem> extends List<TGItem> {
 
     removeItemByProperty(
         propertyValue: string | number,
-        propertyName: TCollectionItemProps,
-    ): TGItem | undefined {
+        propertyName: T_CollectionItemProps,
+    ): GT_Item | undefined {
         const itemIndex = this.getItemIndexByProperty(
             propertyValue,
             propertyName,
@@ -40,8 +42,8 @@ export class Collection<TGItem extends TCollectionItem> extends List<TGItem> {
     }
 
     override getItemIndex(
-        requestedItem: TGItem,
-        propertyName?: TCollectionItemProps,
+        requestedItem: GT_Item,
+        propertyName?: T_CollectionItemProps,
     ): number {
         if (this.list.length === 0) return -1;
 

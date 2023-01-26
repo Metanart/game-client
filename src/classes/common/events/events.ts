@@ -1,51 +1,51 @@
 import { v4 } from 'uuid';
 
 import {
-    TEventsContext,
-    TEventsEvent,
-    TEventsSubscriptions,
-    TEventsSubsribe,
+    T_EventsContext,
+    T_EventsEvent,
+    T_EventsSubscriptions,
+    T_EventsSubsribe,
 } from './types';
 
-export class Events<
-    TGContextId extends string,
-    TGEventId extends string,
-    TGCallbackPayload extends object,
+export class CL_Events<
+    GT_ContextId extends string,
+    GT_EventId extends string,
+    GT_CallbackPayload extends object,
 > {
     private subscriptions: Partial<
-        TEventsSubscriptions<TGContextId, TGEventId, TGCallbackPayload>
+        T_EventsSubscriptions<GT_ContextId, GT_EventId, GT_CallbackPayload>
     > = {};
 
     private getContext(
-        eventContext: TGContextId,
-    ): TEventsContext<TGEventId, TGCallbackPayload> {
+        eventContext: GT_ContextId,
+    ): T_EventsContext<GT_EventId, GT_CallbackPayload> {
         if (this.subscriptions[eventContext] === undefined) {
             this.subscriptions[eventContext] = {};
         }
 
-        return this.subscriptions[eventContext] as TEventsContext<
-            TGEventId,
-            TGCallbackPayload
+        return this.subscriptions[eventContext] as T_EventsContext<
+            GT_EventId,
+            GT_CallbackPayload
         >;
     }
 
     private getEvent(
-        context: TEventsContext<TGEventId, TGCallbackPayload>,
-        eventId: TGEventId,
-    ): TEventsEvent<TGCallbackPayload> {
+        context: T_EventsContext<GT_EventId, GT_CallbackPayload>,
+        eventId: GT_EventId,
+    ): T_EventsEvent<GT_CallbackPayload> {
         if (context[eventId] === undefined) {
             context[eventId] = {};
         }
 
-        return context[eventId] as TEventsEvent<TGCallbackPayload>;
+        return context[eventId] as T_EventsEvent<GT_CallbackPayload>;
     }
 
     subscribe(
-        contextId: TGContextId,
-        eventId: TGEventId,
-        callback: (payload: TGCallbackPayload) => void,
+        contextId: GT_ContextId,
+        eventId: GT_EventId,
+        callback: (payload: GT_CallbackPayload) => void,
         callbackId: string = v4(),
-    ): TEventsSubsribe {
+    ): T_EventsSubsribe {
         const context = this.getContext(contextId);
         const event = this.getEvent(context, eventId);
 
@@ -64,13 +64,14 @@ export class Events<
     }
 
     unsubscribe(
-        contextId: TGContextId,
-        eventId: TGEventId,
+        contextId: GT_ContextId,
+        eventId: GT_EventId,
         callbackId: string,
-        context: TEventsContext<TGEventId, TGCallbackPayload> = this.getContext(
-            contextId,
-        ),
-        event: TEventsEvent<TGCallbackPayload> = this.getEvent(
+        context: T_EventsContext<
+            GT_EventId,
+            GT_CallbackPayload
+        > = this.getContext(contextId),
+        event: T_EventsEvent<GT_CallbackPayload> = this.getEvent(
             context,
             eventId,
         ),
@@ -87,9 +88,9 @@ export class Events<
     }
 
     trigger(
-        contextId: TGContextId,
-        eventId: TGEventId,
-        callbackPayload: TGCallbackPayload,
+        contextId: GT_ContextId,
+        eventId: GT_EventId,
+        callbackPayload: GT_CallbackPayload,
     ) {
         const event = this.subscriptions[contextId]?.[eventId];
 

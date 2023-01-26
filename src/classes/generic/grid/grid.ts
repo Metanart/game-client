@@ -1,29 +1,29 @@
-import { EGridCellStatus } from './enums';
+import { E_GridCellStatus } from './enums';
 import {
-    TGrid,
-    TGridCell,
-    TGridCoords,
-    TGridFindCoordsParams,
-    TGridSize,
+    T_Grid,
+    T_GridCell,
+    T_GridCoords,
+    T_GridFindCoordsParams,
+    T_GridSize,
 } from './types';
 
-const DEFAULT_CELL: TGridCell = { status: EGridCellStatus.EMPTY };
+const DEFAULT_CELL: T_GridCell = { status: E_GridCellStatus.EMPTY };
 
-const DEFAULT_GRID_SIZE: TGridSize = [9, 9];
+const DEFAULT_GRID_SIZE: T_GridSize = [9, 9];
 
-export class Grid<TGGridCell extends TGridCell> {
-    private grid: TGrid<TGGridCell>;
+export class CL_Grid<GT_GridCell extends T_GridCell> {
+    private grid: T_Grid<GT_GridCell>;
     private numberOfRows: number;
     private numberOfCols: number;
 
-    constructor(size: TGridSize = DEFAULT_GRID_SIZE) {
+    constructor(size: T_GridSize = DEFAULT_GRID_SIZE) {
         this.numberOfRows = size[0];
         this.numberOfCols = size[1];
         this.grid = this.generateGrid();
     }
 
     private generateGrid() {
-        const grid: TGrid<TGGridCell> = new Array(this.numberOfRows).fill(
+        const grid: T_Grid<GT_GridCell> = new Array(this.numberOfRows).fill(
             DEFAULT_CELL,
         );
 
@@ -40,8 +40,8 @@ export class Grid<TGGridCell extends TGridCell> {
         return grid;
     }
 
-    cellChecker(providedCell: TGGridCell): boolean {
-        return providedCell.status === EGridCellStatus.EMPTY;
+    cellChecker(providedCell: GT_GridCell): boolean {
+        return providedCell.status === E_GridCellStatus.EMPTY;
     }
 
     findCrossCoords(
@@ -50,7 +50,7 @@ export class Grid<TGGridCell extends TGridCell> {
         currentColIndex: number,
         requestedHeight: number,
         requestedWidth: number,
-        cellChecker: (providedCell: TGGridCell) => boolean,
+        cellChecker: (providedCell: GT_GridCell) => boolean,
     ) {
         return this.findCoordsFromLine({
             startingRowIndex: isRowDirected
@@ -90,8 +90,8 @@ export class Grid<TGGridCell extends TGridCell> {
         requestedWidth = 1,
         direction = 'row',
         cellChecker = this.cellChecker,
-    }: TGridFindCoordsParams<TGGridCell>): TGridCoords[] {
-        let foundCoords: TGridCoords[] = [];
+    }: T_GridFindCoordsParams<GT_GridCell>): T_GridCoords[] {
+        let foundCoords: T_GridCoords[] = [];
 
         if (direction === 'row') {
             for (
@@ -139,7 +139,7 @@ export class Grid<TGGridCell extends TGridCell> {
         requestedWidth = 1,
         direction = 'row',
         cellChecker = this.cellChecker,
-    }: TGridFindCoordsParams<TGGridCell>): TGridCoords[] {
+    }: T_GridFindCoordsParams<GT_GridCell>): T_GridCoords[] {
         const isRowDirected = direction === 'row';
 
         const isRequestedSizeAvailable = this.checkRequestedSize(
@@ -158,8 +158,8 @@ export class Grid<TGGridCell extends TGridCell> {
             ? this.numberOfCols
             : this.numberOfRows;
 
-        let foundCoords: TGridCoords[] = [];
-        let foundCrossCoords: TGridCoords[] = [];
+        let foundCoords: T_GridCoords[] = [];
+        let foundCrossCoords: T_GridCoords[] = [];
 
         const shoudHaveCrossCoords = isRowDirected
             ? requestedHeight > 1
@@ -214,9 +214,9 @@ export class Grid<TGGridCell extends TGridCell> {
     }
 
     updateCellsByCoords(
-        coordsList: TGridCoords[],
-        updatedCellData: TGGridCell,
-    ): TGridCell[] {
+        coordsList: T_GridCoords[],
+        updatedCellData: GT_GridCell,
+    ): T_GridCell[] {
         return coordsList.map((coords) => {
             const [rowIndex, colIndex] = coords;
             const iteratedCell = this.grid[rowIndex][colIndex];
@@ -226,7 +226,7 @@ export class Grid<TGGridCell extends TGridCell> {
     }
 
     checkCellsByCoords(
-        coordsList: TGridCoords[],
+        coordsList: T_GridCoords[],
         cellChecker = this.cellChecker,
     ): Boolean {
         for (let iterator = 0; iterator < coordsList.length; iterator++) {

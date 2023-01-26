@@ -1,6 +1,6 @@
-import { TGameAction, TGameState } from './types';
+import { T_GameAction, T_GameState } from './types';
 
-export function gameReducer(state: TGameState, action: TGameAction) {
+export function gameReducer(state: T_GameState, action: T_GameAction) {
     switch (action.type) {
         case 'update':
             return { ...state, ...action.payload };

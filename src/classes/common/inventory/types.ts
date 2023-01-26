@@ -1,13 +1,13 @@
-import { TGridSize } from 'classes/generic/grid/types';
+import { T_GridSize } from 'classes/generic/grid/types';
 
-export type TInventoryItem = {
+export type T_InventoryItem = {
     id: number;
-    size: TGridSize;
+    size: T_GridSize;
 };
 
-export type TInventoryCell = {
+export type T_InventoryCell = {
     id: string;
     ownerId: string;
 };
 
-export type TInventorySlot = {};
+export type T_InventorySlot = {};
