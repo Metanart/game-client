@@ -1,22 +1,18 @@
 import { FC, ReactNode } from 'react';
-import { CSSProperties } from 'react';
 
-import { TK_Grey } from 'tokens/colors';
+import { useStyles } from './box.styles';
 
 type Props = {
-    children: ReactNode;
+    children?: ReactNode;
     height?: number;
     width?: number;
+    backgroundColor?: string;
 };
 
 export const SB_Box: FC<Props> = (props) => {
-    const { children, height, width } = props;
+    const { children, height, width, backgroundColor } = props;
 
-    const inlineStyles: CSSProperties = {
-        height,
-        width,
-        backgroundColor: TK_Grey[200],
-    };
+    const styles = useStyles({ height, width, backgroundColor });
 
-    return <div style={inlineStyles}>{children}</div>;
+    return <div css={styles.root}>{children}</div>;
 };
