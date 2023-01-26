@@ -20,7 +20,7 @@
         "paths": {
             "*": ["*"]
         },
-        "jsxImportSource": "@emotion/react"  
+        "jsxImportSource": "@emotion/react"
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "public"],
