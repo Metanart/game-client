@@ -4,10 +4,14 @@ import { Grid, GridProps } from '@mui/material';
 
 type Props = {
     children: ReactNode;
-} & Pick<GridProps, 'spacing' | 'columns'>;
+} & Pick<GridProps, 'xs'>;
 
 export const UI_GridCell: FC<Props> = (props) => {
     const { children } = props;
 
-    return <Grid>{children}</Grid>;
+    return (
+        <Grid item={true} {...props}>
+            {children}
+        </Grid>
+    );
 };

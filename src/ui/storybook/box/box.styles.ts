@@ -7,11 +7,11 @@ import { TK_Radius } from 'tokens/radius';
 
 export const useStyles = ({
     height = 40,
-    width = 40,
+    width = 'auto',
     backgroundColor = TK_Grey[200],
 }: {
-    height?: number;
-    width?: number;
+    height?: number | string;
+    width?: number | string;
     backgroundColor?: string;
 }) =>
     useMemo(
