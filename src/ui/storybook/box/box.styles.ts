@@ -5,15 +5,19 @@ import { css } from '@emotion/react';
 import { TK_Grey } from 'tokens/colors';
 import { TK_Radius } from 'tokens/radius';
 
-export const useStyles = ({
-    height = 40,
-    width = 'auto',
-    backgroundColor = TK_Grey[200],
-}: {
+type T_Options = {
     height?: number | string;
     width?: number | string;
     backgroundColor?: string;
-}) =>
+    hasBorder?: boolean;
+};
+
+export const useStyles = ({
+    height,
+    width,
+    backgroundColor,
+    hasBorder,
+}: T_Options) =>
     useMemo(
         () => ({
             root: css({
@@ -25,7 +29,8 @@ export const useStyles = ({
                 width,
                 height,
                 backgroundColor,
+                border: hasBorder ? `1px solid ${TK_Grey[300]}` : undefined,
             }),
         }),
-        [],
+        [height, width, backgroundColor, hasBorder],
     );

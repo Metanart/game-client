@@ -2,11 +2,11 @@ import { FC, ReactNode } from 'react';
 
 import { Grid, GridProps } from '@mui/material';
 
-type Props = {
+type T_Props = Pick<GridProps, 'spacing' | 'rowSpacing' | 'columns'> & {
     children: ReactNode;
-} & Pick<GridProps, 'spacing' | 'rowSpacing' | 'columns'>;
+};
 
-export const UI_Grid: FC<Props> = (props) => {
+export const UI_Grid: FC<T_Props> = (props) => {
     return (
         <Grid container={true} {...props}>
             {props.children}
