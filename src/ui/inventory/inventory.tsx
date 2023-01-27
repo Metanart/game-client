@@ -6,7 +6,7 @@ import { UI_Grid } from 'ui/generic/grid/grid';
 import { UI_GridCell } from 'ui/generic/grid/grid-cell';
 import { SB_Box } from 'ui/storybook/box/box';
 
-import { useStyles } from './inventory.styles';
+import { styles } from './inventory.styles';
 
 type T_Props = {
     size: T_GridSize;
@@ -19,15 +19,15 @@ export const UI_Inventory: FC<T_Props> = (props) => {
         children,
     } = props;
 
-    const styles = useStyles();
+    const renderGridCell = (rowIndex: number, colIndex: number) => {
+        const key = `${rowIndex + 1}:${colIndex + 1}`;
 
-    const renderGridCell = (rowIndex: number, colIndex: number) => (
-        <UI_GridCell xs={1}>
-            <SB_Box hasBorder={true}>
-                {`${rowIndex + 1}:${colIndex + 1}`}
-            </SB_Box>
-        </UI_GridCell>
-    );
+        return (
+            <UI_GridCell xs={1} key={key}>
+                <SB_Box hasBorder={true}>{key}</SB_Box>
+            </UI_GridCell>
+        );
+    };
 
     const gridCells = [...new Array(height)].map((_, rowIndex) => {
         return [...new Array(width)].map((_, colIndex) =>

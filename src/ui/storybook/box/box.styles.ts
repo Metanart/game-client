@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 
 import { TK_Grey } from 'tokens/colors';
 import { TK_Radius } from 'tokens/radius';
+import { TK_Spacing } from 'tokens/spacing';
 
 type T_Options = {
     height?: number | string;
@@ -24,8 +25,8 @@ export const useStyles = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '20px',
-                borderRadius: TK_Radius.xsm,
+                padding: TK_Spacing.md,
+                borderRadius: TK_Radius.sm,
                 width,
                 height,
                 backgroundColor,
