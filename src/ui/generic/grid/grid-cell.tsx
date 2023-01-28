@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react';
 
 import { Grid, GridProps } from '@mui/material';
 
-type T_Props = Pick<GridProps, 'xs'> & {
+type T_Props = Pick<GridProps, 'height' | 'width' | 'xs'> & {
     children: ReactNode;
 };
 

@@ -8,8 +8,6 @@ import { TK_Radius } from 'tokens/radius';
 export const styles = {
     root: css({
         backgroundColor: TK_Grey[400],
-        height: 120,
-        width: 120,
-        borderRadius: TK_Radius.sm,
+        borderRadius: TK_Radius.xsm,
     }),
 };

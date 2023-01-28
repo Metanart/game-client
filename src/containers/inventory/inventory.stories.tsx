@@ -19,7 +19,7 @@ const size: T_GridSize = [6, 12];
 const Template: StoryFn<typeof CN_Inventory> = () => (
     <DndProvider backend={HTML5Backend}>
         <CN_Inventory size={size}>
-            <CN_InventorySlot id={v4()} top={10} left={10} />
+            <CN_InventorySlot id={v4()} />
         </CN_Inventory>
     </DndProvider>
 );

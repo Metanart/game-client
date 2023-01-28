@@ -14,8 +14,8 @@ type T_Props = {
 
 export const SB_Box: FC<T_Props> = (props) => {
     const {
-        height = 'auto',
-        width = 'auto',
+        height = '100%',
+        width = '100%',
         backgroundColor = TK_Grey[100],
         hasBorder,
         children,

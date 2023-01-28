@@ -7,15 +7,30 @@ import { E_DragItem } from 'enums/drag-n-drop';
 
 import { T_DragItem } from 'types/drag-n-drop';
 
+import { TK_Spacing } from 'tokens/spacing';
+
 import { UI_Inventory } from 'ui/inventory/inventory';
 
 type T_Props = {
     size: T_GridSize;
+    cellSize?: number;
     children: ReactNode;
 };
 
+function snapToGrid(
+    y: number,
+    x: number,
+    cellSize: number = 32,
+): [number, number] {
+    const snappedY = Math.round(y / cellSize) * cellSize;
+    const snappedX = Math.round(x / cellSize) * cellSize;
+    return [snappedY, snappedX];
+}
+
 export const CN_Inventory: FC<T_Props> = (props) => {
-    const handleDrop = (
+    const { size, cellSize = TK_Spacing.xlg, children } = props;
+
+    const handleDndDrop = (
         item: T_DragItem,
         monitor: DropTargetMonitor<T_DragItem>,
     ) => {
@@ -24,23 +39,31 @@ export const CN_Inventory: FC<T_Props> = (props) => {
             y: number;
         };
 
-        item.updatePosition(offset.y, offset.x);
+        const [gridOffsetY, gridOffsetX] = snapToGrid(
+            offset.y,
+            offset.x,
+            cellSize,
+        );
+
+        item.updatePosition(gridOffsetY, gridOffsetX);
     };
+
+    const handleDndCollect = (monitor: DropTargetMonitor<T_DragItem>) => ({
+        monitor,
+    });
 
     const [monitor, dropRef] = useDrop(
         () => ({
             accept: E_DragItem.InventorySlot,
-            drop: handleDrop,
-            collect: (monitor) => ({
-                monitor,
-            }),
+            drop: handleDndDrop,
+            collect: handleDndCollect,
         }),
         [],
     );
 
     return (
         <div ref={dropRef}>
-            <UI_Inventory size={props.size}>{props.children}</UI_Inventory>
+            <UI_Inventory size={size}>{children}</UI_Inventory>
         </div>
     );
 };
