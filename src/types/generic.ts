@@ -14,3 +14,5 @@ export type T_Direction8 =
     | 'downRight';
 
 export type T_PlayerDirection = T_Direction8 | 'none';
+
+export type T_Position = [top: number, left: number];

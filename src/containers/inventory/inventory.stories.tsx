@@ -1,8 +1,6 @@
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import { v4 } from 'uuid';
-
 import { Meta, StoryFn } from '@storybook/react';
 
 import { T_GridSize } from 'classes/generic/grid/types';
@@ -15,11 +13,12 @@ export default {
 } as Meta<typeof CN_Inventory>;
 
 const size: T_GridSize = [6, 12];
+const cellSize = 32;
 
 const Template: StoryFn<typeof CN_Inventory> = () => (
     <DndProvider backend={HTML5Backend}>
-        <CN_Inventory size={size}>
-            <CN_InventorySlot id={v4()} />
+        <CN_Inventory size={size} cellSize={cellSize}>
+            <CN_InventorySlot cellSize={cellSize} />
         </CN_Inventory>
     </DndProvider>
 );

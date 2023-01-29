@@ -1,15 +1,15 @@
-import { useMemo } from 'react';
-
 import { css } from '@emotion/react';
 
-import { TK_Grey } from 'tokens/colors';
+import { TK_Colors } from 'tokens/colors';
 import { TK_Radius } from 'tokens/radius';
 
 export const styles = {
     root: css({
-        cursor: 'move',
         position: 'absolute',
-        backgroundColor: TK_Grey[400],
+        height: '100%',
+        width: '100%',
+        backgroundColor: TK_Colors.Bouncy,
         borderRadius: TK_Radius.xsm,
+        opacity: 0.3,
     }),
 };

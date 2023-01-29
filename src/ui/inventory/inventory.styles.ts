@@ -5,7 +5,6 @@ import { css } from '@emotion/react';
 export const styles = {
     root: css({
         width: '100%',
-        position: 'relative',
     }),
     grid: css({
         zIndex: 1,

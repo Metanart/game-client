@@ -1,42 +1,71 @@
-import { CSSProperties, FC, ReactNode, useRef, useState } from 'react';
-import { DragSourceMonitor, DropTargetMonitor, useDrag } from 'react-dnd';
+import { FC, Fragment, ReactNode, useRef, useState } from 'react';
+import { DragSourceMonitor, useDrag } from 'react-dnd';
+
+import { T_GridSize } from 'classes/generic/grid/types';
 
 import { E_DragItem } from 'enums/drag-n-drop';
 
 import { T_DragItem } from 'types/drag-n-drop';
+import { T_Position } from 'types/generic';
+
+import { snapToGrid } from 'utils/snap-to-grid';
 
 import { UI_InventorySlot } from 'ui/inventory/inventory-slot';
+import { UI_InventorySlotBackdrop } from 'ui/inventory/inventory-slot-backdrop';
 
 type T_Props = {
-    id: string;
-    top?: number;
-    left?: number;
+    size?: T_GridSize;
+    cellSize?: number;
+    position?: T_Position;
     children?: ReactNode;
 };
 
-export const CN_InventorySlot: FC<T_Props> = (props) => {
-    const { id, top = 0, left = 0, children } = props;
+type T_State = {
+    position: T_Position;
+    backdropPosition: T_Position;
+};
 
-    const [position, setPosition] = useState({
-        top,
-        left,
+export const CN_InventorySlot: FC<T_Props> = (props) => {
+    const { position = [0, 0], size = [2, 2], cellSize = 32, children } = props;
+
+    const [state, setState] = useState<T_State>({
+        position,
+        backdropPosition: position,
     });
 
-    const prevPosition = useRef({ position });
+    const prevState = useRef(state);
 
-    const handleDndUpdatePosition = (offsetTop: number, offsetLeft: number) => {
-        const newTop = prevPosition.current.position.top + offsetTop;
-        const newLeft = prevPosition.current.position.left + offsetLeft;
+    const handleHover = (offset: T_Position) => {
+        const newHoverPosition: T_Position = [
+            prevState.current.backdropPosition[0] + offset[0],
+            prevState.current.backdropPosition[1] + offset[1],
+        ];
 
-        prevPosition.current.position = {
-            top: newTop,
-            left: newLeft,
+        const newState: T_State = {
+            position: newHoverPosition,
+            backdropPosition: snapToGrid(newHoverPosition, cellSize),
         };
 
-        setPosition({
-            top: newTop,
-            left: newLeft,
-        });
+        console.log(newState);
+
+        setState(newState);
+    };
+
+    const handleDrop = (offset: T_Position) => {
+        const { position } = prevState.current;
+
+        const newPosition: T_Position = [
+            position[0] + offset[0],
+            position[1] + offset[1],
+        ];
+
+        const newState: T_State = {
+            position: snapToGrid(newPosition, cellSize),
+            backdropPosition: snapToGrid(newPosition, cellSize),
+        };
+
+        prevState.current = newState;
+        setState(newState);
     };
 
     const handleDndCollect = (monitor: DragSourceMonitor<T_DragItem>) => ({
@@ -47,23 +76,30 @@ export const CN_InventorySlot: FC<T_Props> = (props) => {
         () => ({
             type: E_DragItem.InventorySlot,
             item: {
-                updatePosition: handleDndUpdatePosition,
+                onDrop: handleDrop,
+                onHover: handleHover,
             },
             collect: handleDndCollect,
         }),
-        [id, top, left],
+        [],
     );
 
-    const inlineStyle: CSSProperties = {
-        position: 'absolute',
-        transform: `translate3d(${position.left}px, ${position.top}px, 0)`,
-        opacity: isDragging ? '0.5' : '1',
-        cursor: 'move',
-    };
-
     return (
-        <div ref={dragRef} style={inlineStyle}>
-            <UI_InventorySlot size={[2, 2]}>{children}</UI_InventorySlot>
-        </div>
+        <Fragment>
+            <UI_InventorySlotBackdrop
+                size={size}
+                cellSize={cellSize}
+                position={state.backdropPosition}
+            />
+            <UI_InventorySlot
+                ref={dragRef}
+                size={size}
+                cellSize={cellSize}
+                position={prevState.current.position}
+                isDragging={isDragging}
+            >
+                {children}
+            </UI_InventorySlot>
+        </Fragment>
     );
 };
