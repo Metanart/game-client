@@ -33,7 +33,7 @@ export const UI_InventorySlot = forwardRef<HTMLDivElement, T_Props>(
 
         const dynamicStyle: CSSProperties = {
             transform: `translate3d(${left}px, ${top}px, 0)`,
-            opacity: isDragging ? '0.5' : '1',
+            opacity: isDragging ? '0.2' : '1',
         };
 
         return (
