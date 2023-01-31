@@ -52,20 +52,19 @@ module.exports = {
                     ['^scenes/'],
                     ['^control/'],
 
-                    ['^utils/'],
-                    ['^hooks/'],
-
                     ['^constants/'],
                     ['^tokens/'],
                     ['^types/'],
                     ['^enums/'],
 
                     ['^assets/'],
-
                     ['^scss/'],
 
                     ['^../'],
                     ['^./'],
+
+                    ['^utils/'],
+                    ['^hooks/'],
                 ],
             },
         ],

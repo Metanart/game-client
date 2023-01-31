@@ -5,14 +5,14 @@ import { CL_Area } from 'classes/generic/area/area';
 
 import { UI_InventorySlot } from 'ui/inventory/inventory-slot';
 
-import { getCoordsFromPosition } from 'utils/get-coords-from-position';
-import { snapToGrid } from 'utils/snap-to-grid';
-
 import { T_Position, T_Size } from 'types/generic';
 
 import { E_DragItem } from 'enums/drag-n-drop';
 
 import { T_InventoryDragItem } from './types';
+
+import { getCoordsFromPosition } from 'utils/get-coords-from-position';
+import { snapToGrid } from 'utils/snap-to-grid';
 
 import { diff } from 'fast-array-diff';
 import { add } from 'mathjs';
