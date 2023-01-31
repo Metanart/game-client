@@ -4,12 +4,12 @@ import { E_GridCellStatus } from 'classes/generic/grid/enums';
 import { CL_Grid } from 'classes/generic/grid/grid';
 import { T_GridCell } from 'classes/generic/grid/types';
 
-import { iterateMethod } from 'utils/iterate-method';
-
 import { T_Coords, T_Size } from 'types/generic';
 
 import { CL_InventorySlot } from './inventory-slot';
 import { T_InventoryItem } from './types';
+
+import { iterateMethod } from 'utils/iterate-method';
 
 export class CL_Inventory {
     public grid: CL_Grid<T_GridCell>;
