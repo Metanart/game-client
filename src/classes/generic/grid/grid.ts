@@ -1,22 +1,23 @@
+import { CL_Area } from 'classes/generic/area/area';
+
+import { T_Coords, T_Position, T_Size } from 'types/generic';
+
 import { E_GridCellStatus } from './enums';
 import {
     T_Grid,
     T_GridCell,
-    T_GridCoords,
+    T_GridDirection,
     T_GridFindCoordsParams,
-    T_GridSize,
 } from './types';
 
 const DEFAULT_CELL: T_GridCell = { status: E_GridCellStatus.EMPTY };
-
-const DEFAULT_GRID_SIZE: T_GridSize = [9, 9];
 
 export class CL_Grid<GT_GridCell extends T_GridCell> {
     private grid: T_Grid<GT_GridCell>;
     private numberOfRows: number;
     private numberOfCols: number;
 
-    constructor(size: T_GridSize = DEFAULT_GRID_SIZE) {
+    constructor(size: T_Size) {
         this.numberOfRows = size[0];
         this.numberOfCols = size[1];
         this.grid = this.generateGrid();
@@ -45,53 +46,42 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
     }
 
     findCrossCoords(
-        isRowDirected: boolean,
-        currentRowIndex: number,
-        currentColIndex: number,
-        requestedHeight: number,
-        requestedWidth: number,
+        area: CL_Area,
+        direction: T_GridDirection,
         cellChecker: (providedCell: GT_GridCell) => boolean,
     ) {
+        const isRowDirected = direction === 'row';
+
+        const {
+            startingCoords: [currentRowIndex, currentColIndex],
+            size: [requestedHeight, requestedWidth],
+        } = area;
+
+        const newStartingCoords: T_Coords = [
+            isRowDirected ? currentRowIndex + 1 : currentRowIndex,
+            !isRowDirected ? currentColIndex + 1 : currentColIndex,
+        ];
+
+        const newRequestedSize: T_Position = [
+            isRowDirected ? requestedHeight - 1 : 1,
+            isRowDirected ? 1 : requestedWidth - 1,
+        ];
+
         return this.findCoordsFromLine({
-            startingRowIndex: isRowDirected
-                ? currentRowIndex + 1
-                : currentRowIndex,
-            startingColIndex: !isRowDirected
-                ? currentColIndex + 1
-                : currentColIndex,
-            requestedHeight: isRowDirected ? requestedHeight - 1 : 1,
-            requestedWidth: isRowDirected ? 1 : requestedWidth - 1,
-            direction: isRowDirected ? 'col' : 'row',
+            area: new CL_Area(newStartingCoords, newRequestedSize),
+            direction,
             cellChecker,
         });
     }
 
-    checkRequestedSize(
-        startingRowIndex: number,
-        startingColIndex: number,
-        requestedHeight: number,
-        requestedWidth: number,
-    ) {
-        const endingRowIndex = startingRowIndex + requestedHeight;
-        const endingColIndex = startingColIndex + requestedWidth;
-
-        return (
-            requestedWidth > 0 ||
-            requestedHeight > 0 ||
-            endingRowIndex < this.numberOfRows ||
-            endingColIndex < this.numberOfCols
-        );
-    }
-
     findCoords({
-        startingRowIndex = 0,
-        startingColIndex = 0,
-        requestedHeight = 1,
-        requestedWidth = 1,
+        area,
         direction = 'row',
         cellChecker = this.cellChecker,
-    }: T_GridFindCoordsParams<GT_GridCell>): T_GridCoords[] {
-        let foundCoords: T_GridCoords[] = [];
+    }: T_GridFindCoordsParams<GT_GridCell>): T_Coords[] {
+        let foundCoords: T_Coords[] = [];
+
+        const { startingRowIndex, startingColIndex, height, width } = area;
 
         if (direction === 'row') {
             for (
@@ -99,11 +89,13 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
                 iteratorRowIndex < this.numberOfRows;
                 iteratorRowIndex++
             ) {
+                const newArea = new CL_Area(
+                    [iteratorRowIndex, startingColIndex],
+                    [height, width],
+                );
+
                 foundCoords = this.findCoordsFromLine({
-                    startingRowIndex: iteratorRowIndex,
-                    startingColIndex,
-                    requestedHeight,
-                    requestedWidth,
+                    area: newArea,
                     direction,
                     cellChecker,
                 });
@@ -116,11 +108,13 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
                 iteratorColIndex < this.numberOfRows;
                 iteratorColIndex++
             ) {
+                const newArea = new CL_Area(
+                    [startingRowIndex, iteratorColIndex],
+                    [width, height],
+                );
+
                 foundCoords = this.findCoordsFromLine({
-                    startingRowIndex,
-                    startingColIndex: iteratorColIndex,
-                    requestedHeight,
-                    requestedWidth,
+                    area: newArea,
                     direction,
                     cellChecker,
                 });
@@ -133,39 +127,34 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
     }
 
     findCoordsFromLine({
-        startingRowIndex = 0,
-        startingColIndex = 0,
-        requestedHeight = 1,
-        requestedWidth = 1,
+        area,
         direction = 'row',
         cellChecker = this.cellChecker,
-    }: T_GridFindCoordsParams<GT_GridCell>): T_GridCoords[] {
+    }: T_GridFindCoordsParams<GT_GridCell>): T_Coords[] {
         const isRowDirected = direction === 'row';
 
-        const isRequestedSizeAvailable = this.checkRequestedSize(
+        const {
             startingRowIndex,
             startingColIndex,
-            requestedHeight,
-            requestedWidth,
-        );
-
-        if (!isRequestedSizeAvailable) return [];
+            size: [requestedHeight, requestedWidth],
+        } = area;
 
         const iteratorStartingIndex = isRowDirected
             ? startingColIndex
             : startingRowIndex;
+
         const iteratorMaxIndex = isRowDirected
             ? this.numberOfCols
             : this.numberOfRows;
-
-        let foundCoords: T_GridCoords[] = [];
-        let foundCrossCoords: T_GridCoords[] = [];
 
         const shoudHaveCrossCoords = isRowDirected
             ? requestedHeight > 1
             : requestedWidth > 1;
 
         const requredLength = isRowDirected ? requestedWidth : requestedHeight;
+
+        let foundCoords: T_Coords[] = [];
+        let foundCrossCoords: T_Coords[] = [];
 
         for (
             let iteratorIndex = iteratorStartingIndex;
@@ -188,12 +177,14 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
             } else foundCoords = [];
 
             if (isCellMatches && shoudHaveCrossCoords) {
+                const newArea = new CL_Area(
+                    [currentRowIndex, currentColIndex],
+                    [requestedHeight, requestedWidth],
+                );
+
                 const crossCoords = this.findCrossCoords(
-                    isRowDirected,
-                    currentRowIndex,
-                    currentColIndex,
-                    requestedHeight,
-                    requestedWidth,
+                    newArea,
+                    direction,
                     cellChecker,
                 );
 
@@ -214,26 +205,23 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
     }
 
     updateCellsByCoords(
-        coordsList: T_GridCoords[],
-        updatedCellData: GT_GridCell,
+        coordsList: T_Coords[],
+        newData: GT_GridCell,
     ): T_GridCell[] {
         return coordsList.map((coords) => {
             const [rowIndex, colIndex] = coords;
-            const iteratedCell = this.grid[rowIndex][colIndex];
-            this.grid[rowIndex][colIndex] = updatedCellData;
-            return iteratedCell;
+            this.grid[rowIndex][colIndex] = newData;
+            return this.grid[rowIndex][colIndex];
         });
     }
 
     checkCellsByCoords(
-        coordsList: T_GridCoords[],
+        coordsList: T_Coords[],
         cellChecker = this.cellChecker,
     ): Boolean {
         for (let iterator = 0; iterator < coordsList.length; iterator++) {
             const [rowIndex, colIndex] = coordsList[iterator];
-            const iteratedCell = this.grid[rowIndex][colIndex];
-            const isCellMatvhes = cellChecker(iteratedCell);
-
+            const isCellMatvhes = cellChecker(this.grid[rowIndex][colIndex]);
             if (!isCellMatvhes) return false;
         }
 

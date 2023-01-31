@@ -1,4 +1,4 @@
-import { CL_List } from './list';
+import { CL_List } from '../list/list';
 
 type T_CollectionItemProps = 'id' | 'ownerId';
 

@@ -8,9 +8,9 @@ import {
     handleUnsubscribeContextAction,
 } from 'control/utils';
 
-import { E_CollisionGroups } from 'enums/collision-groups';
-
 import { T_CylinderBodyProps, T_CylinderMeshProps } from 'types/cannon';
+
+import { E_CollisionGroups } from 'enums/collision-groups';
 
 const handleContextAction = (isPressed: boolean) => {
     console.log(isPressed);

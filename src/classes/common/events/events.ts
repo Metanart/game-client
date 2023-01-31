@@ -1,11 +1,11 @@
-import { v4 } from 'uuid';
-
 import {
     T_EventsContext,
     T_EventsEvent,
     T_EventsSubscriptions,
     T_EventsSubsribe,
 } from './types';
+
+import { v4 } from 'uuid';
 
 export class CL_Events<
     GT_ContextId extends string,

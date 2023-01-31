@@ -1,74 +1,73 @@
-import { FC, Fragment, ReactNode, useRef, useState } from 'react';
+import { FC, ReactNode, useRef, useState } from 'react';
 import { DragSourceMonitor, useDrag } from 'react-dnd';
 
-import { T_GridSize } from 'classes/generic/grid/types';
+import { CL_Area } from 'classes/generic/area/area';
+
+import { UI_InventorySlot } from 'ui/inventory/inventory-slot';
+
+import { getCoordsFromPosition } from 'utils/get-coords-from-position';
+import { snapToGrid } from 'utils/snap-to-grid';
+
+import { T_Position, T_Size } from 'types/generic';
 
 import { E_DragItem } from 'enums/drag-n-drop';
 
-import { T_DragItem } from 'types/drag-n-drop';
-import { T_Position } from 'types/generic';
+import { T_InventoryDragItem } from './types';
 
-import { snapToGrid } from 'utils/snap-to-grid';
-
-import { UI_InventorySlot } from 'ui/inventory/inventory-slot';
-import { UI_InventorySlotBackdrop } from 'ui/inventory/inventory-slot-backdrop';
+import { diff } from 'fast-array-diff';
+import { add } from 'mathjs';
 
 type T_Props = {
-    size?: T_GridSize;
+    size?: T_Size;
     cellSize?: number;
-    position?: T_Position;
+    initialPosition?: T_Position;
     children?: ReactNode;
 };
 
-type T_State = {
-    position: T_Position;
-    backdropPosition: T_Position;
-};
-
 export const CN_InventorySlot: FC<T_Props> = (props) => {
-    const { position = [0, 0], size = [2, 2], cellSize = 32, children } = props;
+    const {
+        size = [2, 2],
+        cellSize = 32,
+        initialPosition = [0, 0],
+        children,
+    } = props;
 
-    const [state, setState] = useState<T_State>({
-        position,
-        backdropPosition: position,
-    });
-
-    const prevState = useRef(state);
-
-    const handleHover = (offset: T_Position) => {
-        const newHoverPosition: T_Position = [
-            prevState.current.backdropPosition[0] + offset[0],
-            prevState.current.backdropPosition[1] + offset[1],
-        ];
-
-        const newState: T_State = {
-            position: newHoverPosition,
-            backdropPosition: snapToGrid(newHoverPosition, cellSize),
-        };
-
-        console.log(newState);
-
-        setState(newState);
-    };
+    const [position, setPosition] = useState<T_Position>(initialPosition);
+    const prevPosition = useRef<T_Position>(initialPosition);
+    const prevHoverPosition = useRef<T_Position>(initialPosition);
 
     const handleDrop = (offset: T_Position) => {
-        const { position } = prevState.current;
+        const newPosition = snapToGrid(
+            add(prevPosition.current, offset),
+            cellSize,
+        );
 
-        const newPosition: T_Position = [
-            position[0] + offset[0],
-            position[1] + offset[1],
-        ];
-
-        const newState: T_State = {
-            position: snapToGrid(newPosition, cellSize),
-            backdropPosition: snapToGrid(newPosition, cellSize),
-        };
-
-        prevState.current = newState;
-        setState(newState);
+        if (diff(prevPosition.current, newPosition).added.length) {
+            prevPosition.current = newPosition;
+            setPosition(newPosition);
+        }
     };
 
-    const handleDndCollect = (monitor: DragSourceMonitor<T_DragItem>) => ({
+    const handleHover = (offset: T_Position): CL_Area | undefined => {
+        const newHoverPosition = snapToGrid(
+            add(prevPosition.current, offset),
+            cellSize,
+        );
+
+        if (diff(prevHoverPosition.current, newHoverPosition).added.length) {
+            prevHoverPosition.current = newHoverPosition;
+            setPosition(newHoverPosition);
+
+            return new CL_Area(
+                size,
+                getCoordsFromPosition(newHoverPosition, cellSize),
+            );
+        } else return;
+    };
+
+    const handleCollect = (
+        monitor: DragSourceMonitor<T_InventoryDragItem>,
+    ) => ({
         isDragging: !!monitor.isDragging(),
     });
 
@@ -76,30 +75,23 @@ export const CN_InventorySlot: FC<T_Props> = (props) => {
         () => ({
             type: E_DragItem.InventorySlot,
             item: {
-                onDrop: handleDrop,
-                onHover: handleHover,
+                handleDrop,
+                handleHover,
             },
-            collect: handleDndCollect,
+            collect: handleCollect,
         }),
         [],
     );
 
     return (
-        <Fragment>
-            <UI_InventorySlotBackdrop
-                size={size}
-                cellSize={cellSize}
-                position={state.backdropPosition}
-            />
-            <UI_InventorySlot
-                ref={dragRef}
-                size={size}
-                cellSize={cellSize}
-                position={prevState.current.position}
-                isDragging={isDragging}
-            >
-                {children}
-            </UI_InventorySlot>
-        </Fragment>
+        <UI_InventorySlot
+            ref={dragRef}
+            size={size}
+            cellSize={cellSize}
+            position={position}
+            isDragging={isDragging}
+        >
+            {children}
+        </UI_InventorySlot>
     );
 };

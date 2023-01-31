@@ -1,15 +1,13 @@
 import { FC } from 'react';
-import { DropTargetMonitor, useDrop } from 'react-dnd';
-
-import { E_DragItem } from 'enums/drag-n-drop';
-
-import { T_DragItem } from 'types/drag-n-drop';
-
-import { TK_Spacing } from 'tokens/spacing';
+import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
 
 import { T_InventoryProps, UI_Inventory } from 'ui/inventory/inventory';
 
-import { CN_InventoryCell } from './inventory-cell';
+import { TK_Spacing } from 'tokens/spacing';
+
+import { E_DragItem } from 'enums/drag-n-drop';
+
+import { T_InventoryDragItem } from './types';
 
 type T_Props = Omit<T_InventoryProps, 'cell'>;
 
@@ -17,27 +15,21 @@ export const CN_Inventory: FC<T_Props> = (props) => {
     const { size, cellSize = TK_Spacing.xlg, children } = props;
 
     const handleItemDrop = (
-        item: T_DragItem,
-        monitor: DropTargetMonitor<T_DragItem>,
+        item: T_InventoryDragItem,
+        monitor: DropTargetMonitor<T_InventoryDragItem>,
     ) => {
-        const offset = monitor.getDifferenceFromInitialOffset() as {
-            x: number;
-            y: number;
-        };
-
-        item.onDrop([offset.y, offset.x]);
+        const offset = monitor.getDifferenceFromInitialOffset() as XYCoord;
+        item.handleDrop([offset.y, offset.x]);
     };
 
     const handleItemHover = (
-        item: T_DragItem,
-        monitor: DropTargetMonitor<T_DragItem>,
+        item: T_InventoryDragItem,
+        monitor: DropTargetMonitor<T_InventoryDragItem>,
     ) => {
-        const offset = monitor.getDifferenceFromInitialOffset() as {
-            x: number;
-            y: number;
-        };
+        const offset = monitor.getDifferenceFromInitialOffset() as XYCoord;
+        const area = item.handleHover([offset.y, offset.x]);
 
-        item.onHover([offset.y, offset.x]);
+        if (area) console.log(area);
     };
 
     const [_, dropRef] = useDrop(
@@ -50,12 +42,7 @@ export const CN_Inventory: FC<T_Props> = (props) => {
     );
 
     return (
-        <UI_Inventory
-            ref={dropRef}
-            cellSize={cellSize}
-            cell={<CN_InventoryCell />}
-            size={size}
-        >
+        <UI_Inventory ref={dropRef} cellSize={cellSize} size={size}>
             {children}
         </UI_Inventory>
     );

@@ -1,8 +1,8 @@
-import { T_GridSize } from 'classes/generic/grid/types';
+import { T_Size } from 'types/generic';
 
 export type T_InventoryItem = {
     id: number;
-    size: T_GridSize;
+    size: T_Size;
 };
 
 export type T_InventoryCell = {

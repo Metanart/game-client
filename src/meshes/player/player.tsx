@@ -3,10 +3,10 @@ import { FC } from 'react';
 import { useSphere } from '@react-three/cannon';
 import { Sphere } from '@react-three/drei';
 
+import { T_SphereBodyProps, T_SphereMeshProps } from 'types/cannon';
+
 import { E_CollisionGroups } from 'enums/collision-groups';
 import { E_Materials } from 'enums/materials';
-
-import { T_SphereBodyProps, T_SphereMeshProps } from 'types/cannon';
 
 import { usePlayerContactMaterials } from './hooks/use-player-contact-materials';
 import { usePlayerControl } from './hooks/use-player-control';
