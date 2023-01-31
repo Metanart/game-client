@@ -1,22 +1,21 @@
-import { CL_Collection } from 'classes/generic/collection';
+import { CL_Area } from 'classes/generic/area/area';
+import { CL_Collection } from 'classes/generic/collection/collection';
 import { E_GridCellStatus } from 'classes/generic/grid/enums';
 import { CL_Grid } from 'classes/generic/grid/grid';
-import {
-    T_GridCell,
-    T_GridCoords,
-    T_GridSize,
-} from 'classes/generic/grid/types';
+import { T_GridCell } from 'classes/generic/grid/types';
 
 import { iterateMethod } from 'utils/iterate-method';
+
+import { T_Coords, T_Size } from 'types/generic';
 
 import { CL_InventorySlot } from './inventory-slot';
 import { T_InventoryItem } from './types';
 
-export class Inventory {
+export class CL_Inventory {
     public grid: CL_Grid<T_GridCell>;
     public collection: CL_Collection<CL_InventorySlot>;
 
-    constructor(size: T_GridSize, public ownerId: string) {
+    constructor(size: T_Size, public ownerId: string) {
         this.grid = new CL_Grid(size);
         this.collection = new CL_Collection<CL_InventorySlot>();
     }
@@ -24,12 +23,12 @@ export class Inventory {
     storeItem(item: T_InventoryItem): CL_InventorySlot | false {
         const foundCoords = this.findCoords(item.size);
 
-        if (!foundCoords.list.length) return false;
+        if (!foundCoords.results.length) return false;
 
         const newSlot = new CL_InventorySlot(
             item,
             this.ownerId,
-            foundCoords.list,
+            foundCoords.results,
             foundCoords.isRotated,
         );
 
@@ -66,32 +65,30 @@ export class Inventory {
         );
     }
 
-    findCoords(itemSize: T_GridSize): {
-        list: T_GridCoords[];
+    findCoords(size: T_Size): {
+        results: T_Coords[];
         isRotated: boolean;
     } {
-        let foundCoords: T_GridCoords[] = [];
+        let foundCoords: T_Coords[] = [];
 
-        const [requestedHeight, requestedWidth] = itemSize;
+        const [requestedHeight, requestedWidth] = size;
 
         foundCoords = this.grid.findCoords({
-            requestedHeight,
-            requestedWidth,
+            area: new CL_Area(size),
         });
 
         if (foundCoords.length) {
-            return { list: foundCoords, isRotated: false };
+            return { results: foundCoords, isRotated: false };
         }
 
         foundCoords = this.grid.findCoords({
-            requestedHeight: requestedWidth,
-            requestedWidth: requestedHeight,
+            area: new CL_Area([requestedWidth, requestedHeight]),
         });
 
         if (foundCoords.length) {
-            return { list: foundCoords, isRotated: true };
+            return { results: foundCoords, isRotated: true };
         }
 
-        return { list: [], isRotated: false };
+        return { results: [], isRotated: false };
     }
 }

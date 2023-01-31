@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { css } from '@emotion/react';
 
 import { TK_Grey } from 'tokens/colors';

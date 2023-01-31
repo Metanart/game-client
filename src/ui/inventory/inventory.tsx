@@ -1,17 +1,16 @@
 import { forwardRef, ReactNode } from 'react';
 
-import { T_GridSize } from 'classes/generic/grid/types';
-
-import { TK_Spacing } from 'tokens/spacing';
-
 import { UI_Grid } from 'ui/generic/grid/grid';
 import { UI_GridCell } from 'ui/generic/grid/grid-cell';
 
-import { styles } from './inventory.styles';
+import { TK_Spacing } from 'tokens/spacing';
+
+import { T_Size } from 'types/generic';
+
+import { UI_InventoryCell } from './inventory-cell';
 
 export type T_InventoryProps = {
-    cell: ReactNode;
-    size: T_GridSize;
+    size: T_Size;
     cellSize: number;
     children?: ReactNode;
 };
@@ -19,7 +18,6 @@ export type T_InventoryProps = {
 export const UI_Inventory = forwardRef<HTMLDivElement, T_InventoryProps>(
     (props, ref) => {
         const {
-            cell,
             size: [height, width] = [1, 1],
             cellSize = TK_Spacing.xlg,
             children,
@@ -30,7 +28,7 @@ export const UI_Inventory = forwardRef<HTMLDivElement, T_InventoryProps>(
 
             return (
                 <UI_GridCell height={cellSize} width={cellSize} key={key}>
-                    {cell}
+                    <UI_InventoryCell />
                 </UI_GridCell>
             );
         };
@@ -42,15 +40,11 @@ export const UI_Inventory = forwardRef<HTMLDivElement, T_InventoryProps>(
         });
 
         return (
-            <div
-                ref={ref}
-                css={styles.root}
-                style={{ width: width * cellSize }}
-            >
-                <div css={styles.grid}>
-                    <UI_Grid columns={width}>{gridCells}</UI_Grid>
-                </div>
-                <div css={styles.slots}>{children}</div>
+            <div ref={ref} style={{ width: width * cellSize }}>
+                <UI_Grid columns={width}>
+                    {gridCells}
+                    {children}
+                </UI_Grid>
             </div>
         );
     },

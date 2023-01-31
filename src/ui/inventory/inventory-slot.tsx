@@ -1,16 +1,14 @@
 import { CSSProperties, forwardRef, ReactNode } from 'react';
 
-import { T_GridSize } from 'classes/generic/grid/types';
-
-import { T_Position } from 'types/generic';
-
 import { TK_Spacing } from 'tokens/spacing';
+
+import { T_Position, T_Size } from 'types/generic';
 
 import { styles } from './inventory-slot.styles';
 
 type T_Props = {
     position: T_Position;
-    size?: T_GridSize;
+    size?: T_Size;
     cellSize?: number;
     children?: ReactNode;
     isDragging?: boolean;

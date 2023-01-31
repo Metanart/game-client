@@ -3,10 +3,10 @@ import { FC } from 'react';
 import { usePlane } from '@react-three/cannon';
 import { Plane } from '@react-three/drei';
 
+import { T_PlaneBodyProps, T_PlaneMeshProps } from 'types/cannon';
+
 import { E_CollisionGroups } from 'enums/collision-groups';
 import { E_Materials } from 'enums/materials';
-
-import { T_PlaneBodyProps, T_PlaneMeshProps } from 'types/cannon';
 
 const meshProps: T_PlaneMeshProps = {
     args: [100, 100],

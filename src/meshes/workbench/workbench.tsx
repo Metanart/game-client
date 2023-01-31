@@ -3,9 +3,9 @@ import { FC } from 'react';
 import { useBox } from '@react-three/cannon';
 import { Box } from '@react-three/drei';
 
-import { E_CollisionGroups } from 'enums/collision-groups';
-
 import { T_BoxBodyProps, T_BoxMeshProps } from 'types/cannon';
+
+import { E_CollisionGroups } from 'enums/collision-groups';
 
 import '@react-three/fiber';
 

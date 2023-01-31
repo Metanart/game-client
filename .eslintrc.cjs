@@ -41,19 +41,29 @@ module.exports = {
                     ['^react'],
                     ['^vite'],
                     ['^three'],
-                    ['uuid'],
+
                     ['^@'],
-                    ['^classes'],
-                    ['^components'],
-                    ['^scenes'],
-                    ['^control'],
-                    ['^enums'],
-                    ['^types'],
-                    ['^tokens'],
-                    ['^constants'],
-                    ['^utils'],
-                    ['^assets'],
-                    ['^scss'],
+
+                    ['^containers/'],
+                    ['^classes/'],
+                    ['^meshes/'],
+                    ['^ui/'],
+
+                    ['^scenes/'],
+                    ['^control/'],
+
+                    ['^utils/'],
+                    ['^hooks/'],
+
+                    ['^constants/'],
+                    ['^tokens/'],
+                    ['^types/'],
+                    ['^enums/'],
+
+                    ['^assets/'],
+
+                    ['^scss/'],
+
                     ['^../'],
                     ['^./'],
                 ],

@@ -1,17 +1,17 @@
-import { v4 } from 'uuid';
-
-import { T_GridCoords, T_GridSize } from 'classes/generic/grid/types';
+import { T_Coords, T_Size } from 'types/generic';
 
 import { T_InventoryItem } from './types';
 
+import { v4 } from 'uuid';
+
 export class CL_InventorySlot {
     id: string;
-    size: T_GridSize;
+    size: T_Size;
 
     constructor(
         public item: T_InventoryItem,
         public ownerId: string,
-        public coords: T_GridCoords[],
+        public coords: T_Coords[],
         public isRotated = false,
     ) {
         this.id = v4();
