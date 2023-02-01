@@ -73,17 +73,15 @@ export class CL_Inventory {
 
         const [requestedHeight, requestedWidth] = size;
 
-        foundCoords = this.grid.findCoords({
-            area: new CL_Area(size),
-        });
+        foundCoords = this.grid.findCoords(new CL_Area(size));
 
         if (foundCoords.length) {
             return { results: foundCoords, isRotated: false };
         }
 
-        foundCoords = this.grid.findCoords({
-            area: new CL_Area([requestedWidth, requestedHeight]),
-        });
+        foundCoords = this.grid.findCoords(
+            new CL_Area([requestedWidth, requestedHeight]),
+        );
 
         if (foundCoords.length) {
             return { results: foundCoords, isRotated: true };

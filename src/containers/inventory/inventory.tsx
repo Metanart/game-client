@@ -28,8 +28,6 @@ export const CN_Inventory: FC<T_Props> = (props) => {
     ) => {
         const offset = monitor.getDifferenceFromInitialOffset() as XYCoord;
         const area = item.handleHover([offset.y, offset.x]);
-
-        if (area) console.log(area);
     };
 
     const [_, dropRef] = useDrop(
