@@ -1,50 +1,47 @@
 import { T_Coords, T_Size } from 'types/generic';
 
-import { diff } from 'fast-array-diff';
+import {
+    checkIfArrayIsSmaller,
+    checkIfArrayIsSmallerOrEquival,
+} from 'utils/arrays';
 
 export class CL_Area {
-    height: number;
-    width: number;
-    size: T_Size;
+    private height: number;
+    private width: number;
+    private size: T_Size;
 
-    startingRowIndex: number;
-    startingColIndex: number;
-    startingCoords: T_Coords;
+    private startingRowIndex: number;
+    private startingColIndex: number;
+    private startingCoords: T_Coords;
 
-    endingRowIndex!: number;
-    endingColIndex!: number;
-    endingCoords!: T_Coords;
+    private endingRowIndex: number = 0;
+    private endingColIndex: number = 0;
+    private endingCoords: T_Coords = [0, 0];
 
     isCorrect = true;
 
-    constructor(
-        size: T_Size,
-        startingCoords: T_Coords = [0, 0],
-        forceCheck = false,
-    ) {
+    constructor(size: T_Size, coords: T_Coords = [0, 0]) {
         this.size = [...size];
         this.width = this.size[1];
         this.height = this.size[0];
 
-        this.startingCoords = [...startingCoords];
+        this.startingCoords = [...coords];
         this.startingRowIndex = this.startingCoords[0];
         this.startingColIndex = this.startingCoords[1];
 
         this.calculateEndingCoords();
-
-        if (forceCheck) {
-            this.isCorrect = this.checkIsCorrect();
-        }
+        this.isCorrect = this.checkIsCorrect();
     }
 
-    rotate(forceCheck = false) {
+    rotate() {
         this.height = this.size[1];
         this.width = this.size[0];
         this.size = [this.height, this.width];
 
-        if (forceCheck) {
-            this.isCorrect = this.checkIsCorrect();
-        }
+        this.calculateEndingCoords();
+        this.isCorrect = this.checkIsCorrect();
+
+        return this;
     }
 
     calculateEndingCoords() {
@@ -54,14 +51,36 @@ export class CL_Area {
     }
 
     checkIsCorrect(): boolean {
-        if (diff(this.startingCoords, [0, 0], (ia, ib) => ia < ib))
-            return false;
-
-        if (diff(this.endingCoords, [1, 1], (ia, ib) => ia < ib)) return false;
-
-        if (diff(this.startingCoords, this.endingCoords, (ia, ib) => ia >= ib))
+        if (checkIfArrayIsSmallerOrEquival(this.size, [0, 0])) return false;
+        if (checkIfArrayIsSmaller(this.startingCoords, [0, 0])) return false;
+        if (checkIfArrayIsSmaller(this.endingCoords, [0, 0])) return false;
+        if (checkIfArrayIsSmaller(this.endingCoords, this.startingCoords))
             return false;
 
         return true;
+    }
+
+    getSize(): T_Size {
+        return [this.height.valueOf(), this.width.valueOf()];
+    }
+
+    getStartingCoords(): T_Coords {
+        return [
+            this.startingRowIndex.valueOf(),
+            this.startingColIndex.valueOf(),
+        ];
+    }
+
+    getEndingCoords(): T_Coords {
+        return [this.endingRowIndex.valueOf(), this.endingColIndex.valueOf()];
+    }
+
+    getData() {
+        return {
+            size: this.getSize(),
+            startingCoords: this.getStartingCoords(),
+            endingCoords: this.getEndingCoords(),
+            isCorrect: this.isCorrect.valueOf(),
+        };
     }
 }
