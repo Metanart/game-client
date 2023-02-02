@@ -1,34 +1,26 @@
 import { iterateMethod } from 'utils/iterate-method';
 
+// @TODO
+// check if the list items should be immutable for some methods
+// or investigate npm data-strcutures and use them instead
+
 export class CL_List<GT_ListItem> {
-    list: GT_ListItem[] = [];
+    items: GT_ListItem[] = [];
 
     constructor(items?: GT_ListItem[]) {
         if (items?.length) this.addItems(items);
     }
 
+    // It's better to keep -1 as a negative return,
+    // because resturning undefined here
+    // could overlap with a 0 index in later checks -
+    // (!index) could be 0 and undefined
     getItemIndex(requestedItem: GT_ListItem): number {
-        if (this.list.length === 0) return -1;
-        return this.list.findIndex((item) => item === requestedItem);
-    }
-
-    getItemsIndexes(
-        items: GT_ListItem[],
-        isExact = false,
-    ): number[] | undefined {
-        if (this.list.length === 0) return;
-
-        const results = items
-            .map((item) => this.getItemIndex(item))
-            .filter((item) => item !== -1) as number[];
-
-        if (isExact && results.length !== items.length) return;
-
-        return results.length > 0 ? results : undefined;
+        return this.items.findIndex((item) => item === requestedItem);
     }
 
     addItem(item: GT_ListItem): GT_ListItem {
-        this.list.push(item);
+        this.items.push(item);
         return item;
     }
 
@@ -52,33 +44,21 @@ export class CL_List<GT_ListItem> {
     }
 
     removeItemByIndex(index: number): GT_ListItem | undefined {
-        if (this.list.length === 0) return;
-        const removedItem = this.list.splice(index, 1)[0];
-        return removedItem;
-    }
-
-    removeItemsByIndexes(indexes: number[]): GT_ListItem[] | undefined {
-        if (this.list.length === 0) return;
-
-        return iterateMethod<number, GT_ListItem>(
-            indexes,
-            this.removeItemByIndex.bind(this),
-        );
+        return this.items.splice(index, 1)[0];
     }
 
     removeItem(item: GT_ListItem): GT_ListItem | undefined {
-        if (this.list.length === 0) return;
-
         const itemIndex = this.getItemIndex(item);
 
         if (itemIndex === -1) return;
 
-        return this.removeItemByIndex(itemIndex);
+        return this.removeItemByIndex(itemIndex!);
     }
 
     removeItems(items: GT_ListItem[]): GT_ListItem[] | undefined {
-        if (this.list.length === 0) return;
-
+        // I'm adding this check only here,
+        // because it's not worthin to use the same check on singular calls
+        if (this.items.length === 0) return;
         return iterateMethod<GT_ListItem>(items, this.removeItem.bind(this));
     }
 }
