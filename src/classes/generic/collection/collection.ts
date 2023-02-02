@@ -17,15 +17,14 @@ export class CL_Collection<
             propertyValue,
             propertyName,
         );
-        return itemIndex >= 0 ? this.list[itemIndex] : undefined;
+        return itemIndex >= 0 ? this.items[itemIndex] : undefined;
     }
 
     getItemIndexByProperty(
         propertyValue: string | number,
         propertyName: T_CollectionItemProps,
     ): number {
-        if (this.list.length === 0) return -1;
-        return this.list.findIndex(
+        return this.items.findIndex(
             (item) => item[propertyName] === propertyValue,
         );
     }
@@ -45,7 +44,7 @@ export class CL_Collection<
         requestedItem: GT_Item,
         propertyName?: T_CollectionItemProps,
     ): number {
-        if (this.list.length === 0) return -1;
+        if (this.items.length === 0) return -1;
 
         if (propertyName)
             return this.getItemIndexByProperty(

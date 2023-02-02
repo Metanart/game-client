@@ -8,14 +8,14 @@ import { T_Grid, T_GridCell, T_GridDirection } from './types';
 const DEFAULT_CELL: T_GridCell = { status: E_GridCellStatus.EMPTY };
 
 export class CL_Grid<GT_GridCell extends T_GridCell> {
-    body: T_Grid<GT_GridCell>;
+    matrix: T_Grid<GT_GridCell>;
     numberOfRows: number;
     numberOfCols: number;
 
     constructor(size: T_Size) {
         this.numberOfRows = size[0];
         this.numberOfCols = size[1];
-        this.body = this.generateGrid();
+        this.matrix = this.generateGrid();
     }
 
     generateGrid() {
@@ -46,8 +46,8 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
     ): T_GridCell[] {
         return coordsList.map((coords) => {
             const [rowIndex, colIndex] = coords;
-            this.body[rowIndex][colIndex] = newData;
-            return this.body[rowIndex][colIndex];
+            this.matrix[rowIndex][colIndex] = newData;
+            return this.matrix[rowIndex][colIndex];
         });
     }
 
@@ -57,7 +57,7 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
     ): Boolean {
         for (let iterator = 0; iterator < coordsList.length; iterator++) {
             const [rowIndex, colIndex] = coordsList[iterator];
-            const isCellMatvhes = cellChecker(this.body[rowIndex][colIndex]);
+            const isCellMatvhes = cellChecker(this.matrix[rowIndex][colIndex]);
             if (!isCellMatvhes) return false;
         }
 
@@ -135,7 +135,7 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
             currentColIndex++
         ) {
             const isCellMatches = cellChecker(
-                this.body[startingRowIndex][currentColIndex],
+                this.matrix[startingRowIndex][currentColIndex],
             );
 
             if (isCellMatches) {
@@ -187,7 +187,7 @@ export class CL_Grid<GT_GridCell extends T_GridCell> {
             currentRowIndex++
         ) {
             const isCellMatches = cellChecker(
-                this.body[currentRowIndex][startingColIndex],
+                this.matrix[currentRowIndex][startingColIndex],
             );
 
             if (isCellMatches) {

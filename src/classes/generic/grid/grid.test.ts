@@ -16,8 +16,8 @@ const handleBusyCheck = (providedCell: T_GridCell) => {
 describe('Grid', () => {
     describe('Size', () => {
         test('16:18 size', () => {
-            expect(grid.body.length).toBe(16);
-            expect(grid.body[0].length).toBe(18);
+            expect(grid.matrix.length).toBe(16);
+            expect(grid.matrix[0].length).toBe(18);
         });
     });
 

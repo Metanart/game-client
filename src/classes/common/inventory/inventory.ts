@@ -51,7 +51,7 @@ export class CL_Inventory {
 
         if (!slotIndex) return undefined;
 
-        this.grid.updateCellsByCoords(this.collection.list[slotIndex].coords, {
+        this.grid.updateCellsByCoords(this.collection.items[slotIndex].coords, {
             status: E_GridCellStatus.EMPTY,
         });
 
