@@ -1,6 +1,6 @@
 import { CL_List } from '../list/list';
 
-type T_CollectionItemProps = 'id' | 'ownerId';
+type T_CollectionItemProps = 'id' | 'ownerId' | string | number | symbol;
 
 export type T_CollectionItem = {
     [Key in T_CollectionItemProps]: any;
@@ -11,7 +11,7 @@ export class CL_Collection<
 > extends CL_List<GT_Item> {
     getItemByProperty(
         propertyValue: string | number,
-        propertyName: T_CollectionItemProps,
+        propertyName: keyof GT_Item = 'id',
     ): GT_Item | undefined {
         const itemIndex = this.getItemIndexByProperty(
             propertyValue,
@@ -31,7 +31,7 @@ export class CL_Collection<
 
     removeItemByProperty(
         propertyValue: string | number,
-        propertyName: T_CollectionItemProps,
+        propertyName: T_CollectionItemProps = 'id',
     ): GT_Item | undefined {
         const itemIndex = this.getItemIndexByProperty(
             propertyValue,
@@ -53,5 +53,9 @@ export class CL_Collection<
             );
 
         return this.getItemIndexByProperty(requestedItem.id, 'id');
+    }
+
+    override removeItem(item: GT_Item): GT_Item | undefined {
+        return this.removeItemByProperty(item.id);
     }
 }
