@@ -37,10 +37,7 @@ export class CL_List<GT_ListItem> {
     }
 
     addUniqueItems(items: GT_ListItem[]): GT_ListItem[] | undefined {
-        return iterateMethod<GT_ListItem>(
-            items,
-            this.removeItemByIndex.bind(this),
-        );
+        return iterateMethod<GT_ListItem>(items, this.addUniqueItem.bind(this));
     }
 
     removeItemByIndex(index: number): GT_ListItem | undefined {
